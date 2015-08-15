@@ -1,0 +1,9 @@
+c:\users\tahsin\documents\visual studio 2012\Projects\USBtoHDD\USBtoHDD\bin\Debug\USBtoHDD.exe.config
+c:\users\tahsin\documents\visual studio 2012\Projects\USBtoHDD\USBtoHDD\bin\Debug\USBtoHDD.exe
+c:\users\tahsin\documents\visual studio 2012\Projects\USBtoHDD\USBtoHDD\bin\Debug\USBtoHDD.pdb
+c:\users\tahsin\documents\visual studio 2012\Projects\USBtoHDD\USBtoHDD\obj\Debug\USBtoHDD.csprojResolveAssemblyReference.cache
+c:\users\tahsin\documents\visual studio 2012\Projects\USBtoHDD\USBtoHDD\obj\Debug\USBtoHDD.Form1.resources
+c:\users\tahsin\documents\visual studio 2012\Projects\USBtoHDD\USBtoHDD\obj\Debug\USBtoHDD.Properties.Resources.resources
+c:\users\tahsin\documents\visual studio 2012\Projects\USBtoHDD\USBtoHDD\obj\Debug\USBtoHDD.csproj.GenerateResource.Cache
+c:\users\tahsin\documents\visual studio 2012\Projects\USBtoHDD\USBtoHDD\obj\Debug\USBtoHDD.exe
+c:\users\tahsin\documents\visual studio 2012\Projects\USBtoHDD\USBtoHDD\obj\Debug\USBtoHDD.pdb
