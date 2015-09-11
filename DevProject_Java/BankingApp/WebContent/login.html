@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login Page</title>
+</head>
+<body>
+	<h2>Welcome! Please login.</h2>
+	<form action="login" method="post">
+	<!-- 
+		<br>User Name : <input type="text" name="userName" id="userName"/>
+		<br>Password : <input type="password" name="pswd" id="pswd"/>
+	-->
+		<table>
+			<tr>
+		 		<td> User Name </td>
+		 		<td><input type="text" name="userName" id="userName"/> </td>
+			</tr>
+		
+			<tr>
+		 		<td> Password </td>
+		 		<td><input type="password" name="pswd" id="pswd"/> </td>
+			</tr>
+		</table>
+	
+		<br><input type="button" id="submit" value="Login" onclick="valuesAuth('submit','userName','pswd')"/>
+	</form>
+	
+
+	<script type="text/javascript">
+		function checkUserNameLength(objId){
+			var validLen = 2;
+			var userName = document.getElementById(objId).value;
+			if(userName.length < validLen){
+				window.alert("Invalid user length! Valid length is " + validLen);
+				//document.getElementById("submit").
+				return false;
+			}
+			else return true;
+			
+		}
+		function checkPswdLength(objId){
+			var validLen = 2;
+			var userName = document.getElementById(objId).value;
+			if(userName.length < validLen){
+				window.alert("Invalid password length! Valid length is " + validLen);
+				//document.getElementById("submit").
+				return false;
+			}
+			else return true;
+			
+		}
+		
+		function valuesAuth(objid, objId1, objId2){
+			if( checkUserNameLength(objId1) && checkPswdLength(objId2))
+				document.getElementById(objid).type = "submit";
+			
+		}
+		
+		function SomeFunction (element1,element2) {
+		    var e1 = $("#"+element1),
+		        e2 = $("#"+element2);
+		    // Do something with variables e1 and e2
+		}	
+	
+	
+	</script>
+</body>
+</html>
