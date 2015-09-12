@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://webservices.apps/" xmlns:tns="http://webservices.apps/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="CheckCustomerExist" type="tns:CheckCustomerExist"/>
+
+  <xs:element name="CheckCustomerExistResponse" type="tns:CheckCustomerExistResponse"/>
+
+  <xs:element name="GetCustomer" type="tns:GetCustomer"/>
+
+  <xs:element name="GetCustomerResponse" type="tns:GetCustomerResponse"/>
+
+  <xs:element name="hello" type="tns:hello"/>
+
+  <xs:element name="helloResponse" type="tns:helloResponse"/>
+
+  <xs:complexType name="hello">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="helloResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="GetCustomer">
+    <xs:sequence>
+      <xs:element name="custId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="GetCustomerResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CheckCustomerExist">
+    <xs:sequence>
+      <xs:element name="custId" type="xs:int"/>
+      <xs:element name="effTime" type="xs:string" minOccurs="0"/>
+      <xs:element name="expTime" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CheckCustomerExistResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+
