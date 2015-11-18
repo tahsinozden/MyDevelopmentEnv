@@ -32,7 +32,7 @@ class CValueHandler {
 		 void (*valueChanged)() = nullptr;
 };
 
-void whenValueChnaged(){
+void whenValueChanged(){
 	std::cout << __FUNCTION__ << " says that ";
 	std::cout << "Now the value has been modified!" << std::endl;
 }
@@ -47,7 +47,7 @@ void testMechanism(){
 	std::cin >> x;
 	CValueHandler<std::string>* val = new CValueHandler<std::string>(x);
 	// inject an external function to the class mechanism
-	val->valueChanged = &whenValueChnaged;
+	val->valueChanged = &whenValueChanged;
 	
 	int counter = 0;
 	while(true){
@@ -55,7 +55,7 @@ void testMechanism(){
 		std::cin >> x;
 		
 		if ( counter % 2 == 0)
-			val->valueChanged = &whenValueChnaged;		
+			val->valueChanged = &whenValueChanged;		
 		// now change the rule when the value has been chnaged
 		else
 			val->valueChanged = &makeSound;
