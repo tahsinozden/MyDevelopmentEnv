@@ -1,0 +1,1 @@
+mongod --config C:\Users\tahsin\Documents\NetBeansProjects\CurrencyConversionCenter\Resource\mongodb.conf

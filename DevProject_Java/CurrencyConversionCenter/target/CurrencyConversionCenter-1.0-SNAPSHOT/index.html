@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script>
+            // all supported currencies
+            var CURRENCY_DATA =
+                    {
+                        "base": "EUR",
+                        "date": "yyyy-mm-dd",
+                        "rates": {
+                            "AUD": -1,
+                            "BGN": -1,
+                            "BRL": -1,
+                            "CAD": -1,
+                            "CHF": -1,
+                            "CNY": -1,
+                            "CZK": -1,
+                            "DKK": -1,
+                            "GBP": -1,
+                            "HKD": -1,
+                            "HRK": -1,
+                            "HUF": -1,
+                            "IDR": -1,
+                            "ILS": -1,
+                            "INR": -1,
+                            "JPY": -1,
+                            "KRW": -1,
+                            "MXN": -1,
+                            "MYR": -1,
+                            "NOK": -1,
+                            "NZD": -1,
+                            "PHP": -1,
+                            "PLN": -1,
+                            "RON": -1,
+                            "RUB": -1,
+                            "SEK": -1,
+                            "SGD": -1,
+                            "THB": -1,
+                            "TRY": -1,
+                            "USD": -1,
+                            "ZAR": -1
+                        }
+                    };
+
+            $(document).ready(function () {
+                console.log(CURRENCY_DATA["rates"]);
+                //var selectElm = $("<select></select>").attr("id","slctCurrencies");
+                //$("<select></select>").attr("id","slctCurrencies");
+                // $.each(CURRENCY_DATA["rates"], function() {
+                //   $.each(this, function(k, v) {
+                //   		cosole.log(k);
+                //   		$("select").append($("<option></option>").text(k).attr("value",k));
+                //   });
+                // });
+
+                // make the SEND button disabled in the beginning
+                var btnSend = $("#btnSend");
+                btnSend.attr("disabled", true);
+
+                var rates = CURRENCY_DATA["rates"];
+                // iterate over JSON object
+                for (var key in rates) {
+                    // fill the options with currencies
+                    $("#srcCurrency").append($("<option></option>").text(key).attr("value", key));
+                    $("#dstCurrency").append($("<option></option>").text(key).attr("value", key));
+                    //selectElm.append($("<option></option>").text(key).attr("value",key));
+                }
+
+                var srcCur = "EUR";
+                var dstCur = "EUR";
+                //  print the selected option
+                $('#srcCurrency').change(function () {
+                    console.log($(this).val());
+                    srcCur = $(this).val();
+                    $("#srcSelected").text(srcCur);
+                    // if any currency is elected, enable amount section
+                    if (srcCur != null && dstCur != null) {
+                        $("#panel").slideDown("slow");
+                        btnSend.attr("disabled", false);
+                        console.log("here1");
+                    }
+                });
+
+                $('#dstCurrency').change(function () {
+                    console.log($(this).val());
+                    dstCur = $(this).val();
+//                    console.log(srcCur);
+//                    console.log(dstCur);
+                    $("#dstSelected").text(dstCur);
+                    // if any currency is elected, enable amount section
+                    if (srcCur != null && dstCur != null) {
+                        $("#panel").slideDown("slow");
+                        btnSend.attr("disabled", false);
+                        console.log("here2");
+                    }
+                });
+
+                // do some checks before submit
+//                var thisForm = $("#curForm");
+//                thisForm.submit(function () {
+//                    var srcAmt = $("#srcAmt").val();
+//                    console.log(srcAmt);
+//                    if (srcAmt === null || srcAmt <= 0) {
+//                        window.alert("Check source amount!");
+//                        return false;
+//                    }
+//                });
+
+                // if button is clicked for cur. conversion
+                btnSend.click(function () {
+                    var srcAmt = $("#srcAmt").val();
+                    console.log(srcAmt);
+                    // validate fileds
+                    if (srcAmt === null || srcAmt <= 0 || !$.isNumeric(srcAmt)) {
+                        window.alert("WARNING : Check source amount! val : " + srcAmt);
+                        return false;
+                    }
+
+                    // get selected currencies
+                    var selSrcCur = $("#srcSelected").text();
+                    var selDstCur = $("#dstSelected").text();
+                    var srcAmtVal = $("#srcAmt").val();
+                    var data = {srcCurrencyName: selSrcCur, dstCurrencyName: selDstCur, srcAmt: srcAmtVal};
+                    // send request to the server async.
+                    $.getJSON("Converter", data).done(function (dat) {
+                        console.log("I am inside" + dat["dstAmt"]);
+                        // print the calculated amount in the page
+                        $("#dstAmt").val(dat.dstAmt).text(dat.dstAmt);
+                    });
+
+                });
+                // fade in the main title
+                $("#mainTitle").fadeIn();
+
+                // exchange currencies
+                $("#btnExchange").click(function () {
+
+                    var srcCurSelected = $("#srcCurrency option:selected");
+                    var dstCurSelected = $("#dstCurrency option:selected");
+                    // change texts
+                    var tmp = srcCurSelected.text();
+                    srcCurSelected.text(dstCurSelected.text());
+                    dstCurSelected.text(tmp);
+
+                    // change values
+                    var tmp = srcCurSelected.val();
+                    srcCurSelected.val(dstCurSelected.val());
+                    dstCurSelected.val(tmp);
+                    // trigger change events
+                    $('#srcCurrency').change();
+                    $('#dstCurrency').change();
+
+                });
+
+                $("#btnSendMail").click(function (){
+                    $.get("Converter", {"btnSendMail":"YES"}).done(function (data) {
+                        console.log("Mail sent!");
+                    });
+                });
+            });
+        </script>
+
+        <style type="text/css">
+            .important {
+                font-weight: bold;
+                font-size: xx-large;
+                color:blue;
+            }
+
+            .def_color {
+                background-color: #e5eecc;
+            }
+
+            #panel, #currencyPanel {
+                padding: 5px;
+                background-color: #e5eecc;
+                border: solid 1px #c3c3c3;
+            }
+
+            #panel {
+                padding: 0px;
+                display: none;
+            }
+
+            #mainTitle {
+                display : none;
+                background-color: #e5eecc;
+                font-size: xx-large;
+                font-weight: bold;
+                color:green;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="mainTitle"> Online Currency Converter v1.0</div>
+
+        <div id="currencyPanel">
+
+            <label for="srcCurrencyName">Source Currency</label>
+            <select id="srcCurrency" name="srcCurrencyName" >
+                <option id="srcBsseCur" value="EUR">EUR</option>
+            </select>
+
+            <input id="btnExchange" type="button" value="<-->"/>
+
+            <select id="dstCurrency" name="dstCurrencyName">
+                <option id="dstBsseCur" value="EUR">EUR</option>
+            </select>                
+            <label for="dstCurrencyName">Destination Currency</label>
+        </div>
+
+        <div id="panel">
+            <table border="1" >
+                <tr>
+                    <td> <label id="srcSelected">EUR</label> </td>
+                    <td> <input type="text" id="srcAmt" name="srcAmt" placeholder=" Amount"/> </td>
+                </tr>
+                <tr>
+                    <td> <label id="dstSelected">EUR</label> </td>
+                    <td> <input type="text" id="dstAmt" name="dstAmt" value="1" disabled/> </td> 
+                </tr> 
+            </table>
+        </div>
+
+        <input id="btnSend" type="button" value="Convert" />
+        
+        <!--button id="btnSendMail" name="btnSendMail">Send Mail</button-->
+    </body>
+</html>
