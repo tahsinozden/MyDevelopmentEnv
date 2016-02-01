@@ -2,7 +2,9 @@
 <html>
     <head>
         <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script-->
+        <link rel="stylesheet" href="menu/css/style.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript" src="menu/js/login.js"></script>
         <script>
             // all supported currencies
             var CURRENCY_DATA =
@@ -154,8 +156,8 @@
 
                 });
 
-                $("#btnSendMail").click(function (){
-                    $.get("Converter", {"btnSendMail":"YES"}).done(function (data) {
+                $("#btnSendMail").click(function () {
+                    $.get("Converter", {"btnSendMail": "YES"}).done(function (data) {
                         console.log("Mail sent!");
                     });
                 });
@@ -191,13 +193,13 @@
                 font-weight: bold;
                 color:green;
             }
+
         </style>
     </head>
-    <body>
+    <body bgcolor="#e5eecc">
         <div id="mainTitle"> Online Currency Converter v1.0</div>
 
         <div id="currencyPanel">
-
             <label for="srcCurrencyName">Source Currency</label>
             <select id="srcCurrency" name="srcCurrencyName" >
                 <option id="srcBsseCur" value="EUR">EUR</option>
@@ -222,10 +224,33 @@
                     <td> <input type="text" id="dstAmt" name="dstAmt" value="1" disabled/> </td> 
                 </tr> 
             </table>
+            <input id="btnSend" type="button" value="Convert" />
         </div>
 
-        <input id="btnSend" type="button" value="Convert" />
-        
+
+
         <!--button id="btnSendMail" name="btnSendMail">Send Mail</button-->
+
+        <div id="loginOption">
+            <button id="btnSubscribeOpt">Subscribe</button>
+            <button id="btnLoginOpt">Login</button>
+        </div>
+
+        <div class="container">
+            <div class="main">
+                <form class="form" method="post" action="#">
+                    <h2>Welcome!</h2>
+                    <label>Email :</label>
+                    <input type="text" name="demail" id="email">
+                    <label>Password :</label>
+                    <input type="password" name="password" id="password">
+                    <label class="subsribe_section" id="lblRePass">Re-Password :</label>
+                    <input class="subsribe_section" type="password" name="repassword" id="repassword">
+                    <input type="button" name="login" id="login" value="Login">
+                    <input class="subsribe_section" type="button" name="btnSubscribe" id="btnSubscribe" value="Subscribe">
+                </form>
+            </div>
+        </div>
+
     </body>
 </html>
