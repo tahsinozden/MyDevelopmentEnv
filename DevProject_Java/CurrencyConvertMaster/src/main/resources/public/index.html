@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Currency Convert Master</title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+
+
+<style>
+input[type="text"] {
+    width: 200px;
+}
+</style>
+
+<body ng-app="currencyApp">
+	<h1>Currency Convert Center</h1>
+
+	<div class='container-fluid typeahead-demo'
+		ng-controller="TypeaheadCtrl">
+
+		<input type="text" ng-model="srcAmt"
+					placeholder="Src. Cur. Amt"
+					class="form-control"/>
+		<input type="text" ng-model="selectedSrcCurrency"
+			placeholder="Source Currency Code"
+			typeahead-show-hint="true"
+			uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
+			typeahead-loading="loadingLocations" typeahead-no-results="noResults"
+			class="form-control"> <i ng-show="loadingSrc"
+			class="glyphicon glyphicon-refresh"></i>
+		<div ng-show="noResults">
+			<i class="glyphicon glyphicon-remove"></i> No Results Found
+		</div>
+
+
+		<input type="text" ng-model="selectedDstCurrency"
+			placeholder="Dest. Currency Code"
+			typeahead-show-hint="true"
+			typeahead-min-length="1"
+			uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
+			typeahead-loading="loadingDst" typeahead-no-results="noResults"
+			class="form-control">
+		<div ng-show="noResults">
+			<i class="glyphicon glyphicon-remove"></i> No Results Found
+		</div>
+		<button ng-click="convert()">Convert</button>
+		<input type="text" 
+			ng-model="conversion" 
+			class="form-control"
+			placeholder="Conversion Result"
+			disabled="disabled"/>
+		<label>{{selectedDstCurrency}}</label>
+
+	</div>
+
+</body>
+
+<script src="js/angular.min.js"></script>
+<script src="js/ui-bootstrap-tpls-1.1.2.min.js"></script>
+<script src="js/helper.js"></script>
+</html>

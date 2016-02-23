@@ -21,9 +21,10 @@ public class CurrencyService {
 	
 	@RequestMapping(value="/currency_service/currency")
 	public @ResponseBody CurrencyConversion getCurrenyConversion(@RequestParam String src, 
-											   @RequestParam String dst) throws Exception{
+											   @RequestParam String dst,
+											   @RequestParam Double srcAmt) throws Exception{
 		CurrencyHelper helper = new CurrencyHelper();
-		return helper.getCurrencyConversion(src, dst);
+		return helper.getCurrencyConversion(src, dst, srcAmt.doubleValue());
 		
 	}
 }

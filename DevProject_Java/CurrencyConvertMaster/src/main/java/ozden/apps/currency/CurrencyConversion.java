@@ -6,18 +6,23 @@ public class CurrencyConversion {
 	private double sourceRate;
 	private double destinationRate;
 	private double rate;
+	private double srcAmt;
+	private double conversionResult;
 	
 	protected CurrencyConversion(){
 		
 	}
+
 	public CurrencyConversion(String sourceCurrencyCode, String destinationCurrencyCode, double sourceRate,
-			double destinationRate) {
+			double destinationRate, double srcAmt) {
 		super();
 		this.sourceCurrencyCode = sourceCurrencyCode;
 		this.destinationCurrencyCode = destinationCurrencyCode;
 		this.sourceRate = sourceRate;
 		this.destinationRate = destinationRate;
+		this.srcAmt = srcAmt;
 	}
+
 	public String getSourceCurrencyCode() {
 		return sourceCurrencyCode;
 	}
@@ -42,12 +47,26 @@ public class CurrencyConversion {
 	public void setDestinationRate(double destinationRate) {
 		this.destinationRate = destinationRate;
 	}
+	public double getConversionResult() {
+		return conversionResult;
+	}
+	public void setConversionResult(double conversionResult) {
+		this.conversionResult = conversionResult;
+	}
 	
 //	public double getConvRate(){
 //		this.rate = this.destinationRate / this.sourceRate;
 //		return this.rate;
 //	}
 	
+	public double getSrcAmt() {
+		return srcAmt;
+	}
+
+	public void setSrcAmt(double srcAmt) {
+		this.srcAmt = srcAmt;
+	}
+
 	public double getRate() {
 		this.rate = this.destinationRate / this.sourceRate;
 		return this.rate;
@@ -55,12 +74,17 @@ public class CurrencyConversion {
 	protected void setRate(double rate) {
 		this.rate = rate;
 	}
+	
+	public void doCurrencyConversion(){
+		this.conversionResult = this.srcAmt * this.getRate();
+	}
 	@Override
 	public String toString() {
 		return "CurrencyConversion [sourceCurrencyCode=" + sourceCurrencyCode + ", destinationCurrencyCode="
 				+ destinationCurrencyCode + ", sourceRate=" + sourceRate + ", destinationRate=" + destinationRate
-				+ ", rate=" + rate + "]";
+				+ ", rate=" + rate + ", conversionResult=" + conversionResult + "]";
 	}
+
 
 	
 	

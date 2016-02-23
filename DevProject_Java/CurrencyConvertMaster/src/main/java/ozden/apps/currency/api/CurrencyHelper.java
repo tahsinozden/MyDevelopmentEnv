@@ -27,14 +27,20 @@ public class CurrencyHelper {
 
 	}
 	
-	public CurrencyConversion getCurrencyConversion(String srcCurrency, String dstCurrency) throws Exception{
-		// throe exception if currencies are empty
+	public CurrencyConversion getCurrencyConversion(String srcCurrency, String dstCurrency, double srcAmt) throws Exception{
+		// throw exception if currencies are empty
 		if (srcCurrency.equals("") || dstCurrency.equals("")){
 			throw new Exception("Empty Currency!");
+		}
+		if(srcAmt <= 0){
+			throw new Exception("Invalid value of source amount!");
 		}
 		double srcRate = 0.0;
 		double dstRate = 0.0;
 		List<Currency> allRates = this.getAllRates();
+		if( srcCurrency.equals(dstCurrency)){
+			throw new Exception("Same currency type is selected!");
+		}
 		for (Currency cur : allRates){
 			// map currencies as source and destination
 			if(cur.getCode().equals(srcCurrency)) srcRate = cur.getRate().doubleValue();
@@ -45,9 +51,11 @@ public class CurrencyHelper {
 			throw new Exception("Currency Not Found!");
 		}
 		
-		CurrencyConversion conv = new CurrencyConversion(srcCurrency, dstCurrency, srcRate, dstRate);
+		CurrencyConversion conv = new CurrencyConversion(srcCurrency, dstCurrency, srcRate, dstRate, srcAmt);
 		// perform currency calculation
-		conv.getRate();
+//		double rate = conv.getRate();
+//		conv.getConvResult();
+		conv.doCurrencyConversion();
 		return conv;
 	}
 	
