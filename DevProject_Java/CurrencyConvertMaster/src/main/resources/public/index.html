@@ -3,56 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <title>Currency Convert Master</title>
+<link rel="stylesheet" type="text/css" href="css/index_styles.css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
 </head>
 
 
 <style>
 input[type="text"] {
-    width: 200px;
+	width: 200px;
 }
 </style>
 
 <body ng-app="currencyApp">
 	<h1>Currency Convert Center</h1>
 
-	<div class='container-fluid typeahead-demo'
-		ng-controller="TypeaheadCtrl">
+	<div class="row">
+		<div class="col-md-6 col-md-offset-1" ng-controller="TypeaheadCtrl">
 
-		<input type="text" ng-model="srcAmt"
-					placeholder="Src. Cur. Amt"
-					class="form-control"/>
-		<input type="text" ng-model="selectedSrcCurrency"
-			placeholder="Source Currency Code"
-			typeahead-show-hint="true"
-			uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
-			typeahead-loading="loadingLocations" typeahead-no-results="noResults"
-			class="form-control"> <i ng-show="loadingSrc"
-			class="glyphicon glyphicon-refresh"></i>
-		<div ng-show="noResults">
-			<i class="glyphicon glyphicon-remove"></i> No Results Found
+			<input type="text" ng-model="srcAmt" placeholder="Src. Cur. Amt"
+				class="form-control" /> <input type="text"
+				ng-model="selectedSrcCurrency" placeholder="Source Currency Code"
+				uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
+				typeahead-loading="loadingLocations"
+				typeahead-no-results="noResults0" class="form-control" /> <i
+				ng-show="loadingSrc" class="glyphicon glyphicon-refresh"></i>
+			<div ng-show="noResults0">
+				<i class="glyphicon glyphicon-remove"></i> No Results Found
+			</div>
+
+
+			<input type="text" ng-model="selectedDstCurrency"
+				placeholder="Dest. Currency Code" typeahead-min-length="1"
+				uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
+				typeahead-loading="loadingDst" typeahead-no-results="noResults1"
+				class="form-control" />
+			<div ng-show="noResults1">
+				<i class="glyphicon glyphicon-remove"></i> No Results Found
+			</div>
+			<button ng-click="convert()">Convert</button>
+			<input type="text" ng-model="conversion" class="form-control"
+				placeholder="Conversion Result" disabled="disabled" /> <label>{{selectedDstCurrency}}</label>
+
 		</div>
 
-
-		<input type="text" ng-model="selectedDstCurrency"
-			placeholder="Dest. Currency Code"
-			typeahead-show-hint="true"
-			typeahead-min-length="1"
-			uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
-			typeahead-loading="loadingDst" typeahead-no-results="noResults"
-			class="form-control">
-		<div ng-show="noResults">
-			<i class="glyphicon glyphicon-remove"></i> No Results Found
+		<div class="col-md-2 col-md-offset-1">
+			<div id="login" class="span3 well well-large offset4">
+		<h4>Account Panel</h4>
+			<form class="form" action="/login">
+				<input name="username" type="text" placeholder="Email" />
+				<input name="password" type="password" placeholder="Password" />
+				<label class="checkbox" for="rememberme">
+					<input type="checkbox" /> Remember me
+				</label> <br />
+				<input class="btn btn-success" type="submit" value="Login" />
+			</form>
+	</div>
 		</div>
-		<button ng-click="convert()">Convert</button>
-		<input type="text" 
-			ng-model="conversion" 
-			class="form-control"
-			placeholder="Conversion Result"
-			disabled="disabled"/>
-		<label>{{selectedDstCurrency}}</label>
 
 	</div>
+
+
 
 </body>
 
