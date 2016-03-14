@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
-@ComponentScan
+@ComponentScan(basePackages = "ozden.apps")
 @EnableAutoConfiguration
 @EnableJpaRepositories(basePackages = "ozden.apps")
 @EntityScan(basePackages = "ozden.apps")
