@@ -21,7 +21,7 @@ public class AccountPageController {
 	UserSessionsRepository userSessionsRepository;
 	
 	// TODO: handle just POST requests
-	@RequestMapping(value = "/account_page")
+	@RequestMapping(value = "/account_page", method=RequestMethod.POST)
 	public String processAccountPage(@RequestParam(value="token") String token){
 		Date now = Calendar.getInstance().getTime();
 		System.out.println(token + " " + now.toString());
@@ -31,6 +31,9 @@ public class AccountPageController {
 			return "redirect:/index.html";
 		}
 		System.out.println("Welcome " + sessions.get(0).toString());
-		return "pages/account_page.html";
+		// to direct a static webpage redirect: is used.
+		// if it were used like "redirect:/account_page.html" then "/account_page" would be called.
+		// in our case pages/account_page.html static page is called.
+		return "redirect:pages/account_page.html";
 	}
 }

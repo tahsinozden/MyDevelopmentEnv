@@ -65,7 +65,7 @@ public class LoginController {
 		Users currentUser = lstUser.get(0);
 		if (!currentUser.getPassword().equals(password)){
 			// redirect is used to redirect request to another controller
-			// if redirect is not used, spring boot redirects the request to a static mapped page.
+			// if redirect is not used, spring boot redirects the request to a mapped controller if exist.
 			return "redirect:/index.html";
 		}
 		Calendar calInst = Calendar.getInstance();
@@ -77,10 +77,9 @@ public class LoginController {
 		UserSessions currentUserSession = new UserSessions(sessionId, currentUser.getUserName(), sessionStartTime, sessionExpTime);
 		userSessionsRepository.save(currentUserSession);
 //		RedirectAttributes redirectAttrs = new RedirectAttributesModelMap();
-		redirectAttrs.addAttribute("sessionId", sessionId);
-		// TODO: handle send just POST requests
-		// redirect to account page
-		return "redirect:/account_page?token={sessionId}";
+//		redirectAttrs.addAttribute("sessionId", sessionId);
+		// to direct a controller, controller mapping is returned
+		return "/account_page?token=" + sessionId;
 	}
 	
 }
