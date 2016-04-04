@@ -33,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
           .antMatchers("/js/*.js").permitAll()
           .antMatchers("/currency_service/currencies").permitAll()
           .antMatchers("/currency_service/currency").permitAll()
+          .antMatchers("/notic_reg_serv/create").permitAll()
           .antMatchers("/pages/*.html").permitAll()
         .anyRequest().authenticated()
           .and()

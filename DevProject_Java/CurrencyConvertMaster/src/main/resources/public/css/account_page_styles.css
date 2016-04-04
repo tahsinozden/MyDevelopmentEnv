@@ -1,0 +1,59 @@
+body[ng-cloak] {
+  display:none;
+}
+body {
+    /*background-color: #FEEBC8;*/
+}
+div[flex="30"] {
+  /*background-color: #DFDFDF;*/
+}
+
+section[flex="40"] {
+  /*background-color: #D4E5FA;*/
+}
+section[flex="70"] {
+  /*background-color: #E8FCD6;*/
+}
+section[flex="20"] {
+ /*background-color: #FFD5E3;*/
+}
+section[flex=""] {
+ /*background-color: rgba(0, 128, 0, 0.35);*/
+}
+
+
+/* Important to set height for column layout  */
+.boxWithHeight {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+/*.a, section {*/
+  /*border: 1px solid rgba(85, 97, 85, 0.27);*/
+  /*border: 1px;*/
+  /*margin: 0px;*/
+/*}*/
+
+#divMenu section{
+
+    border: 1px solid rgba(85, 97, 85, 0.27);
+    /*border: 1px;*/
+    margin: 0px;
+}
+
+#divMenu button{
+  width: 400px;
+}
+
+section {
+  /*background-color: #330099;*/
+}
+
+
+#btnMenu{
+  /*background-color: #330099;*/
+}
+/*
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.
+*/
