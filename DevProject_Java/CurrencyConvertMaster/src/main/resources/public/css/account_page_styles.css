@@ -53,6 +53,28 @@ section {
 #btnMenu{
   /*background-color: #330099;*/
 }
+
+table {
+    width:100%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+table#tblSubsQuery tr:nth-child(even) {
+    background-color: #eee;
+}
+table#tblSubsQuery tr:nth-child(odd) {
+   background-color:#fff;
+}
+table#tblSubsQuery th	{
+    background-color: black;
+    color: white;
+}
 /*
 Copyright 2016 Google Inc. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.

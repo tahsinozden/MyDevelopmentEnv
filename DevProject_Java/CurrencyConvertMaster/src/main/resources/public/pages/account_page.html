@@ -45,10 +45,29 @@
 				<h2>Subscription List</h2>
 				<p>Selected Item: {{ selectedMenuItem.Title }}</p>
 			</section> -->
+      <div ng-controller="ctrlSubsNotic">
+      <div id="divSubscribeCurrency" ng-show="selectedMenuItem.MenuIndex == 0;">
+        <table id="tblSubsQuery">
+          <tr>
+            <th>Src. Currency</th>
+            <th>Dest. Currency</th>
+            <th>Status</th>
+            <th>Notic. Period</th>
+            <th>Threshold</th>
+          </tr>
+          <tr ng-repeat="subs in $root.allSubscriptions">
+            <td>{{subs.srcCurrencyCode}}</td>
+            <td>{{subs.dstCurrencyCode}}</td>
+            <td>{{subs.status}}</td>
+            <td>{{subs.noticPeriod}}</td>
+            <td>{{subs.thresholdValue}}</td>
+          </tr>
+        </table>
+      </div>
 			<div id="divSubscribeCurrency" ng-show="selectedMenuItem.MenuIndex == 1;">
 				<section flex="10"></section>
 				<!-- Here I use bootstrap ui for auto-complete-->
-				<section ng-controller="ctrlSubsNotic">
+				<section >
 						<h2>Subscribe a  Currency</h2>
 						<select id="selectNotPeriod" ng-model="selectedNoticPeriod">
 							<option value="Daily">Daily</option>
@@ -104,6 +123,7 @@
 						<p>Selected Item: {{ selectedMenuItem.Title }}</p>
 					</section>
 			</div>
+    </div>
 	</div>
 
   <!-- Angular Material requires Angular.js Libraries -->

@@ -54,9 +54,22 @@ public class CurrencyNotificationRegistryController {
 		NotificationRegistry newReg =  new NotificationRegistry(userName, srcCur, dstCur, status, noticPeriod, threshold);
 		
 		// register new record
+		// if the record has the same username, spring updates the record, not create a new one
 		notificationRegistryRepository.save(newReg);
-		
+
 		// return newly created record
 		return newReg;
+	}
+	
+	@RequestMapping(value="/notic_reg_serv/query")
+	public List<NotificationRegistry> getAllNotificationRegistryByUser(@RequestParam String userName){
+		if(usersRepository.findByUserName(userName) == null){
+			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found!");
+		}
+		List<NotificationRegistry> lstReg = notificationRegistryRepository.findByUserName(userName);
+//		if (lstReg == null){
+//			
+//		}
+		return lstReg;
 	}
 }

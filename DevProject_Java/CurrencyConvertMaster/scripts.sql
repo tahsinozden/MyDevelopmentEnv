@@ -10,6 +10,7 @@ create table user_sessions(
 
 drop table notification_registry;
 create table notification_registry (
+	rec_id int,
 	user_name varchar(128),
 	src_currency_code varchar(128),
 	dst_currency_code varchar(128),

@@ -1,5 +1,30 @@
+
 var app = angular.module('myApp', ['ngMaterial', 'ui.bootstrap']);
-app.controller('MyController', function($scope, $mdSidenav) {
+
+// to be able to use global functions, varibale etc,
+// rootScope should be initialized as in the following
+app.run(function ($rootScope, $http) {
+        // to be able to use $rootScope variables inside HTML, $root must be used inside HTML
+        // i.e. $root.mySetting
+        $rootScope.mySetting = 42;
+        $rootScope.allSubscriptions = null;
+        $rootScope.showSubscriptions = function(userName){
+          $http.get('http://localhost:8080/notic_reg_serv/query', {
+            params: {
+              'userName': userName,
+            }
+          }).then(function(response){
+            // success function
+            console.log(response.data);
+            // set response data, it is JSON
+            $rootScope.allSubscriptions = response.data;
+          }, function(response){
+            // error function
+            alert(response.data.message);
+          });
+      };
+});
+app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
   //   $scope.openLeftMenu = function() {
   //   $mdSidenav('left').toggle();
   // };
@@ -10,8 +35,17 @@ app.controller('MyController', function($scope, $mdSidenav) {
   $scope.linkClicked = function(item){
     console.log(item);
     $scope.selectedMenuItem = item;
+    if ($scope.selectedMenuItem.MenuIndex == 0){
+      $rootScope.showSubscriptions('tahsin');
+      console.log("$rootScope.allSubscriptions : " +  $rootScope.allSubscriptions);
+    }
   };
   $scope.navLinks = [
+    {
+      Title: "Show Subscriptions",
+      LinkText: "Show Subscriptions",
+      MenuIndex: 0
+    },
     {
       Title: "Subscribe Currency",
       LinkText: "Subscribe Currency",
@@ -34,10 +68,11 @@ app.controller('MyController', function($scope, $mdSidenav) {
     }
 
   ];
-
+  // set initial menu as subscription list
+  $scope.selectedMenuItem = $scope.navLinks[0];
 });
 
-app.controller('ctrlSubsNotic', function ($scope, $http) {
+app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
     var _selected;
     var selectedNoticPeriod = null;
 
@@ -45,7 +80,6 @@ app.controller('ctrlSubsNotic', function ($scope, $http) {
 
     $scope.allCurrencyCodes = [];
     $http.get('http://localhost:8080/currency_service/currencies').then(function(response){
-      console.log('HERE!');
         for (var item in response.data){
             $scope.allCurrencyCodes.push(response.data[item].code);
           }
@@ -106,8 +140,27 @@ app.controller('ctrlSubsNotic', function ($scope, $http) {
           // error function
           alert(response.data.message);
         });
-    }
+    };
 
+    $scope.allSubscriptions = null;
+    // $scope.showSubscriptions = function(){
+    //   $http.get('http://localhost:8080/notic_reg_serv/query', {
+    //     params: {
+    //       'userName': 'tahsin',
+    //     }
+    //   }).then(function(response){
+    //     // success function
+    //     console.log(response.data);
+    //     // set response data, it is JSON
+    //     $scope.allSubscriptions = response.data;
+    //   }, function(response){
+    //     // error function
+    //     alert(response.data.message);
+    //   });
+    // };
 
+    $rootScope.showSubscriptions('tahsin');
+    // $scope.allSubscriptions = $rootScope.allSubscriptions;
+    console.log("$rootScope.allSubscriptions : " +  $rootScope.allSubscriptions);
 
   });

@@ -4,8 +4,10 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 @Entity
 @Table(name = "notification_registry")
 public class NotificationRegistry implements Serializable {
@@ -15,7 +17,14 @@ public class NotificationRegistry implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	// id is used to identify the record in DB,
+	// i.e. if save() function is called and if there is a record having the same id,
+	// then the record is updated instead of creating a new one.
 	@Id
+	@Column(name="rec_id")
+	@GeneratedValue
+	private Integer recId;
+	
 	@Column(name="user_name")
 	private String userName;
 	
@@ -39,8 +48,9 @@ public class NotificationRegistry implements Serializable {
 		
 	}
 	
-	public NotificationRegistry(String userName, String srcCurrencyCode, String dstCurrencyCode, String status,
-			String noticPeriod, Double thresholdValue) {
+	
+	public NotificationRegistry(String userName, String srcCurrencyCode, String dstCurrencyCode,
+			String status, String noticPeriod, Double thresholdValue) {
 		super();
 		this.userName = userName;
 		this.srcCurrencyCode = srcCurrencyCode;
@@ -49,6 +59,17 @@ public class NotificationRegistry implements Serializable {
 		this.noticPeriod = noticPeriod;
 		this.thresholdValue = thresholdValue;
 	}
+
+
+	public Integer getRecId() {
+		return recId;
+	}
+
+
+	public void setRecId(Integer recId) {
+		this.recId = recId;
+	}
+
 
 	public String getUserName() {
 		return userName;

@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
           .antMatchers("/currency_service/currencies").permitAll()
           .antMatchers("/currency_service/currency").permitAll()
           .antMatchers("/notic_reg_serv/create").permitAll()
+          .antMatchers("/notic_reg_serv/query").permitAll()
           .antMatchers("/pages/*.html").permitAll()
         .anyRequest().authenticated()
           .and()
@@ -44,8 +45,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .logout()
         .permitAll()
           .and()
-//          .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
-//          .csrf().csrfTokenRepository(csrfTokenRepository());
+//          .csrf().csrfTokenRepository(csrfTokenRepository())
+//          .and()
+//          .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
           .csrf().disable();
     	http.httpBasic().disable().csrf().disable();
     }
