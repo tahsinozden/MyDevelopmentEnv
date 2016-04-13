@@ -1,4 +1,4 @@
-
+// TODO: hanlde async responses for some request for them to wait for reponses, using promises.
 var app = angular.module('myApp', ['ngMaterial', 'ui.bootstrap']);
 
 // to be able to use global functions, varibale etc,
@@ -7,7 +7,10 @@ app.run(function ($rootScope, $http) {
         // to be able to use $rootScope variables inside HTML, $root must be used inside HTML
         // i.e. $root.mySetting
         $rootScope.mySetting = 42;
+        $rootScope.currentUserName = "tahsin";
         $rootScope.allSubscriptions = null;
+        // list of data prepared for unsubscription selection of currencies.
+        $rootScope.lstUnsubscriptions = [];
         $rootScope.showSubscriptions = function(userName){
           $http.get('http://localhost:8080/notic_reg_serv/query', {
             params: {
@@ -18,10 +21,20 @@ app.run(function ($rootScope, $http) {
             console.log(response.data);
             // set response data, it is JSON
             $rootScope.allSubscriptions = response.data;
+            $rootScope.lstUnsubscriptions = $rootScope.allSubscriptions;
           }, function(response){
             // error function
             alert(response.data.message);
           });
+      };
+      $rootScope.showUnSubscriptionsForMenu = function(userName){
+          $rootScope.showSubscriptions(userName);
+          // $rootScope.lstUnsubscriptions = $rootScope.allSubscriptions;
+          // create a new mapping for selected items
+          for (var i = 0; i < $rootScope.lstUnsubscriptions.length; i++) {
+            // set a default value as false, 'not checked'
+            $rootScope.lstUnsubscriptions[i]["checked"] = false;
+          }
       };
 });
 app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
@@ -32,12 +45,25 @@ app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
   // scope.select = function(item) {
   //   scope.selectedMenuItem = item;
   // };
+  // for links to be clciked, hanlde all process here.
+  // for the data which will be used in general must be in root scope.
   $scope.linkClicked = function(item){
     console.log(item);
     $scope.selectedMenuItem = item;
     if ($scope.selectedMenuItem.MenuIndex == 0){
       $rootScope.showSubscriptions('tahsin');
       console.log("$rootScope.allSubscriptions : " +  $rootScope.allSubscriptions);
+    }
+    else if ($scope.selectedMenuItem.MenuIndex == 2){
+      // TODO: solve single click update problem, after second click, we can see all subscriptions. -> seems fixed now after setting lstUnsubscriptions insode response.
+      $rootScope.showSubscriptions('tahsin');
+      $rootScope.lstUnsubscriptions = $rootScope.allSubscriptions;
+      // create a new mapping for selected items
+      for (var i = 0; i < $rootScope.lstUnsubscriptions.length; i++) {
+        // set a default value as false, 'not checked'
+        $rootScope.lstUnsubscriptions[i]["checked"] = false;
+      }
+      console.log($rootScope.lstUnsubscriptions);
     }
   };
   $scope.navLinks = [
@@ -135,6 +161,38 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
           }
         }).then(function(response){
           // success function
+          console.log(response);
+        }, function(response){
+          // error function
+          alert(response.data.message);
+        });
+    };
+
+    // function for unsubscribtion from currency notification
+    $scope.deleteNotic = function(){
+      // find selected records from the table
+      var lstRecords = [];
+      for (var i = 0; i < $rootScope.lstUnsubscriptions.length; i++) {
+        // add the selected records to the list
+        if( $rootScope.lstUnsubscriptions[i].checked)
+          lstRecords.push($rootScope.lstUnsubscriptions[i].recId);
+      }
+      if (lstRecords === undefined || lstRecords.length == 0) {
+        alert("No records selected!");
+        return;
+      }
+      console.log("Selected Records :" + String(lstRecords));
+        $http.delete('http://localhost:8080/notic_reg_serv/unsubscribe', {
+          params: {
+            'userName': 'tahsin',
+            // in order to send multiple values of recID,
+            // a js list can be set to recID.
+            'recID': lstRecords,
+          }
+        }).then(function(response){
+          // success function
+          console.log("Unsubscription successful!");
+          $rootScope.showUnSubscriptionsForMenu($rootScope.currentUserName);
           console.log(response);
         }, function(response){
           // error function

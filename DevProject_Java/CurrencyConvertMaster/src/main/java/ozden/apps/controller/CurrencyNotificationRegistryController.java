@@ -1,5 +1,7 @@
 package ozden.apps.controller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,10 +68,40 @@ public class CurrencyNotificationRegistryController {
 		if(usersRepository.findByUserName(userName) == null){
 			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found!");
 		}
-		List<NotificationRegistry> lstReg = notificationRegistryRepository.findByUserName(userName);
-//		if (lstReg == null){
-//			
-//		}
+//		List<NotificationRegistry> lstReg = notificationRegistryRepository.findByUserName(userName);
+		List<NotificationRegistry> lstReg = notificationRegistryRepository.findByUserNameAndStatus(userName, "ACTIVE");
 		return lstReg;
+	}
+	
+	@RequestMapping(value="/notic_reg_serv/unsubscribe", method=RequestMethod.DELETE)
+	public void doUnsubscribeNotification(@RequestParam String userName,
+										  @RequestParam Integer[] recID ){
+		if (recID.length == 0){
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "No recIds! : " + recID.toString());
+		}
+		// check user exists or not
+		List<Users> user = usersRepository.findByUserName(userName);
+		if (user == null || user.isEmpty()){
+			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found!");
+		}
+		
+		// check user has subscription to this currency notic.
+		List<NotificationRegistry> lstSubscriptions = new ArrayList<NotificationRegistry>();
+		for (Integer id : recID) {
+			List<NotificationRegistry> tmp = notificationRegistryRepository.findByRecId(id);
+			if (tmp == null || tmp.isEmpty())
+					throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User does not have this subscription " + id.toString());
+			// get the first element
+			lstSubscriptions.add(tmp.get(0));
+		}
+		
+		// update subscriptions as INACTIVE
+//		for (NotificationRegistry rec : lstSubscriptions) {
+//			rec.setStatus("INACTIVE");
+//			notificationRegistryRepository.save(rec);
+//		}
+		
+		// delete related records from DB
+		notificationRegistryRepository.delete(lstSubscriptions);
 	}
 }

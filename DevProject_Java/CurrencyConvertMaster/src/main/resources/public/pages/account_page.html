@@ -106,7 +106,26 @@
 				<section flex="10"></section>
 				<section>
 						<h2>Unsubscribe a  Currency</h2>
-						<p>Selected Item: {{ selectedMenuItem.Title }}</p>
+            <table id="tblSelectCur2Unsubscribe">
+              <tr>
+                <th></th>
+                <th>Src. Currency</th>
+                <th>Dest. Currency</th>
+                <th>Status</th>
+                <th>Notic. Period</th>
+                <th>Threshold</th>
+              </tr>
+              <tr ng-repeat="subs in $root.lstUnsubscriptions">
+                <td><input type="checkbox" checked="false" ng-model="subs.checked" id="chkBxUnsCur"/></td>
+                <td>{{subs.srcCurrencyCode}}</td>
+                <td>{{subs.dstCurrencyCode}}</td>
+                <td>{{subs.status}}</td>
+                <td>{{subs.noticPeriod}}</td>
+                <td>{{subs.thresholdValue}}</td>
+              </tr>
+            </table>
+            <button ng-click="deleteNotic()">Delete Selected Records</button>
+            <button ng-click="$root.showUnSubscriptionsForMenu('tahsin');">Refresh</button>
 					</section>
 			</div>
 			<div id="divSubscribeCurrencyThr" ng-show="selectedMenuItem.MenuIndex == 3;">

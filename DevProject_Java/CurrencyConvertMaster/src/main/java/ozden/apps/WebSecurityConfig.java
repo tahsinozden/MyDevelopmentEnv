@@ -35,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
           .antMatchers("/currency_service/currency").permitAll()
           .antMatchers("/notic_reg_serv/create").permitAll()
           .antMatchers("/notic_reg_serv/query").permitAll()
+          .antMatchers("/notic_reg_serv/unsubscribe").permitAll()
           .antMatchers("/pages/*.html").permitAll()
         .anyRequest().authenticated()
           .and()

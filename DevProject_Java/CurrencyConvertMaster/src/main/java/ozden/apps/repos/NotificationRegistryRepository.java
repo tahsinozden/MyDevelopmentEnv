@@ -10,6 +10,7 @@ import ozden.apps.entities.NotificationRegistry;
 @Transactional
 public interface NotificationRegistryRepository extends JpaRepository<NotificationRegistry, String>{
 	public List<NotificationRegistry> findAll();
+	public List<NotificationRegistry> findByRecId(Integer recId);
 	public List<NotificationRegistry> findByUserName(String userName);
 	public List<NotificationRegistry> findByUserNameAndStatus(String userName, String status);
 }
