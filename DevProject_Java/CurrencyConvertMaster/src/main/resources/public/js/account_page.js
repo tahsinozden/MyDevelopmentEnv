@@ -9,6 +9,10 @@ app.run(function ($rootScope, $http) {
         $rootScope.mySetting = 42;
         $rootScope.currentUserName = "tahsin";
         $rootScope.allSubscriptions = null;
+        $rootScope.ThresholdTypes = {'EQUAL': 'EQUAL',
+        							 'GREATER_THAN': 'GREATER_THAN',
+        							 'LESS_THAN': 'LESS_THAN'};
+        ;
         // list of data prepared for unsubscription selection of currencies.
         $rootScope.lstUnsubscriptions = [];
         $rootScope.showSubscriptions = function(userName){
@@ -81,17 +85,18 @@ app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
       Title: "Unsubscribe Currency",
       LinkText: "Unsubscribe Currency",
       MenuIndex: 2
-    },
-    {
-      Title: "Subscribe Currency Threshold Notification",
-      LinkText: "Subscribe Currency Threshold Notification",
-      MenuIndex: 3
-    },
-    {
-      Title: "Unsubscribe Currency Threshold Notification",
-      LinkText: "Unsubscribe Currency Threshold Notification",
-      MenuIndex: 4
     }
+//    },
+//    {
+//      Title: "Subscribe Currency Threshold Notification",
+//      LinkText: "Subscribe Currency Threshold Notification",
+//      MenuIndex: 3
+//    },
+//    {
+//      Title: "Unsubscribe Currency Threshold Notification",
+//      LinkText: "Unsubscribe Currency Threshold Notification",
+//      MenuIndex: 4
+//    }
 
   ];
   // set initial menu as subscription list
@@ -112,10 +117,10 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
       console.log($scope.allCurrencyCodes);
      });
 
-    $scope.convert = function(){
-      var src = $scope.selectedSrcCurrency;
-      var dst = $scope.selectedDstCurrency;
-      var srcAmt = $scope.srcAmt;
+    $scope.convertCurrency = function(src, dst, srcAmt){
+//      var src = $scope.selectedSrcCurrency;
+//      var dst = $scope.selectedDstCurrency;
+//      var srcAmt = $scope.srcAmt;
 
       if ((src !== '' && dst !== '' || srcAmt !== '') && src !== dst){
         $http.get('http://localhost:8080/currency_service/currency', {
@@ -150,14 +155,18 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
       },
       getterSetter: true
     };
-
+    
+    $scope.thresholdValue = 0.0;
+    $scope.thresholdType = "GREATER_THAN"
     $scope.createNotic = function(){
         $http.get('http://localhost:8080/notic_reg_serv/create', {
           params: {
             'userName': 'tahsin',
             'srcCur': $scope.selectedSrcCurrency,
             'dstCur': $scope.selectedDstCurrency,
-            'noticPeriod': $scope.selectedNoticPeriod
+            'noticPeriod': $scope.selectedNoticPeriod,
+            'threshold': $scope.thresholdValue,
+            'thresholdType': $scope.thresholdType
           }
         }).then(function(response){
           // success function

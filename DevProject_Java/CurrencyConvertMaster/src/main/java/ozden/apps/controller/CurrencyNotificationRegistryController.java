@@ -33,11 +33,30 @@ public class CurrencyNotificationRegistryController {
 			@RequestParam String srcCur,
 			@RequestParam String dstCur,
 			@RequestParam String noticPeriod,
-			@RequestParam(required=false) Double threshold ){
+			@RequestParam(required=false) Double threshold,
+			@RequestParam(required=false) String thresholdType){
 		
+		NotificationRegistry.ThresholdType thrType = NotificationRegistry.ThresholdType.GREATER_THAN;
 		if(threshold == null || threshold < 0.0){
 			threshold = 0.0;
 		}
+		
+//		System.out.println(NotificationRegistry.ThresholdType.EQUAL.name());
+//		System.out.println(NotificationRegistry.ThresholdType.GREATER_THAN.name());
+//		System.out.println(NotificationRegistry.ThresholdType.LESS_THAN.name());
+
+		// map the value
+		if (thresholdType != null){
+			if (thresholdType.equals(NotificationRegistry.ThresholdType.EQUAL.name()))
+				thrType = NotificationRegistry.ThresholdType.EQUAL;
+			else if (thresholdType.equals(NotificationRegistry.ThresholdType.GREATER_THAN.name()))
+				thrType = NotificationRegistry.ThresholdType.GREATER_THAN;
+			else if (thresholdType.equals(NotificationRegistry.ThresholdType.LESS_THAN.name()))
+				thrType = NotificationRegistry.ThresholdType.LESS_THAN;
+			else
+				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, thresholdType + " is not a valid threshold type!");
+		}
+
 		String status = "ACTIVE";
 		
 		if (userName.equals("") ||
@@ -53,7 +72,8 @@ public class CurrencyNotificationRegistryController {
 			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found!");
 		}
 		
-		NotificationRegistry newReg =  new NotificationRegistry(userName, srcCur, dstCur, status, noticPeriod, threshold);
+		NotificationRegistry newReg =  new NotificationRegistry(userName, srcCur, dstCur, 
+								status, noticPeriod, threshold, thrType);
 		
 		// register new record
 		// if the record has the same username, spring updates the record, not create a new one

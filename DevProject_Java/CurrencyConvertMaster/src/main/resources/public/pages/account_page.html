@@ -53,14 +53,18 @@
             <th>Dest. Currency</th>
             <th>Status</th>
             <th>Notic. Period</th>
+<!--             <th>Current Rate</th> -->
             <th>Threshold</th>
+            <th>Threshold Type</th>
           </tr>
           <tr ng-repeat="subs in $root.allSubscriptions">
             <td>{{subs.srcCurrencyCode}}</td>
             <td>{{subs.dstCurrencyCode}}</td>
             <td>{{subs.status}}</td>
             <td>{{subs.noticPeriod}}</td>
+<!--             <td>{{convertCurrency(subs.srcCurrencyCode, subs.dstCurrencyCode, 1)}}</td> -->
             <td>{{subs.thresholdValue}}</td>
+            <td>{{subs.thresholdType}}</td>
           </tr>
         </table>
       </div>
@@ -94,6 +98,16 @@
 							<i class="glyphicon glyphicon-remove"></i> No Results Found
 						</div>
 
+						<input type="text" ng-model="thresholdValue"
+							placeholder="Threshold Value"
+							class="form-control" value="0.0" />
+						
+						<select id="selectNotPeriod" ng-model="thresholdType">
+							<option >EQUAL</option>
+							<option >GREATER_THAN</option>
+							<option >LESS_THAN</option>
+						</select>
+						
 						<p>Selected Source Currency: <b>{{ selectedSrcCurrency }}</b></p>
 						<p>Selected Destination Currency: <b>{{ selectedDstCurrency }}</b></p>
 						<p>Notification Period: <b>{{ selectedNoticPeriod }}</b></p>
@@ -105,7 +119,7 @@
 			<div id="divUnsubscribeCurrency" ng-show="selectedMenuItem.MenuIndex == 2;">
 				<section flex="10"></section>
 				<section>
-						<h2>Unsubscribe a  Currency</h2>
+						<h2>Unsubscribe a Currency</h2>
             <table id="tblSelectCur2Unsubscribe">
               <tr>
                 <th></th>
@@ -114,6 +128,7 @@
                 <th>Status</th>
                 <th>Notic. Period</th>
                 <th>Threshold</th>
+                <th>Threshold Type</th>
               </tr>
               <tr ng-repeat="subs in $root.lstUnsubscriptions">
                 <td><input type="checkbox" checked="false" ng-model="subs.checked" id="chkBxUnsCur"/></td>
@@ -122,6 +137,7 @@
                 <td>{{subs.status}}</td>
                 <td>{{subs.noticPeriod}}</td>
                 <td>{{subs.thresholdValue}}</td>
+                <td>{{subs.thresholdType}}</td>
               </tr>
             </table>
             <button ng-click="deleteNotic()">Delete Selected Records</button>

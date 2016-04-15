@@ -16,6 +16,11 @@ public class NotificationRegistry implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static enum ThresholdType{
+		LESS_THAN,
+		EQUAL,
+		GREATER_THAN
+	}
 	
 	// id is used to identify the record in DB,
 	// i.e. if save() function is called and if there is a record having the same id,
@@ -44,13 +49,16 @@ public class NotificationRegistry implements Serializable {
 	@Column(name="threshold_value")
 	private Double thresholdValue;
 
+	@Column(name="threshold_type")
+	private String thresholdType;
+	
 	public NotificationRegistry(){
 		
 	}
 	
 	
 	public NotificationRegistry(String userName, String srcCurrencyCode, String dstCurrencyCode,
-			String status, String noticPeriod, Double thresholdValue) {
+			String status, String noticPeriod, Double thresholdValue, ThresholdType thresholdType) {
 		super();
 		this.userName = userName;
 		this.srcCurrencyCode = srcCurrencyCode;
@@ -58,6 +66,7 @@ public class NotificationRegistry implements Serializable {
 		this.status = status;
 		this.noticPeriod = noticPeriod;
 		this.thresholdValue = thresholdValue;
+		this.thresholdType = thresholdType.name();
 	}
 
 
@@ -118,6 +127,17 @@ public class NotificationRegistry implements Serializable {
 	public void setThresholdValue(Double thresholdValue) {
 		this.thresholdValue = thresholdValue;
 	}
+
+	
+	public String getThresholdType() {
+		return thresholdType;
+	}
+
+
+	public void setThresholdType(String thresholdType) {
+		this.thresholdType = thresholdType;
+	}
+
 
 	@Override
 	public String toString() {
