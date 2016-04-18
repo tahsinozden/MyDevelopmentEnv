@@ -28,13 +28,18 @@ CREATE TABLE "AppSchema".notification_registry
   status character varying(32),
   notic_period character varying(32),
   threshold_value double precision,
-  threshold_type integer
+  threshold_type character varying(32),
+  last_notic_send_date timestamp without time zone,
+  email_send_status character varying(255),
+  notification_email character varying(255),
+  current_rate double precision
 )
 WITH (
   OIDS=FALSE
 );
 ALTER TABLE "AppSchema".notification_registry
   OWNER TO postgres;
+
 
 
 -- Table: "AppSchema".user_sessions
@@ -73,6 +78,25 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE "AppSchema".users
+  OWNER TO postgres;
+
+  
+-- Table: "AppSchema".currencies
+
+DROP TABLE "AppSchema".currencies;
+
+CREATE TABLE "AppSchema".currencies
+(
+  code character varying(255) NOT NULL,
+  last_update_time timestamp without time zone,
+  name character varying(255),
+  rate double precision,
+  CONSTRAINT currencies_pkey PRIMARY KEY (code)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "AppSchema".currencies
   OWNER TO postgres;
 
   

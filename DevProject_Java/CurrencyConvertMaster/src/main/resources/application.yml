@@ -14,3 +14,18 @@ spring:
     jpa.hibernate.ddl-auto: "update"
     jpa.hibernate.dialect: "org.hibernate.dialect.PostgreSQLDialect"
     jpa.hibernate.naming_strategy: "org.hibernate.cfg.ImprovedNamingStrategy"
+    
+#    security.user.name: "user"
+#    security.user.password: "pass"
+#    #security.user.role=ADMIN
+
+    # Email Configuration
+    mail.host: smtp.gmail.com
+    mail.username: utest0095@gmail.com
+    mail.password: 20162015
+
+    mail.properties.mail.smtp.auth: true
+    mail.properties.mail.smtp.socketFactory.port: 465
+    mail.properties.mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
+    mail.properties.mail.smtp.socketFactory.fallback: false
+     

@@ -11,14 +11,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "ozden.apps")
+//@ComponentScan
+//@ComponentScan(basePackages = {"ozden.apps", "ozden.apps.currency.api"})
 @EnableAutoConfiguration
 @EnableJpaRepositories(basePackages = "ozden.apps")
 @EntityScan(basePackages = "ozden.apps")
+@EnableScheduling
 //@EnableWebMvc
 
 public class Application {

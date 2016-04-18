@@ -34,11 +34,13 @@ public class CurrencyNotificationRegistryController {
 			@RequestParam String dstCur,
 			@RequestParam String noticPeriod,
 			@RequestParam(required=false) Double threshold,
-			@RequestParam(required=false) String thresholdType){
+			@RequestParam(required=false) String thresholdType,
+			@RequestParam(required=false) String notificationEmail){
 		
 		NotificationRegistry.ThresholdType thrType = NotificationRegistry.ThresholdType.GREATER_THAN;
 		if(threshold == null || threshold < 0.0){
 			threshold = 0.0;
+			thrType = NotificationRegistry.ThresholdType.NO_THRESHOLD;
 		}
 		
 //		System.out.println(NotificationRegistry.ThresholdType.EQUAL.name());
@@ -66,6 +68,9 @@ public class CurrencyNotificationRegistryController {
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Check your request parameters!");
 		}
 		
+		if (notificationEmail == null || notificationEmail.equals(""))
+			notificationEmail = userName;
+		
 		// check user exists or not
 		List<Users> user = usersRepository.findByUserName(userName);
 		if (user == null || user.isEmpty()){
@@ -73,7 +78,7 @@ public class CurrencyNotificationRegistryController {
 		}
 		
 		NotificationRegistry newReg =  new NotificationRegistry(userName, srcCur, dstCur, 
-								status, noticPeriod, threshold, thrType);
+								status, noticPeriod, threshold, thrType, notificationEmail);
 		
 		// register new record
 		// if the record has the same username, spring updates the record, not create a new one

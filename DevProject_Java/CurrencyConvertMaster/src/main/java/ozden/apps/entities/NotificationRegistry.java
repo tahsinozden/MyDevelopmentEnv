@@ -1,12 +1,16 @@
 package ozden.apps.entities;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "notification_registry")
@@ -19,7 +23,8 @@ public class NotificationRegistry implements Serializable {
 	public static enum ThresholdType{
 		LESS_THAN,
 		EQUAL,
-		GREATER_THAN
+		GREATER_THAN,
+		NO_THRESHOLD
 	}
 	
 	// id is used to identify the record in DB,
@@ -52,13 +57,27 @@ public class NotificationRegistry implements Serializable {
 	@Column(name="threshold_type")
 	private String thresholdType;
 	
+	@Column(name="last_notic_send_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastNoticSendDate;
+	
+	// PENDING, FAILED, SUCCESS
+	@Column(name="email_send_status")
+	private String emailSendStatus;
+	
+	@Column(name="notification_email")
+	private String notificationEmail;
+	
+	@Column(name="current_rate")
+	private Double currentRate;
+	
 	public NotificationRegistry(){
 		
 	}
 	
 	
 	public NotificationRegistry(String userName, String srcCurrencyCode, String dstCurrencyCode,
-			String status, String noticPeriod, Double thresholdValue, ThresholdType thresholdType) {
+			String status, String noticPeriod, Double thresholdValue, ThresholdType thresholdType, String notificationEmail) {
 		super();
 		this.userName = userName;
 		this.srcCurrencyCode = srcCurrencyCode;
@@ -67,6 +86,10 @@ public class NotificationRegistry implements Serializable {
 		this.noticPeriod = noticPeriod;
 		this.thresholdValue = thresholdValue;
 		this.thresholdType = thresholdType.name();
+		this.lastNoticSendDate = new Calendar.Builder().setDate(1990, 1, 1).build().getTime();
+		this.emailSendStatus = "PENDING";
+		this.notificationEmail = notificationEmail;
+		this.currentRate = -1.0;
 	}
 
 
@@ -138,13 +161,56 @@ public class NotificationRegistry implements Serializable {
 		this.thresholdType = thresholdType;
 	}
 
+	
+	public Date getLastNoticSendDate() {
+		return lastNoticSendDate;
+	}
+
+
+	public void setLastNoticSendDate(Date lastNoticSendDate) {
+		this.lastNoticSendDate = lastNoticSendDate;
+	}
+
+
+	public String getEmailSendStatus() {
+		return emailSendStatus;
+	}
+
+
+	public void setEmailSendStatus(String emailSendStatus) {
+		this.emailSendStatus = emailSendStatus;
+	}
+
+
+	public String getNotificationEmail() {
+		return notificationEmail;
+	}
+
+
+	public void setNotificationEmail(String notificationEmail) {
+		this.notificationEmail = notificationEmail;
+	}
+
+
+	public Double getCurrentRate() {
+		return currentRate;
+	}
+
+
+	public void setCurrentRate(Double currentRate) {
+		this.currentRate = currentRate;
+	}
+
 
 	@Override
 	public String toString() {
-		return "NotificationRegistry [userName=" + userName + ", srcCurrencyCode=" + srcCurrencyCode
-				+ ", dstCurrencyCode=" + dstCurrencyCode + ", status=" + status + ", noticPeriod=" + noticPeriod
-				+ ", thresholdValue=" + thresholdValue + "]";
+		return "NotificationRegistry [recId=" + recId + ", userName=" + userName + ", srcCurrencyCode="
+				+ srcCurrencyCode + ", dstCurrencyCode=" + dstCurrencyCode + ", status=" + status + ", noticPeriod="
+				+ noticPeriod + ", thresholdValue=" + thresholdValue + ", thresholdType=" + thresholdType
+				+ ", lastNoticSendDate=" + lastNoticSendDate + ", emailSendStatus=" + emailSendStatus
+				+ ", notificationEmail=" + notificationEmail + ", currentRate=" + currentRate + "]";
 	}
+
 
 	@Override
 	public int hashCode() {
