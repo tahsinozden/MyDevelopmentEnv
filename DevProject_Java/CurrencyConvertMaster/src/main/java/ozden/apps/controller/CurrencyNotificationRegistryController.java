@@ -55,6 +55,8 @@ public class CurrencyNotificationRegistryController {
 				thrType = NotificationRegistry.ThresholdType.GREATER_THAN;
 			else if (thresholdType.equals(NotificationRegistry.ThresholdType.LESS_THAN.name()))
 				thrType = NotificationRegistry.ThresholdType.LESS_THAN;
+			else if (thresholdType.equals(NotificationRegistry.ThresholdType.NO_THRESHOLD.name()))
+				thrType = NotificationRegistry.ThresholdType.NO_THRESHOLD;
 			else
 				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, thresholdType + " is not a valid threshold type!");
 		}

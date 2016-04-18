@@ -11,7 +11,8 @@ app.run(function ($rootScope, $http) {
         $rootScope.allSubscriptions = null;
         $rootScope.ThresholdTypes = {'EQUAL': 'EQUAL',
         							 'GREATER_THAN': 'GREATER_THAN',
-        							 'LESS_THAN': 'LESS_THAN'};
+        							 'LESS_THAN': 'LESS_THAN',
+        							 'NO_THRESHOLD': 'NO_THRESHOLD'};
         ;
         // list of data prepared for unsubscription selection of currencies.
         $rootScope.lstUnsubscriptions = [];
@@ -157,7 +158,7 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
     };
     
     $scope.thresholdValue = 0.0;
-    $scope.thresholdType = "GREATER_THAN"
+    $scope.thresholdType = "NO_THRESHOLD"
     $scope.createNotic = function(){
         $http.get('http://localhost:8080/notic_reg_serv/create', {
           params: {
