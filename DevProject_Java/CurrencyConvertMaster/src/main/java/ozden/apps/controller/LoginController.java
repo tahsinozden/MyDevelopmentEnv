@@ -9,11 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.catalina.connector.Request;
+import org.jasypt.util.password.StrongPasswordEncryptor;
+import org.jasypt.util.text.BasicTextEncryptor;
+import org.jasypt.util.text.StrongTextEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import ozden.apps.repos.UserSessionsRepository;
 import ozden.apps.repos.UsersRepository;
+import ozden.apps.tools.EncryptionHelper;
 import ozden.apps.currency.Currency;
 import ozden.apps.currency.CurrencyConversion;
 import ozden.apps.currency.api.CurrencyHelper;
@@ -63,11 +69,18 @@ public class LoginController {
 			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found!");
 		}
 		Users currentUser = lstUser.get(0);
-		if (!currentUser.getPassword().equals(password)){
+		
+		if (!EncryptionHelper.checkPasswordPairEqual(currentUser.getPassword(), password)){
 			// redirect is used to redirect request to another controller
 			// if redirect is not used, spring boot redirects the request to a mapped controller if exist.
 			return "redirect:/index.html";
 		}
+        
+//		if (!currentUser.getPassword().equals(password)){
+//			// redirect is used to redirect request to another controller
+//			// if redirect is not used, spring boot redirects the request to a mapped controller if exist.
+//			return "redirect:/index.html";
+//		}
 		Calendar calInst = Calendar.getInstance();
 		Date sessionStartTime = calInst.getTime();
 		calInst.set(Calendar.MINUTE, calInst.get(Calendar.MINUTE) + 10); // 10 minutes expire time
