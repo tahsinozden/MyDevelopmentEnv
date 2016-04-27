@@ -7,7 +7,13 @@ app.run(function ($rootScope, $http) {
         // to be able to use $rootScope variables inside HTML, $root must be used inside HTML
         // i.e. $root.mySetting
         $rootScope.mySetting = 42;
-        $rootScope.currentUserName = "tahsin";
+//        $rootScope.currentUserName = "tahsin";
+        // get current user
+        $rootScope.currentUserName = sessionStorage.getItem('currentUser');
+        // get JWT token
+        var token = sessionStorage.getItem("token");
+        $rootScope.AuthHeader = 'Bearer ' + token;
+        $http.defaults.headers.common.Authorization = $rootScope.AuthHeader;
         $rootScope.allSubscriptions = null;
         $rootScope.ThresholdTypes = {'EQUAL': 'EQUAL',
         							 'GREATER_THAN': 'GREATER_THAN',
@@ -43,6 +49,13 @@ app.run(function ($rootScope, $http) {
       };
 });
 app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
+	$scope.loggedIn = function(){
+		var curUser = sessionStorage.getItem('currentUser');
+		if(curUser != null)
+			return true;
+		else
+			return false;
+	}
   //   $scope.openLeftMenu = function() {
   //   $mdSidenav('left').toggle();
   // };
@@ -56,12 +69,12 @@ app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
     console.log(item);
     $scope.selectedMenuItem = item;
     if ($scope.selectedMenuItem.MenuIndex == 0){
-      $rootScope.showSubscriptions('tahsin');
+      $rootScope.showSubscriptions($rootScope.currentUserName);
       console.log("$rootScope.allSubscriptions : " +  $rootScope.allSubscriptions);
     }
     else if ($scope.selectedMenuItem.MenuIndex == 2){
       // TODO: solve single click update problem, after second click, we can see all subscriptions. -> seems fixed now after setting lstUnsubscriptions insode response.
-      $rootScope.showSubscriptions('tahsin');
+      $rootScope.showSubscriptions($rootScope.currentUserName);
       $rootScope.lstUnsubscriptions = $rootScope.allSubscriptions;
       // create a new mapping for selected items
       for (var i = 0; i < $rootScope.lstUnsubscriptions.length; i++) {
@@ -160,9 +173,10 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
     $scope.thresholdValue = 0.0;
     $scope.thresholdType = "NO_THRESHOLD"
     $scope.createNotic = function(){
+        $http.defaults.headers.common.Authorization = $rootScope.AuthHeader;
         $http.get('http://localhost:8080/notic_reg_serv/create', {
           params: {
-            'userName': 'tahsin',
+            'userName': $rootScope.currentUserName,
             'srcCur': $scope.selectedSrcCurrency,
             'dstCur': $scope.selectedDstCurrency,
             'noticPeriod': $scope.selectedNoticPeriod,
@@ -192,9 +206,10 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
         return;
       }
       console.log("Selected Records :" + String(lstRecords));
+      	$http.defaults.headers.common.Authorization = $rootScope.AuthHeader;
         $http.delete('http://localhost:8080/notic_reg_serv/unsubscribe', {
           params: {
-            'userName': 'tahsin',
+            'userName': $rootScope.currentUserName,
             // in order to send multiple values of recID,
             // a js list can be set to recID.
             'recID': lstRecords,
@@ -227,7 +242,7 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
     //   });
     // };
 
-    $rootScope.showSubscriptions('tahsin');
+    $rootScope.showSubscriptions($rootScope.currentUserName);
     // $scope.allSubscriptions = $rootScope.allSubscriptions;
     console.log("$rootScope.allSubscriptions : " +  $rootScope.allSubscriptions);
 

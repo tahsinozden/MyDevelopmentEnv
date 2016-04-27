@@ -21,38 +21,38 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-        .httpBasic()
-      .and()
-        .authorizeRequests()
-          .antMatchers("/", "/index.html").permitAll()
-          .antMatchers("/login").permitAll()
-          .antMatchers("/create-account").permitAll()
-          .antMatchers("/account_page").permitAll()
-          .antMatchers("/favicon.ico").permitAll()
-          .antMatchers("/*.html").permitAll()
-          .antMatchers("/css/*.css").permitAll()
-          .antMatchers("/js/*.js").permitAll()
-          .antMatchers("/currency_service/currencies").permitAll()
-          .antMatchers("/currency_service/currency").permitAll()
-          .antMatchers("/notic_reg_serv/create").permitAll()
-          .antMatchers("/notic_reg_serv/query").permitAll()
-          .antMatchers("/notic_reg_serv/unsubscribe").permitAll()
-          .antMatchers("/send-email").permitAll()
-          .antMatchers("/pages/*.html").permitAll()
-        .anyRequest().authenticated()
-          .and()
-//        .formLogin()
-//        	.loginPage("/login")
-//        	.permitAll()
+//        http
+//        .httpBasic()
+//      .and()
+//        .authorizeRequests()
+//          .antMatchers("/", "/index.html").permitAll()
+//          .antMatchers("/login").permitAll()
+//          .antMatchers("/create-account").permitAll()
+//          .antMatchers("/account_page").permitAll()
+//          .antMatchers("/favicon.ico").permitAll()
+//          .antMatchers("/*.html").permitAll()
+//          .antMatchers("/css/*.css").permitAll()
+//          .antMatchers("/js/*.js").permitAll()
+//          .antMatchers("/currency_service/currencies").permitAll()
+//          .antMatchers("/currency_service/currency").permitAll()
+//          .antMatchers("/notic_reg_serv/create").permitAll()
+//          .antMatchers("/notic_reg_serv/query").permitAll()
+//          .antMatchers("/notic_reg_serv/unsubscribe").permitAll()
+//          .antMatchers("/send-email").permitAll()
+//          .antMatchers("/pages/*.html").permitAll()
+//        .anyRequest().authenticated()
 //          .and()
-        .logout()
-        .permitAll()
-          .and()
-//          .csrf().csrfTokenRepository(csrfTokenRepository())
+////        .formLogin()
+////        	.loginPage("/login")
+////        	.permitAll()
+////          .and()
+//        .logout()
+//        .permitAll()
 //          .and()
-//          .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
-          .csrf().disable();
+////          .csrf().csrfTokenRepository(csrfTokenRepository())
+////          .and()
+////          .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
+//          .csrf().disable();
     	http.httpBasic().disable().csrf().disable();
     }
 

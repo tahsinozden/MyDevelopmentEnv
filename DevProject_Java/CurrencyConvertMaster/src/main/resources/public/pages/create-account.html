@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Create Account</title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../css/create-account.css">
+</head>
+<body ng-app="ngCreateAcctApp">
+	
+	<div ng-controller="ctrlCreateAcctForm" class="col-md-2 col-md-offset-1">
+	<h2>Create Account</h2>
+		<form action="/create-account" method="POST"  >
+			User Name <input type="text" ng-model="username" name="username" class="form-control" />
+			Password <input type="password" ng-model="password"  name="password" class="form-control"/>
+			Re-Password <input type="password" ng-model="repassword"  class="form-control"/>
+			<i ng-show="password != repassword" class="form-control">Password is not equal</i>
+			Submit <input type="button" value="Submit" ng-click="submitFormData()"  ng-disabled="disableSubmit()" class="form-control"/>
+		</form>
+	</div>
+</body>
+
+<script src="../js/angular.min.js"></script>
+<script src="../js/ui-bootstrap-tpls-1.1.2.min.js"></script>
+<script src="../js/create-account.js"></script>
+
+</html>
