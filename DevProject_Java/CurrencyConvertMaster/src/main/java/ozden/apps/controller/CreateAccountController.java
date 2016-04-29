@@ -33,7 +33,8 @@ public class CreateAccountController {
 	@RequestMapping(value="/create-account", method=RequestMethod.POST)
 //	public String doCreateAccount( @RequestParam String username,
 //								   @RequestParam String password){
-	public String doCreateAccount( @RequestBody UserCreate usr){
+	// since I got parse errors for string, I decided to return a class object, which is directly converted to JSON
+	public UserCreate doCreateAccount( @RequestBody UserCreate usr){
 		// here I used @RequestBody, because I was getting error while doing request from front-end
 		// error is "Required String parameter 'username' is not present"
 		// but it already exists in my request
@@ -69,7 +70,9 @@ public class CreateAccountController {
 		usersRepository.save(user);
 		
 		// redirect to account page 
-		return user.getUserName();
+//		return user.getUserName();
+		usr.password = "****";
+		return usr;
 //		return "redirect:/index.html";
 	}
 	

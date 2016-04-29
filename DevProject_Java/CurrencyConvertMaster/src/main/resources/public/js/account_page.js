@@ -7,19 +7,23 @@ app.run(function ($rootScope, $http) {
         // to be able to use $rootScope variables inside HTML, $root must be used inside HTML
         // i.e. $root.mySetting
         $rootScope.mySetting = 42;
-//        $rootScope.currentUserName = "tahsin";
         // get current user
         $rootScope.currentUserName = sessionStorage.getItem('currentUser');
+        console.log("Current User : " + $rootScope.currentUserName);
         // get JWT token
         var token = sessionStorage.getItem("token");
         $rootScope.AuthHeader = 'Bearer ' + token;
+        
+        
         $http.defaults.headers.common.Authorization = $rootScope.AuthHeader;
         $rootScope.allSubscriptions = null;
+        
+        // valid threshold types
         $rootScope.ThresholdTypes = {'EQUAL': 'EQUAL',
         							 'GREATER_THAN': 'GREATER_THAN',
         							 'LESS_THAN': 'LESS_THAN',
         							 'NO_THRESHOLD': 'NO_THRESHOLD'};
-        ;
+        
         // list of data prepared for unsubscription selection of currencies.
         $rootScope.lstUnsubscriptions = [];
         $rootScope.showSubscriptions = function(userName){
@@ -47,14 +51,29 @@ app.run(function ($rootScope, $http) {
             $rootScope.lstUnsubscriptions[i]["checked"] = false;
           }
       };
+      
+      // user logged in checker function
+      $rootScope.userLoggedIn = function(){
+    	  console.log(sessionStorage.getItem('currentUser'));
+    	  console.log(sessionStorage.getItem('token'));
+    	  if(sessionStorage.getItem('currentUser') !== "" && sessionStorage.getItem('token')!== ""){
+    		  console.log("User is logged in!");
+    		  return true;
+    	  }
+    	  else{
+    		  return false;
+    	  }
+      };
 });
 app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
 	$scope.loggedIn = function(){
 		var curUser = sessionStorage.getItem('currentUser');
 		if(curUser != null)
 			return true;
-		else
+		else{
 			return false;
+		}
+
 	}
   //   $scope.openLeftMenu = function() {
   //   $mdSidenav('left').toggle();
@@ -63,7 +82,7 @@ app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
   // scope.select = function(item) {
   //   scope.selectedMenuItem = item;
   // };
-  // for links to be clciked, hanlde all process here.
+  // for links to be clicked, hanlde all process here.
   // for the data which will be used in general must be in root scope.
   $scope.linkClicked = function(item){
     console.log(item);
@@ -73,7 +92,7 @@ app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
       console.log("$rootScope.allSubscriptions : " +  $rootScope.allSubscriptions);
     }
     else if ($scope.selectedMenuItem.MenuIndex == 2){
-      // TODO: solve single click update problem, after second click, we can see all subscriptions. -> seems fixed now after setting lstUnsubscriptions insode response.
+      // TODO: solve single click update problem, after second click, we can see all subscriptions. -> seems fixed now after setting lstUnsubscriptions inside response.
       $rootScope.showSubscriptions($rootScope.currentUserName);
       $rootScope.lstUnsubscriptions = $rootScope.allSubscriptions;
       // create a new mapping for selected items
@@ -83,7 +102,20 @@ app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
       }
       console.log($rootScope.lstUnsubscriptions);
     }
+    // do logout action
+    else if ($scope.selectedMenuItem.MenuIndex == 3){
+    	// delete current user and token from session storage
+    	sessionStorage.setItem("token", "");
+    	sessionStorage.setItem("currentUser", "");
+    	$rootScope.currentUserName = "";
+    	$rootScope.AuthHeader = "";
+    	// redirect to the main page
+    	alert("Logout success!");
+    	window.location = "http://localhost:8080";
+    }
   };
+  
+  // navigation menu here
   $scope.navLinks = [
     {
       Title: "Show Subscriptions",
@@ -99,6 +131,11 @@ app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
       Title: "Unsubscribe Currency",
       LinkText: "Unsubscribe Currency",
       MenuIndex: 2
+    },
+    {
+        Title: "Logout",
+        LinkText: "Logout",
+        MenuIndex: 3
     }
 //    },
 //    {
@@ -113,8 +150,17 @@ app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
 //    }
 
   ];
-  // set initial menu as subscription list
-  $scope.selectedMenuItem = $scope.navLinks[0];
+  
+  // check if the user logged in or not
+  if ($rootScope.userLoggedIn()){
+	  // set initial menu as subscription list
+	  $scope.selectedMenuItem = $scope.navLinks[0];
+  }
+  else{
+	  console.log("User is not logged in, redirect to main page!")
+  	  window.location = "http://localhost:8080";
+  }
+
 });
 
 app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
@@ -242,8 +288,18 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
     //   });
     // };
 
-    $rootScope.showSubscriptions($rootScope.currentUserName);
-    // $scope.allSubscriptions = $rootScope.allSubscriptions;
-    console.log("$rootScope.allSubscriptions : " +  $rootScope.allSubscriptions);
+    // check if the user logged in or not
+    if ($rootScope.userLoggedIn()){
+  	  // set initial menu as subscription list
+        $rootScope.showSubscriptions($rootScope.currentUserName);
+        // $scope.allSubscriptions = $rootScope.allSubscriptions;
+        console.log("$rootScope.allSubscriptions : " +  $rootScope.allSubscriptions);
+    }
+    else{
+  	  	console.log("User is not logged in, redirect to main page!")
+    	window.location = "http://localhost:8080";
+    }
+    
+
 
   });
