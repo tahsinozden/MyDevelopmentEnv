@@ -22,7 +22,7 @@ spring:
     # Email Configuration
     mail.host: smtp.gmail.com
     mail.username: utest0095@gmail.com
-    mail.password: 20162015
+    mail.password: xxxxxx
 
     mail.properties.mail.smtp.auth: true
     mail.properties.mail.smtp.socketFactory.port: 465

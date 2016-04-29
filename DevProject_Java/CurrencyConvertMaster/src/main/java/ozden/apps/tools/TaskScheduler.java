@@ -363,6 +363,16 @@ public class TaskScheduler {
 		
 	}
     
-    // TODO: Implement everyday change mail send status as PENDING
     
+    // everyday at midnight change the email send status for successfully sent emails
+    @Scheduled(cron="0 0 0 * * *")
+    public void doUpdateStatus(){
+    	// get all success records
+    	List<NotificationRegistry> allRegs = notificationRegistryRepository.findByEmailSendStatus("SUCCESS");
+    	System.out.println(allRegs);
+    	for(NotificationRegistry reg : allRegs){
+    		reg.setEmailSendStatus("PENDING");
+    	}
+    	notificationRegistryRepository.save(allRegs);
+    }
 }
