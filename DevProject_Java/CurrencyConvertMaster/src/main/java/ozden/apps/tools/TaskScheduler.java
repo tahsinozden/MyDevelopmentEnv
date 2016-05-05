@@ -140,7 +140,7 @@ public class TaskScheduler {
      }
     
     // 0: seconds, 0/15: every 15 minutes, *: all hours, *: all days, *: all months, *: all years
-    @Scheduled(cron="0 0/1 * * * *")
+    @Scheduled(cron="0 0/15 * * * *")
     public void checkNotifications(){
     	log.info("The time is now " + Calendar.getInstance().getTime().toString() + " and checking notifications...");
     	log.info("The time is now " + Calendar.getInstance().getTime().toString() + " and checking notifications...");
