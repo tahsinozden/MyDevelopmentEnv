@@ -11,11 +11,14 @@ import java.util.Map;
 
 import javax.mail.MessagingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.web.savedrequest.SavedCookie;
 import org.springframework.stereotype.Component;
 
+import ozden.apps.Application;
 import ozden.apps.currency.Currency;
 import ozden.apps.currency.CurrencyConversion;
 import ozden.apps.currency.api.CurrencyHelper;
@@ -27,6 +30,7 @@ import scala.collection.mutable.ArrayLike;
 
 @Component
 public class TaskScheduler {
+	private static final Logger log = LoggerFactory.getLogger(TaskScheduler.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     final long ONE_HOUR_IN_MILLISECONDS = 1 * 60 * 60 * 1000;
     final long ONE_DAY_IN_MILLISECONDS= 24 * ONE_HOUR_IN_MILLISECONDS;
@@ -44,7 +48,7 @@ public class TaskScheduler {
 	
 //    @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
-        System.out.println("The time is now " + Calendar.getInstance().getTime().toString());
+        log.info("The time is now " + Calendar.getInstance().getTime().toString());
     }
     
     private String createEmailBody(NotificationRegistry reg, Double currentRate, Date updateTime){
@@ -135,16 +139,17 @@ public class TaskScheduler {
        return body;
      }
     
-    // scheduled database checker for notifications 
-    @Scheduled(fixedRate = ONE_HOUR_IN_MILLISECONDS)
+    // 0: seconds, 0/15: every 15 minutes, *: all hours, *: all days, *: all months, *: all years
+    @Scheduled(cron="0 0/1 * * * *")
     public void checkNotifications(){
-    	System.out.println("The time is now " + Calendar.getInstance().getTime().toString() + " and checking notifications...");
+    	log.info("The time is now " + Calendar.getInstance().getTime().toString() + " and checking notifications...");
+    	log.info("The time is now " + Calendar.getInstance().getTime().toString() + " and checking notifications...");
     	Date nowTime = Calendar.getInstance().getTime();
     	final long ONE_DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
     	// get all active records
     	List<NotificationRegistry> allRecords = notificationRegistryRepository.findByStatus("ACTIVE");
     	if ("Retrieved records : " + allRecords != null){
-    		//System.out.println(allRecords);
+    		//log.info(allRecords);
     		Map<String, ArrayList<NotificationRegistry>> user2Notic = new HashMap<String, ArrayList<NotificationRegistry>>();
         	for (NotificationRegistry reg : allRecords){
         		try {
@@ -172,7 +177,7 @@ public class TaskScheduler {
         						CurrencyHelper helper = new CurrencyHelper();
         						CurrencyConversion conv = helper.getCurrencyConversion(srcCur, dstCur, 1);
             					if (threshold == 0.0){
-//                					System.out.println("Trying to send email to " + email);
+//                					log.info("Trying to send email to " + email);
 //                					String msg = "You can find the details below.";
 //                					msg += this.createEmailBody(reg, conv.getRate(), nowTime);
 //            						sendMail.send(email, "Your Currency Notification", msg);
@@ -198,9 +203,9 @@ public class TaskScheduler {
             					else{
             						boolean emailSenderFlag = false;
 
-            						System.out.println("Current currency conversion " + conv.toString());
-            						System.out.println("ThresholdType : " + thresholdType);
-            						System.out.println("ThresholdValue : " + threshold);
+            						log.info("Current currency conversion " + conv.toString());
+            						log.info("ThresholdType : " + thresholdType);
+            						log.info("ThresholdValue : " + threshold);
             						
             						// check threshold conditions
             						if (thresholdType.equals("EQUAL") && conv.getRate() == threshold)
@@ -212,7 +217,8 @@ public class TaskScheduler {
             						
             						// if the threshold condition is met, send email to the user.
             						if(emailSenderFlag){
-                    					System.out.println("Threshold condition is satisfied. Trying to send email to " + email);
+            							log.info("Threshold condition is satisfied. Trying to send email to " + email);
+                    					log.info("Threshold condition is satisfied. Trying to send email to " + email);
 //                    					String msg = "You can find the details below.";
 //                    					msg += this.createEmailBody(reg, conv.getRate(), nowTime);
 //                						sendMail.send(email, "Your Currency Notification", msg);
@@ -239,19 +245,19 @@ public class TaskScheduler {
         						// set status as failed
         						reg.setEmailSendStatus("FAILED");
 //        						notificationRegistryRepository.save(reg);
-//        						System.out.println("Mail couldn't be sent!");
+//        						log.info("Mail couldn't be sent!");
         						e.printStackTrace();
         					}
             		}
             		else{
-            			System.out.println("Condition is not satisfied for the record " + reg.toString());
+            			log.info("Condition is not satisfied for the record " + reg.toString());
             		}
 				} catch (Exception NullPointerException) {
-						System.out.println("One of the record's field is null! Record is " + reg.toString());
+						log.info("One of the record's field is null! Record is " + reg.toString());
 				}
 
         	}
-        	System.out.println("USER MAP : " + user2Notic.toString());
+        	log.info("USER MAP : " + user2Notic.toString());
         	
         	// try to send email to the users and update the records in database
         	for (Map.Entry<String, ArrayList<NotificationRegistry>> entry : user2Notic.entrySet())
@@ -261,17 +267,17 @@ public class TaskScheduler {
         		String email = entry.getKey();
         		// create the email body
         		String content = this.createMultRecEmailBody(allRecs);
-				System.out.println("Trying to send email to " + email);
+				log.info("Trying to send email to " + email);
 				String msg = "Your scheduled notifications are in the following table.";
 				msg += content;
 				String emailTitle = "Your Currency Notification";
-        	    System.out.println("Email message : " + msg);
+        	    log.info("Email message : " + msg);
 				try {
 					sendMail.send(email, emailTitle, msg);
 					// update the records if there is no error
 					notificationRegistryRepository.save(allRecs);
 				} catch (Exception e) {
-					System.err.println("Couldn't send the email to " + email);
+					log.error("Couldn't send the email to " + email);
 					// if the mail is not sent, update status as FAILED and save it to DB.
 					for(NotificationRegistry reg : allRecs)
 						reg.setEmailSendStatus("FAILED");
@@ -284,17 +290,24 @@ public class TaskScheduler {
 
     }
     
-    // scheduled task to save currencies to the table
-    @Scheduled(fixedRate = ONE_HOUR_IN_MILLISECONDS)
+    // scheduled task to save currencies to the table, set as every hour
+//    		"0 0 * * * *" = the top of every hour of every day.
+//    		"*/10 * * * * *" = every ten seconds.
+//    		"0 0 8-10 * * *" = 8, 9 and 10 o'clock of every day.
+//    		"0 0/30 8-10 * * *" = 8:00, 8:30, 9:00, 9:30 and 10 o'clock every day.
+//    		"0 0 9-17 * * MON-FRI" = on the hour nine-to-five weekdays
+//    		"0 0 0 25 12 ?" = every Christmas Day at midnight
+    // 0: seconds, 0: minutes, *: all hours, *: all days, *: all months, *: all years
+    @Scheduled(cron="0 0 * * * *")
     public void saveCurrencies2Table(){
     	CurrencyHelper helper = new CurrencyHelper();
 		// check database for the records
 		List<Currencies> allCurrenciesInTable = null;
 		try {
 			allCurrenciesInTable = currenciesRepository.findAll();
-			System.out.println("Records in the table " + allCurrenciesInTable.toString());
+			log.info("Records in the table " + allCurrenciesInTable.toString());
 		} catch (Exception e) {
-			System.out.println("CAUGHT IT!!!");
+			log.info("CAUGHT IT!!!");
 //			return;
 		}
 		 
@@ -305,28 +318,28 @@ public class TaskScheduler {
 		final long TIME_INTERVAL = 1 * 60 * 60 * 1000;
 		// check if we have records or not
 		if (allCurrenciesInTable == null || allCurrenciesInTable.isEmpty()){
-			System.out.println("Currencies table is empty, will be initialized!");
+			log.info("Currencies table is empty, will be initialized!");
 			currenciesFromService = helper.getAllRates();
 			if (currenciesFromService != null ){
-				System.out.println("Currencies are obtained from the remote service.");
+				log.info("Currencies are obtained from the remote service.");
 				currenciesInTable = new ArrayList<Currencies>();
-//				System.out.println("Currencies from remote service " + currenciesFromService.toString());
+//				log.info("Currencies from remote service " + currenciesFromService.toString());
 				for (Currency cur : currenciesFromService){
 					currenciesInTable.add(new Currencies(cur.getCode(), cur.getName(), cur.getRate(), nowTime));
 				}
 			}
 			// save it to the table
 			if (!currenciesInTable.isEmpty()){
-				System.out.println("Now currencies from servce will be added to the table.");
-//				System.out.println("Currencies for the Currencies table " + currenciesInTable.toString());
+				log.info("Now currencies from servce will be added to the table.");
+//				log.info("Currencies for the Currencies table " + currenciesInTable.toString());
 //				currenciesRepository.save(currenciesInTable);
 				for(Currencies cur : currenciesInTable){
-//					System.out.println(cur.toString());
+//					log.info(cur.toString());
 					try {
 						if(cur != null)
 							currenciesRepository.save(cur);
 					} catch (Exception e) {
-						System.err.println("ERROR message -> " + e.getMessage() + " - " + cur.toString());
+						log.error("ERROR message -> " + e.getMessage() + " - " + cur.toString());
 //						e.printStackTrace();
 					}
 
@@ -340,10 +353,10 @@ public class TaskScheduler {
 				Currencies sampleRecord = allCurrenciesInTable.get(0);	
 				// if the record is older than interval period
 				if((nowTime.getTime() - sampleRecord.getLastUpdateTime().getTime()) >= TIME_INTERVAL){
-					System.out.println("The table needs to be updated");
+					log.info("The table needs to be updated");
 					currenciesFromService = helper.getAllRates();
 					if (currenciesFromService != null ){
-						System.out.println("Currencies are obtained from the remote service.");
+						log.info("Currencies are obtained from the remote service.");
 						currenciesInTable = new ArrayList<Currencies>();
 						for (Currency cur : currenciesFromService){
 							currenciesInTable.add(new Currencies(cur.getCode(), cur.getName(), cur.getRate(), nowTime));
@@ -351,13 +364,13 @@ public class TaskScheduler {
 					}
 					// save it to the table
 					if (!currenciesInTable.isEmpty()){
-						System.out.println("Now currencies from servce will be added to the table.");
+						log.info("Now currencies from servce will be added to the table.");
 						currenciesRepository.save(currenciesInTable);
 					}
 				}
 			}
 			else{
-				System.out.println("Table is empty!");
+				log.info("Table is empty!");
 			}
 		}
 		
@@ -369,7 +382,7 @@ public class TaskScheduler {
     public void doUpdateStatus(){
     	// get all success records
     	List<NotificationRegistry> allRegs = notificationRegistryRepository.findByEmailSendStatus("SUCCESS");
-    	System.out.println(allRegs);
+    	log.info(allRegs.toString());
     	for(NotificationRegistry reg : allRegs){
     		reg.setEmailSendStatus("PENDING");
     	}

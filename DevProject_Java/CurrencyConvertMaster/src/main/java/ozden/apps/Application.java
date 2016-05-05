@@ -16,7 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
+//import org.apache.log4j.Logger;
 
 
 @SpringBootApplication
@@ -32,6 +32,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class Application {
 
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
+//	static Logger log = Logger.getLogger(Application.class.getName());
 	
     @Bean
     public FilterRegistrationBean jwtFilter() {
@@ -48,6 +49,7 @@ public class Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class);
 		System.out.println("here it is!");
+		log.info("Application started!");
 	}
 	
 	

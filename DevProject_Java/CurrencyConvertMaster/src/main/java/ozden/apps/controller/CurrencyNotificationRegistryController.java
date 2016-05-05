@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,8 @@ public class CurrencyNotificationRegistryController {
 	
 	@Autowired
 	private UsersRepository usersRepository;
+	
+	private static final Logger log = LoggerFactory.getLogger(CurrencyNotificationRegistryController.class);
 	
 	@RequestMapping(value="/notic_reg_serv/create", method=RequestMethod.GET)
 	public NotificationRegistry createNoticForUser(

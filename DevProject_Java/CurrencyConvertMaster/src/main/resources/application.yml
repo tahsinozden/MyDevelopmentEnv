@@ -28,4 +28,11 @@ spring:
     mail.properties.mail.smtp.socketFactory.port: 465
     mail.properties.mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
     mail.properties.mail.smtp.socketFactory.fallback: false
+    
+# set all level info for all processes
+logging.level.*: INFO
+#logging.level.org.springframework.web: ERROR
+#logging.level.org.hibernate: ERROR
+logging.file: currency-convert-master.log
+#logging.path: E://currency-convert-master.log
      

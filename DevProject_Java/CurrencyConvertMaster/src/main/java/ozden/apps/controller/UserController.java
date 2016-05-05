@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +21,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import ozden.apps.Application;
 import ozden.apps.entities.Users;
 import ozden.apps.repos.UsersRepository;
 import ozden.apps.tools.EncryptionHelper;
@@ -30,7 +33,8 @@ public class UserController {
 	@Autowired
 	private UsersRepository usersRepository;
     private final Map<String, List<String>> userDb = new HashMap<>();
-
+	private static final Logger log = LoggerFactory.getLogger(UserController.class);
+	
     public UserController() {
         userDb.put("tom", Arrays.asList("user"));
         userDb.put("sally", Arrays.asList("user", "admin"));
@@ -48,12 +52,14 @@ public class UserController {
 		
 		List<Users> lstUser = usersRepository.findByUserNameAndStatusFlag(userName, 1);
 		if (lstUser == null || lstUser.isEmpty()){
+			log.warn("User not found! ");
 			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found!");
 		}
 		Users currentUser = lstUser.get(0);
 		if (!EncryptionHelper.checkPasswordPairEqual(currentUser.getPassword(), password)){
 			// redirect is used to redirect request to another controller
 			// if redirect is not used, spring boot redirects the request to a mapped controller if exist.
+			log.warn("User name or password wrong " + currentUser.getUserName());
 			throw new ServletException("User name or password wrong");
 		}
 		

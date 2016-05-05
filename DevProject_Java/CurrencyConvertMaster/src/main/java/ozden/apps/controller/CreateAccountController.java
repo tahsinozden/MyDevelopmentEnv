@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -28,7 +30,7 @@ import ozden.apps.tools.EncryptionHelper;
 public class CreateAccountController {
 	@Autowired
 	private UsersRepository usersRepository;
-	
+	private static final Logger log = LoggerFactory.getLogger(CreateAccountController.class);
 	// create account service
 	@RequestMapping(value="/create-account", method=RequestMethod.POST)
 //	public String doCreateAccount( @RequestParam String username,
@@ -40,20 +42,23 @@ public class CreateAccountController {
 		// but it already exists in my request
 		String username = usr.username;
 		String password = usr.password;
-		
+
 		if (username == null || password == null){
+			log.warn("password or/and username is not provided!");
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "password or/and username is not provided!");
 		}
 		
 		// check username and password
 		if ("".equals(username) || "".equals(password)){
+			log.warn("Invalid password or username! " + username + ", " + password);
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid password or username!");
 		}
 		
+		log.info("Requested User Name : " + usr.username );
 		// check user exist
 		List<Users> users = usersRepository.findByUserName(username);
 		if (!users.isEmpty()){
-			System.out.print("USERS " + users.toString());
+			log.debug("USERS " + users.toString());
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "User already exists!");
 		}
 		
