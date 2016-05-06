@@ -11,7 +11,7 @@
 	<div ng-controller="ctrlCreateAcctForm" class="col-md-2 col-md-offset-1">
 	<h2>Create Account</h2>
 		<form action="/create-account" method="POST"  >
-			User Name <input type="text" ng-model="username" name="username" class="form-control" />
+			User Name <input type="text" ng-model="username" name="username" class="form-control" ng-blur="checkUserExist(username);"/>
 			Password <input type="password" ng-model="password"  name="password" class="form-control"/>
 			Re-Password <input type="password" ng-model="repassword"  class="form-control"/>
 			<i ng-show="password != repassword" class="form-control">Password is not equal</i>

@@ -112,6 +112,12 @@ app.controller('jwtLoginCtrl', ['mainService','$scope','$http', '$cookies',
 
 	$scope.login = function() {
 		$scope.error = null;
+		if ($scope.userName == "" || $scope.userName == null || $scope.userName == undefined ||
+				$scope.password == "" || $scope.password == null || $scope.password == undefined){
+			alert("Input some values to username and password!");
+			return;
+		}
+			
 		mainService.login($scope.userName, $scope.password).then(function(token) {
 			$scope.token = token;
 			$http.defaults.headers.common.Authorization = 'Bearer ' + token;
@@ -120,7 +126,6 @@ app.controller('jwtLoginCtrl', ['mainService','$scope','$http', '$cookies',
 //			console.log($cookies);
 ////			$cookieStore.put('token', token);
 //			console.log($cookies.get("token"));
-//			localStorage.setItem("lastname", "Smith");
 			sessionStorage.setItem('token', token);
 			sessionStorage.setItem('currentUser', $scope.userName);
 			$scope.checkRoles();
@@ -129,6 +134,7 @@ app.controller('jwtLoginCtrl', ['mainService','$scope','$http', '$cookies',
 		function(error){
 			$scope.error = error
 			$scope.userName = '';
+			$scope.password = '';
 		});
 	}
 	

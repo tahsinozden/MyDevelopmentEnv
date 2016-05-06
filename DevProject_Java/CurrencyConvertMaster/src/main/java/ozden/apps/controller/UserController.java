@@ -72,6 +72,21 @@ public class UserController {
             .signWith(SignatureAlgorithm.HS256, "secretkey").compact());
     }
 
+    
+    @RequestMapping(value = "check-user", method = RequestMethod.POST)
+    public Boolean checkUser(@RequestBody final UserLogin login) throws ServletException{
+    	String userName = login.name;
+    	// return invalid data exc.
+    	if(userName == null || "".equals(userName))
+    		throw new ServletException("Invalid username!");
+    	
+    	// if user not exist
+    	if(usersRepository.findByUserName(userName).isEmpty() )
+    		return false;
+    	else
+    		return true;
+    }
+    
     @SuppressWarnings("unused")
     private static class UserLogin {
         public String name;

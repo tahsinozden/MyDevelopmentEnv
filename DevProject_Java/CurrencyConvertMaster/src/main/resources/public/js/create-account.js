@@ -21,6 +21,7 @@ app.controller('ctrlCreateAcctForm', ['mainService', '$scope', '$http',
 				},
 				function(error){
 					console.log("Error occured " + error.toString());
+					alert(error.data.message);
 				});
 				
 	};
@@ -32,6 +33,32 @@ app.controller('ctrlCreateAcctForm', ['mainService', '$scope', '$http',
 				$scope.username == '' || $scope.password != $scope.repassword);
 	}
 	
+	$scope.checkUserExist = function(usr){
+		if (usr == null || usr == undefined || usr == "")
+			return;
+		
+		mainService.checkUser(usr).then(
+				
+				function(res){
+//					console.log("Created User : " + createdUser.toString());
+//					alert("Created User : " + createdUser.toString());
+//					console.log("User created!");
+					var existFlag = res.data;
+					if (existFlag){
+						alert(usr + " exist!");
+						$scope.username = "";
+					}
+					else{
+						console.log("user not exist, go on...");
+					}
+				},
+				function(error){
+					console.log("Error occured " + error.toString());
+					alert(error.data.message);
+				});
+		
+	};
+	
 }]);
 
 // main service
@@ -39,6 +66,11 @@ app.service('mainService', function($http) {
 	return {
 		createAccount : function(name, pass) {
 			return $http.post('/create-account', {username: name, password: pass}).then(function(response) {
+				return response;
+			});
+		},
+		checkUser : function(usr){
+			return $http.post('/user/check-user', {name: usr}).then(function(response) {
 				return response;
 			});
 		}
