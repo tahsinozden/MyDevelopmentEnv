@@ -7,11 +7,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import ozden.apps.Application;
 import ozden.apps.currency.Currency;
 import ozden.apps.currency.CurrencyConversion;
 import ozden.apps.entities.Currencies;
@@ -19,6 +23,7 @@ import ozden.apps.repos.CurrenciesRepository;
 
 @Component
 public class CurrencyHelper {
+	private static final Logger log = LoggerFactory.getLogger(CurrencyHelper.class);
 	// URL to get the all up-to-date currency rates
 	final String CURRENCY_API_URL = "https://bitpay.com/api/rates";
 	private RestTemplate restTemplate;
@@ -26,6 +31,25 @@ public class CurrencyHelper {
 	@Autowired
 	private CurrenciesRepository currenciesRepository;
 	
+	/*
+	 * Return index number of the currency, returns -1 if there is no match
+	 */
+	private int getCurrencyIndexFromList(List<Currency> lst, String curName){
+		for (int i = 0; i < lst.size(); i++) {
+			if (lst.get(i).getCode().equals(curName)){
+				return i;
+			}
+		}
+//		for(Currency cur : lst){
+//			log.debug("Checking " + cur.getCode());
+//			if (cur.getCode().equals(curName)){
+//				log.debug(cur.getCode() + " MATCHED!");
+//				return true;
+//			}
+//		}
+		log.debug("NOT MATCHED!");
+		return -1;
+	}
 	public CurrencyHelper(){
 		restTemplate = new RestTemplate();
 	}
@@ -66,6 +90,73 @@ public class CurrencyHelper {
 		// perform currency calculation
 //		double rate = conv.getRate();
 //		conv.getConvResult();
+		conv.doCurrencyConversion();
+		return conv;
+	}
+	
+	// TODO: implement a service which enable this calculation for front end
+	// TODO: implement a scheduled task reqularly save data to database for hostory
+	public CurrencyConversion getCurrencyConversionFromNBP(String srcCurrency, String dstCurrency, double srcAmt) throws Exception{
+		
+		// throw exception if currencies are empty
+		if (srcCurrency.equals("") || dstCurrency.equals("")){
+			throw new Exception("Empty Currency!");
+		}
+		if(srcAmt <= 0){
+			throw new Exception("Invalid value of source amount!");
+		}
+		double srcRate = 0.0;
+		double dstRate = 0.0;
+		CurrencyXMLParser parser = new CurrencyXMLParser();
+		List<Currency> allRates = parser.getRatesFromRemoteFile();
+		
+		if( srcCurrency.equals(dstCurrency)){
+			throw new Exception("Same currency type is selected!");
+		}
+		CurrencyConversion conv = null;
+		Currency srcCurInPLN = null;
+		Currency dstCurInPLN = null;
+		
+		
+		// if destination currency is in PLN,
+		// return src currency rate, because all rates calculated over PLN
+		if (srcCurrency.equals("PLN")){
+			if(getCurrencyIndexFromList(allRates, dstCurrency) < 0){
+				throw new Exception("Dest. currency is not supposted! " + dstCurrency );
+			}
+			srcCurInPLN = allRates.get(getCurrencyIndexFromList(allRates, dstCurrency));
+			// since it is in PLN, destination currency rate is 1
+			conv = new CurrencyConversion(srcCurrency, dstCurrency, srcCurInPLN.getRate(), 1 , srcAmt);
+			conv.doCurrencyConversion();
+			return conv;
+		}
+		
+		// if destination currency is in PLN,
+		// return src currency rate, because all rates calculated over PLN
+		if (dstCurrency.equals("PLN")){
+			if(getCurrencyIndexFromList(allRates, srcCurrency) < 0){
+				throw new Exception("Source currency is not supposted! " + srcCurrency );
+			}
+			srcCurInPLN = allRates.get(getCurrencyIndexFromList(allRates, srcCurrency));
+			// since it is in PLN, destination currency rate is 1
+			conv = new CurrencyConversion(srcCurrency, dstCurrency, 1, srcCurInPLN.getRate(), srcAmt);
+			conv.doCurrencyConversion();
+			return conv;
+		}
+
+		if(getCurrencyIndexFromList(allRates, srcCurrency) < 0){
+			throw new Exception("Source currency is not supposted! " + srcCurrency );
+		}
+		
+		if(getCurrencyIndexFromList(allRates, dstCurrency) < 0){
+			throw new Exception("Dest. currency is not supposted! " + dstCurrency );
+		}
+		
+		// get currencies in Polish Zloty ratio
+		srcCurInPLN = allRates.get(getCurrencyIndexFromList(allRates, srcCurrency));
+		dstCurInPLN = allRates.get(getCurrencyIndexFromList(allRates, dstCurrency));
+		
+		conv = new CurrencyConversion(srcCurrency, dstCurrency, dstCurInPLN.getRate(), srcCurInPLN.getRate(), srcAmt);
 		conv.doCurrencyConversion();
 		return conv;
 	}
