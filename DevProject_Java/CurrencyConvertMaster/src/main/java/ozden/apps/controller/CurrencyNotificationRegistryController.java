@@ -39,7 +39,8 @@ public class CurrencyNotificationRegistryController {
 			@RequestParam String noticPeriod,
 			@RequestParam(required=false) Double threshold,
 			@RequestParam(required=false) String thresholdType,
-			@RequestParam(required=false) String notificationEmail){
+			@RequestParam(required=false) String notificationEmail,
+			@RequestParam String currencyServiceMode){
 		
 		NotificationRegistry.ThresholdType thrType = NotificationRegistry.ThresholdType.GREATER_THAN;
 		if(threshold == null || threshold < 0.0){
@@ -50,7 +51,12 @@ public class CurrencyNotificationRegistryController {
 //		System.out.println(NotificationRegistry.ThresholdType.EQUAL.name());
 //		System.out.println(NotificationRegistry.ThresholdType.GREATER_THAN.name());
 //		System.out.println(NotificationRegistry.ThresholdType.LESS_THAN.name());
-
+		
+		// check currency service mode
+		if(!("NBP".equals(currencyServiceMode) || "BITPAY".equals(currencyServiceMode))){
+			log.error("Invalid currency service mode " + currencyServiceMode);
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid currency service mode " + currencyServiceMode);
+		}
 		// map the value
 		if (thresholdType != null){
 			if (thresholdType.equals(NotificationRegistry.ThresholdType.EQUAL.name()))
@@ -83,8 +89,9 @@ public class CurrencyNotificationRegistryController {
 			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found!");
 		}
 		
+		String curServMode = currencyServiceMode;
 		NotificationRegistry newReg =  new NotificationRegistry(userName, srcCur, dstCur, 
-								status, noticPeriod, threshold, thrType, notificationEmail);
+								status, noticPeriod, threshold, thrType, notificationEmail, currencyServiceMode);
 		
 		// register new record
 		// if the record has the same username, spring updates the record, not create a new one

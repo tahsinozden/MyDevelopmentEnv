@@ -7,29 +7,44 @@ app.config(['$httpProvider', function($httpProvider) {
 app.controller('TypeaheadCtrl', function($scope, $http) {
 
 	var _selected;
-
+	$scope.selectedCurrencyServMode = "NBP";
+	
 	$scope.selected = undefined;
 
 	$scope.allCurrencyCodes = [];
-	$http.get('http://localhost:8080/currency_service/currencies').then(function(response){
-		console.log('HERE!');
-		for (var item in response.data){
-			$scope.allCurrencyCodes.push(response.data[item].code);
-		}
-		console.log($scope.allCurrencyCodes);
-	});
+	function getAllCurrenciesFromRemoteService(){
+		$scope.allCurrencyCodes = [];
+		console.log("Getting all currencies from remote service...");
+		$http.get('http://localhost:8080/currency_service/currencies', 
+				{params: 
+				{ 
+					currencyServiceMode: $scope.selectedCurrencyServMode
+				}
+			}).then(function(response){
+
+			for (var item in response.data){
+				$scope.allCurrencyCodes.push(response.data[item].code);
+			}
+			console.log($scope.allCurrencyCodes);
+		});
+	}
+	
+	// run get all service function
+	getAllCurrenciesFromRemoteService();
 
 	$scope.convert = function(){
 		var src = $scope.selectedSrcCurrency;
 		var dst = $scope.selectedDstCurrency;
 		var srcAmt = $scope.srcAmt;
-
+		var currencyServiceMode = $scope.selectedCurrencyServMode;
+		console.log("currencyServiceMode : " + currencyServiceMode);
 		if ((src !== '' && dst !== '' || srcAmt !== '') && src !== dst){
 			$http.get('http://localhost:8080/currency_service/currency', {
 				params: {
 					'src': src,
 					'dst': dst,
-					'srcAmt': srcAmt
+					'srcAmt': srcAmt,
+					'currencyServiceMode': currencyServiceMode
 				}
 			}).then(function(response){
 				// success function
@@ -39,7 +54,20 @@ app.controller('TypeaheadCtrl', function($scope, $http) {
 				alert(response.data.message);
 			});
 		}
+		else {
+			alert("Conversion will not be performed!!!. Check your inputs!");
+			$scope.conversion = "";
+		}
 	};
+	
+	$scope.resetFields = function(){
+		$scope.selectedSrcCurrency = "";
+		$scope.selectedDstCurrency = "";
+		$scope.srcAmt = "";
+		
+		// get all currencies from remote service again 
+		getAllCurrenciesFromRemoteService();
+	}
 //	$scope.getCurrencies = function() {
 //	return ['USD', 'TRY', 'PLN'];
 //	};

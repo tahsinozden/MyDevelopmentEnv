@@ -161,6 +161,7 @@ public class TaskScheduler {
             		String srcCur = reg.getSrcCurrencyCode();
             		String dstCur = reg.getDstCurrencyCode();
             		String thresholdType = reg.getThresholdType();
+            		String currencyServiceMode = reg.getCurrencyServiceMode();
             		
             		boolean periodCondSatisFlag = false;
             		// check the status and period is satisfied or not
@@ -175,7 +176,19 @@ public class TaskScheduler {
             				try {
         						// get the current rate from api
         						CurrencyHelper helper = new CurrencyHelper();
-        						CurrencyConversion conv = helper.getCurrencyConversion(srcCur, dstCur, 1);
+        						CurrencyConversion conv = null;
+        						if("NBP".equals(currencyServiceMode)){
+        							conv = helper.getCurrencyConversionFromNBP(srcCur, dstCur, 1);
+        						}
+        						else if("BITPAY".equals(currencyServiceMode)){
+        							conv = helper.getCurrencyConversion(srcCur, dstCur, 1);
+        						}
+        						else{
+        							// if there is an unsupported mode, continue
+        							log.info(currencyServiceMode + " is not supported as currency service mode, continue with next record.");
+        							continue;
+        						}
+
             					if (threshold == 0.0){
 //                					log.info("Trying to send email to " + email);
 //                					String msg = "You can find the details below.";

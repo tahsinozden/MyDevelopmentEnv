@@ -62,6 +62,18 @@ public class CurrencyHelper {
 
 	}
 	
+	public List<Currency> getAllRatesFromNBP() throws RestClientException{
+		// get all currencies with their rates from NBP
+		CurrencyXMLParser parser = new CurrencyXMLParser();
+		List<Currency> allRates = parser.getRatesFromRemoteFile();
+		Currency PolishCurrency = new Currency("PLN", "Polish Zloty", 1.0);
+		// since all rates are calculated in PLN, PLN does not exist in the list
+		// then add it to the list
+		allRates.add(PolishCurrency);
+		return allRates;
+
+	}
+	
 	public CurrencyConversion getCurrencyConversion(String srcCurrency, String dstCurrency, double srcAmt) throws Exception{
 		// throw exception if currencies are empty
 		if (srcCurrency.equals("") || dstCurrency.equals("")){

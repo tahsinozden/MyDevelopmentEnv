@@ -45,6 +45,12 @@ input[type="text"] {
 			<div ng-show="noResults1">
 				<i class="glyphicon glyphicon-remove"></i> No Results Found
 			</div>
+			<span title="BITPAY: Rates from bitpay.com, NBP: Rates from National Bank of Poland">
+			<select id="currencyServiceMode" ng-model="selectedCurrencyServMode" ng-change="resetFields()">
+				<option value="BITPAY">BITPAY</option>
+				<option value="NBP">NBP</option>
+			</select>
+			</span>
 			<button ng-click="convert()">Convert</button>
 			<input type="text" ng-model="conversion" class="form-control"
 				placeholder="Conversion Result" disabled="disabled" /> <label>{{selectedDstCurrency}}</label>
@@ -52,22 +58,22 @@ input[type="text"] {
 		</div>
 
 		<div class="col-md-2 col-md-offset-1" ng-controller="loginCtl">
-<!-- 			<div id="login" class="span3 well well-large offset4"> -->
-<!-- 				<h4>Account Panel</h4> -->
-<!-- 				<form class="form" ng-submit="submitForm()" > -->
-<!-- 				<form class="form" method="POST" action="/login"> -->
-<!-- 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> -->
-<!-- 									<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
-<!-- 					<input name="username" type="text" placeholder="Email" -->
-<!-- 						ng-model="credentials.username" /> <input name="password" -->
-<!-- 						type="password" placeholder="Password" -->
-<!-- 						ng-model="credentials.password" /> <label class="checkbox" -->
-<!-- 						for="rememberme"> <input type="checkbox" /> Remember me -->
-<!-- 					</label> <br /> <input class="btn btn-success" type="submit" value="Login" /> -->
-<!-- 				</form> -->
-<!-- 				<a class="col-md-1 col-md-offset-8" -->
-<!-- 					href="/pages/create-account.html">Register</a> -->
-<!-- 			</div> -->
+			<!-- 			<div id="login" class="span3 well well-large offset4"> -->
+			<!-- 				<h4>Account Panel</h4> -->
+			<!-- 				<form class="form" ng-submit="submitForm()" > -->
+			<!-- 				<form class="form" method="POST" action="/login"> -->
+			<!-- 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> -->
+			<!-- 									<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
+			<!-- 					<input name="username" type="text" placeholder="Email" -->
+			<!-- 						ng-model="credentials.username" /> <input name="password" -->
+			<!-- 						type="password" placeholder="Password" -->
+			<!-- 						ng-model="credentials.password" /> <label class="checkbox" -->
+			<!-- 						for="rememberme"> <input type="checkbox" /> Remember me -->
+			<!-- 					</label> <br /> <input class="btn btn-success" type="submit" value="Login" /> -->
+			<!-- 				</form> -->
+			<!-- 				<a class="col-md-1 col-md-offset-8" -->
+			<!-- 					href="/pages/create-account.html">Register</a> -->
+			<!-- 			</div> -->
 		</div>
 
 
@@ -76,8 +82,8 @@ input[type="text"] {
 				<h2>Login</h2>
 				<form ng-submit="login()" class="form">
 					Username: <input type="text" ng-model="userName" /><span>
-					Password: <input type="password" ng-model="password" /><span>
-					<input type="submit" value="Login" />
+						Password: <input type="password" ng-model="password" /><span>
+							<input type="submit" value="Login" />
 				</form>
 				<a class="col-md-1 col-md-offset-8"
 					href="/pages/create-account.html">Register</a>
@@ -97,35 +103,35 @@ input[type="text"] {
 						</h3>
 						<a href ng-click="logout()">(logout)</a>
 					</div>
-<!-- 					<div class="col-md-4"> -->
-<!-- 						<div class="row header"> -->
-<!-- 							<div class="col-sm-4">{{userName}} is a</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="row"> -->
-<!-- 							<div class="col-sm-2">User</div> -->
-<!-- 							<div class="col-sm-2"> -->
-<!-- 								<span class="glyphicon glyphicon-ok" aria-hidden="true" -->
-<!-- 									ng-show="roleUser"></span> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="row"> -->
-<!-- 							<div class="col-sm-2">Admin</div> -->
-<!-- 							<div class="col-sm-2"> -->
-<!-- 								<span class="glyphicon glyphicon-ok" aria-hidden="true" -->
-<!-- 									ng-show="roleAdmin"></span> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 						<div class="row"> -->
-<!-- 							<div class="col-sm-2">Foo</div> -->
-<!-- 							<div class="col-sm-2"> -->
-<!-- 								<span class="glyphicon glyphicon-ok" aria-hidden="true" -->
-<!-- 									ng-show="roleFoo"></span> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
+					<!-- 					<div class="col-md-4"> -->
+					<!-- 						<div class="row header"> -->
+					<!-- 							<div class="col-sm-4">{{userName}} is a</div> -->
+					<!-- 						</div> -->
+					<!-- 						<div class="row"> -->
+					<!-- 							<div class="col-sm-2">User</div> -->
+					<!-- 							<div class="col-sm-2"> -->
+					<!-- 								<span class="glyphicon glyphicon-ok" aria-hidden="true" -->
+					<!-- 									ng-show="roleUser"></span> -->
+					<!-- 							</div> -->
+					<!-- 						</div> -->
+					<!-- 						<div class="row"> -->
+					<!-- 							<div class="col-sm-2">Admin</div> -->
+					<!-- 							<div class="col-sm-2"> -->
+					<!-- 								<span class="glyphicon glyphicon-ok" aria-hidden="true" -->
+					<!-- 									ng-show="roleAdmin"></span> -->
+					<!-- 							</div> -->
+					<!-- 						</div> -->
+					<!-- 						<div class="row"> -->
+					<!-- 							<div class="col-sm-2">Foo</div> -->
+					<!-- 							<div class="col-sm-2"> -->
+					<!-- 								<span class="glyphicon glyphicon-ok" aria-hidden="true" -->
+					<!-- 									ng-show="roleFoo"></span> -->
+					<!-- 							</div> -->
+					<!-- 						</div> -->
+					<!-- 					</div> -->
 				</div>
 			</div>
-<!-- 			<button ng-click="yourName()">Your Name</button> -->
+			<!-- 			<button ng-click="yourName()">Your Name</button> -->
 		</div>
 	</div>
 

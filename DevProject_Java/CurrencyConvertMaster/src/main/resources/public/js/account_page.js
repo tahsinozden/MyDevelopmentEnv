@@ -166,18 +166,49 @@ app.controller('MyController', function($scope, $mdSidenav, $rootScope) {
 app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
     var _selected;
     var selectedNoticPeriod = null;
-
+    // defualt currency rates service
+    $scope.selectedCurrencyServMode = "NBP";
+    
     $scope.selected = undefined;
 
-    $scope.allCurrencyCodes = [];
-    $http.get('http://localhost:8080/currency_service/currencies').then(function(response){
-        for (var item in response.data){
-            $scope.allCurrencyCodes.push(response.data[item].code);
-          }
-      console.log($scope.allCurrencyCodes);
-     });
+//    $scope.allCurrencyCodes = [];
+//    $http.get('http://localhost:8080/currency_service/currencies').then(function(response){
+//        for (var item in response.data){
+//            $scope.allCurrencyCodes.push(response.data[item].code);
+//          }
+//      console.log($scope.allCurrencyCodes);
+//     });
+    
+	$scope.allCurrencyCodes = [];
+	function getAllCurrenciesFromRemoteService(){
+		$scope.allCurrencyCodes = [];
+		console.log("Getting all currencies from remote service...");
+		$http.get('http://localhost:8080/currency_service/currencies', 
+				{params: 
+				{ 
+					currencyServiceMode: $scope.selectedCurrencyServMode
+				}
+			}).then(function(response){
 
-    $scope.convertCurrency = function(src, dst, srcAmt){
+			for (var item in response.data){
+				$scope.allCurrencyCodes.push(response.data[item].code);
+			}
+			console.log($scope.allCurrencyCodes);
+		});
+	}
+	
+	// run get all service function
+	getAllCurrenciesFromRemoteService();
+
+	$scope.resetFields = function(){
+		$scope.selectedSrcCurrency = "";
+		$scope.selectedDstCurrency = "";
+		
+		// get all currencies from remote service again 
+		getAllCurrenciesFromRemoteService();
+	}
+	
+    $scope.convertCurrency = function(src, dst, srcAmt, currencyServiceMode){
 //      var src = $scope.selectedSrcCurrency;
 //      var dst = $scope.selectedDstCurrency;
 //      var srcAmt = $scope.srcAmt;
@@ -187,7 +218,8 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
           params: {
             'src': src,
             'dst': dst,
-            'srcAmt': srcAmt
+            'srcAmt': srcAmt,
+			'currencyServiceMode': currencyServiceMode
           }
         }).then(function(response){
           // success function
@@ -227,7 +259,8 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
             'dstCur': $scope.selectedDstCurrency,
             'noticPeriod': $scope.selectedNoticPeriod,
             'threshold': $scope.thresholdValue,
-            'thresholdType': $scope.thresholdType
+            'thresholdType': $scope.thresholdType,
+            'currencyServiceMode': $scope.selectedCurrencyServMode
           }
         }).then(function(response){
           // success function

@@ -71,13 +71,17 @@ public class NotificationRegistry implements Serializable {
 	@Column(name="current_rate")
 	private Double currentRate;
 	
+	@Column(name="currency_service_mode")
+	// available modes: BITPAY, NBP
+	private String currencyServiceMode;
+	
 	public NotificationRegistry(){
 		
 	}
 	
 	
 	public NotificationRegistry(String userName, String srcCurrencyCode, String dstCurrencyCode,
-			String status, String noticPeriod, Double thresholdValue, ThresholdType thresholdType, String notificationEmail) {
+			String status, String noticPeriod, Double thresholdValue, ThresholdType thresholdType, String notificationEmail, String currencyServiceMode) {
 		super();
 		this.userName = userName;
 		this.srcCurrencyCode = srcCurrencyCode;
@@ -90,6 +94,7 @@ public class NotificationRegistry implements Serializable {
 		this.emailSendStatus = "PENDING";
 		this.notificationEmail = notificationEmail;
 		this.currentRate = -1.0;
+		this.currencyServiceMode = currencyServiceMode;
 	}
 
 
@@ -202,13 +207,24 @@ public class NotificationRegistry implements Serializable {
 	}
 
 
+	public String getCurrencyServiceMode() {
+		return currencyServiceMode;
+	}
+
+
+	public void setCurrencyServiceMode(String currencyServiceMode) {
+		this.currencyServiceMode = currencyServiceMode;
+	}
+
+
 	@Override
 	public String toString() {
 		return "NotificationRegistry [recId=" + recId + ", userName=" + userName + ", srcCurrencyCode="
 				+ srcCurrencyCode + ", dstCurrencyCode=" + dstCurrencyCode + ", status=" + status + ", noticPeriod="
 				+ noticPeriod + ", thresholdValue=" + thresholdValue + ", thresholdType=" + thresholdType
 				+ ", lastNoticSendDate=" + lastNoticSendDate + ", emailSendStatus=" + emailSendStatus
-				+ ", notificationEmail=" + notificationEmail + ", currentRate=" + currentRate + "]";
+				+ ", notificationEmail=" + notificationEmail + ", currentRate=" + currentRate + ", currencyServiceMode="
+				+ currencyServiceMode + "]";
 	}
 
 
@@ -216,14 +232,22 @@ public class NotificationRegistry implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((currencyServiceMode == null) ? 0 : currencyServiceMode.hashCode());
+		result = prime * result + ((currentRate == null) ? 0 : currentRate.hashCode());
 		result = prime * result + ((dstCurrencyCode == null) ? 0 : dstCurrencyCode.hashCode());
+		result = prime * result + ((emailSendStatus == null) ? 0 : emailSendStatus.hashCode());
+		result = prime * result + ((lastNoticSendDate == null) ? 0 : lastNoticSendDate.hashCode());
 		result = prime * result + ((noticPeriod == null) ? 0 : noticPeriod.hashCode());
+		result = prime * result + ((notificationEmail == null) ? 0 : notificationEmail.hashCode());
+		result = prime * result + ((recId == null) ? 0 : recId.hashCode());
 		result = prime * result + ((srcCurrencyCode == null) ? 0 : srcCurrencyCode.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((thresholdType == null) ? 0 : thresholdType.hashCode());
 		result = prime * result + ((thresholdValue == null) ? 0 : thresholdValue.hashCode());
 		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -234,15 +258,45 @@ public class NotificationRegistry implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		NotificationRegistry other = (NotificationRegistry) obj;
+		if (currencyServiceMode == null) {
+			if (other.currencyServiceMode != null)
+				return false;
+		} else if (!currencyServiceMode.equals(other.currencyServiceMode))
+			return false;
+		if (currentRate == null) {
+			if (other.currentRate != null)
+				return false;
+		} else if (!currentRate.equals(other.currentRate))
+			return false;
 		if (dstCurrencyCode == null) {
 			if (other.dstCurrencyCode != null)
 				return false;
 		} else if (!dstCurrencyCode.equals(other.dstCurrencyCode))
 			return false;
+		if (emailSendStatus == null) {
+			if (other.emailSendStatus != null)
+				return false;
+		} else if (!emailSendStatus.equals(other.emailSendStatus))
+			return false;
+		if (lastNoticSendDate == null) {
+			if (other.lastNoticSendDate != null)
+				return false;
+		} else if (!lastNoticSendDate.equals(other.lastNoticSendDate))
+			return false;
 		if (noticPeriod == null) {
 			if (other.noticPeriod != null)
 				return false;
 		} else if (!noticPeriod.equals(other.noticPeriod))
+			return false;
+		if (notificationEmail == null) {
+			if (other.notificationEmail != null)
+				return false;
+		} else if (!notificationEmail.equals(other.notificationEmail))
+			return false;
+		if (recId == null) {
+			if (other.recId != null)
+				return false;
+		} else if (!recId.equals(other.recId))
 			return false;
 		if (srcCurrencyCode == null) {
 			if (other.srcCurrencyCode != null)
@@ -253,6 +307,11 @@ public class NotificationRegistry implements Serializable {
 			if (other.status != null)
 				return false;
 		} else if (!status.equals(other.status))
+			return false;
+		if (thresholdType == null) {
+			if (other.thresholdType != null)
+				return false;
+		} else if (!thresholdType.equals(other.thresholdType))
 			return false;
 		if (thresholdValue == null) {
 			if (other.thresholdValue != null)
@@ -266,6 +325,9 @@ public class NotificationRegistry implements Serializable {
 			return false;
 		return true;
 	}
+
+
+
 
 	
 }

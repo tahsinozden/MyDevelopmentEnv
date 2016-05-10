@@ -1,12 +1,16 @@
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Angular Material style sheet -->
-  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
-	<link rel="stylesheet" type="text/css" href="../css/account_page_styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Angular Material style sheet -->
+<link rel="stylesheet"
+	href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+<link rel="stylesheet" type="text/css"
+	href="../css/account_page_styles.css">
 </head>
-<body ng-show="loggedIn()" ng-app="myApp" layout="row" class="icondemoFontIconsWithLigatures" ng-controller="MyController" ng-cloak>
-  <!--
+<body ng-show="loggedIn()" ng-app="myApp" layout="row"
+	class="icondemoFontIconsWithLigatures" ng-controller="MyController"
+	ng-cloak>
+	<!--
     Your HTML content here
   -->
 	<!-- <h1>Welcome to Account Page</h1>
@@ -20,24 +24,26 @@
 		</section>
 	</div> -->
 
-	<div id="divMenu" layout="column" class="boxWithHeight"  layout-padding>
+	<div id="divMenu" layout="column" class="boxWithHeight" layout-padding>
 		<section>
 			<h1>Welcome to Account Page</h1>
 		</section>
 		<section>
-				<h3>Operations</h3>
+			<h3>Operations</h3>
 		</section>
 		<section>
-			<ul  style="list-style-type:none">
-					<!-- <li ng-repeat="navLink in navLinks" > <a  ng-click="selectedMenuItem = navLink;" >{{navLink.LinkText}}</a></li> -->
-					<li ng-repeat="navLink in navLinks" > <button  ng-click="linkClicked(navLink);" >{{navLink.LinkText}}</button></li>
+			<ul style="list-style-type: none">
+				<!-- <li ng-repeat="navLink in navLinks" > <a  ng-click="selectedMenuItem = navLink;" >{{navLink.LinkText}}</a></li> -->
+				<li ng-repeat="navLink in navLinks">
+					<button ng-click="linkClicked(navLink);">{{navLink.LinkText}}</button>
+				</li>
 			</ul>
 		</section>
 	</div>
 
 
 
-	<div layout="column" class="boxWithHeight"  layout-padding>
+	<div layout="column" class="boxWithHeight" layout-padding>
 		<!-- <section flex="10">
 
 		</section>
@@ -45,135 +51,161 @@
 				<h2>Subscription List</h2>
 				<p>Selected Item: {{ selectedMenuItem.Title }}</p>
 			</section> -->
-      <div ng-controller="ctrlSubsNotic">
-      <div id="divSubscribeCurrency" ng-show="selectedMenuItem.MenuIndex == 0;">
-        <table id="tblSubsQuery">
-          <tr>
-            <th>Src. Currency</th>
-            <th>Dest. Currency</th>
-            <th>Status</th>
-            <th>Notic. Period</th>
-<!--             <th>Current Rate</th> -->
-            <th>Threshold</th>
-            <th>Threshold Type</th>
-          </tr>
-          <tr ng-repeat="subs in $root.allSubscriptions">
-            <td>{{subs.srcCurrencyCode}}</td>
-            <td>{{subs.dstCurrencyCode}}</td>
-            <td>{{subs.status}}</td>
-            <td>{{subs.noticPeriod}}</td>
-<!--             <td>{{convertCurrency(subs.srcCurrencyCode, subs.dstCurrencyCode, 1)}}</td> -->
-            <td>{{subs.thresholdValue}}</td>
-            <td>{{subs.thresholdType}}</td>
-          </tr>
-        </table>
-      </div>
-			<div id="divSubscribeCurrency" ng-show="selectedMenuItem.MenuIndex == 1;">
+		<div ng-controller="ctrlSubsNotic">
+			<div id="divSubscribeCurrency"
+				ng-show="selectedMenuItem.MenuIndex == 0;">
+				<table id="tblSubsQuery">
+					<tr>
+						<th>Src. Currency</th>
+						<th>Dest. Currency</th>
+						<th>Status</th>
+						<th>Notic. Period</th>
+						<!--             <th>Current Rate</th> -->
+						<th>Threshold</th>
+						<th>Threshold Type</th>
+						<th  title="BITPAY: Rates from bitpay.com, NBP: Rates from National Bank of Poland">Cur. Serv. Mode</th>
+					</tr>
+					<tr ng-repeat="subs in $root.allSubscriptions">
+						<td>{{subs.srcCurrencyCode}}</td>
+						<td>{{subs.dstCurrencyCode}}</td>
+						<td>{{subs.status}}</td>
+						<td>{{subs.noticPeriod}}</td>
+						<!--             <td>{{convertCurrency(subs.srcCurrencyCode, subs.dstCurrencyCode, 1)}}</td> -->
+						<td>{{subs.thresholdValue}}</td>
+						<td>{{subs.thresholdType}}</td>
+						<td>{{subs.currencyServiceMode}}</td>
+					</tr>
+				</table>
+				<p><b>Cur. Serv. Mode : </b> <b>BITPAY</b>: Rates from bitpay.com, <b>NBP</b>: Rates from National Bank of Poland</p>
+			</div>
+			<div id="divSubscribeCurrency"
+				ng-show="selectedMenuItem.MenuIndex == 1;">
 				<section flex="10"></section>
 				<!-- Here I use bootstrap ui for auto-complete-->
-				<section >
-						<h2>Subscribe a  Currency</h2>
-						<select id="selectNotPeriod" ng-model="selectedNoticPeriod">
-							<option value="Daily">Daily</option>
-							<option value="Weekly">Weekly</option>
-							<option value="Monthly">Monthly</option>
-						</select>
+				<section>
+					<h2>Subscribe a Currency</h2>
+					<span title="BITPAY: Rates from bitpay.com, NBP: Rates from National Bank of Poland">
+						<select id="selectCurServMode" ng-model="selectedCurrencyServMode" ng-change="resetFields()">
+							<option value="BITPAY">BITPAY</option>
+							<option value="NBP">NBP</option>
+						</select> 
+					</span>
+					<select id="selectNotPeriod" ng-model="selectedNoticPeriod">
+						<option value="Daily">Daily</option>
+						<option value="Weekly">Weekly</option>
+						<option value="Monthly">Monthly</option>
+					</select> <input type="text" ng-model="selectedSrcCurrency"
+						placeholder="Source Currency Code"
+						uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
+						typeahead-loading="loadingLocations"
+						typeahead-no-results="noResults0" class="form-control" /> <i
+						ng-show="loadingSrc" class="glyphicon glyphicon-refresh"></i>
+					<div ng-show="noResults0">
+						<i class="glyphicon glyphicon-remove"></i> No Results Found
+					</div>
 
-						<input type="text"
-							ng-model="selectedSrcCurrency" placeholder="Source Currency Code"
-							uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
-							typeahead-loading="loadingLocations"
-							typeahead-no-results="noResults0" class="form-control" /> <i
-							ng-show="loadingSrc" class="glyphicon glyphicon-refresh"></i>
-						<div ng-show="noResults0">
-							<i class="glyphicon glyphicon-remove"></i> No Results Found
-						</div>
+					<input type="text" ng-model="selectedDstCurrency"
+						placeholder="Dest. Currency Code" typeahead-min-length="1"
+						uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
+						typeahead-loading="loadingDst" typeahead-no-results="noResults1"
+						class="form-control" />
+					<div ng-show="noResults1">
+						<i class="glyphicon glyphicon-remove"></i> No Results Found
+					</div>
 
-						<input type="text" ng-model="selectedDstCurrency"
-							placeholder="Dest. Currency Code" typeahead-min-length="1"
-							uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
-							typeahead-loading="loadingDst" typeahead-no-results="noResults1"
-							class="form-control" />
-						<div ng-show="noResults1">
-							<i class="glyphicon glyphicon-remove"></i> No Results Found
-						</div>
+					<input type="text" ng-model="thresholdValue"
+						placeholder="Threshold Value" class="form-control" value="0.0" />
 
-						<input type="text" ng-model="thresholdValue"
-							placeholder="Threshold Value"
-							class="form-control" value="0.0" />
-						
-						<select id="selectNotPeriod" ng-model="thresholdType">
-							<option >EQUAL</option>
-							<option >GREATER_THAN</option>
-							<option >LESS_THAN</option>
-							<option >NO_THRESHOLD</option>
-						</select>
-						
-						<p>Selected Source Currency: <b>{{ selectedSrcCurrency }}</b></p>
-						<p>Selected Destination Currency: <b>{{ selectedDstCurrency }}</b></p>
-						<p>Notification Period: <b>{{ selectedNoticPeriod }}</b></p>
+					<select id="selectNotPeriod" ng-model="thresholdType">
+						<option>EQUAL</option>
+						<option>GREATER_THAN</option>
+						<option>LESS_THAN</option>
+						<option>NO_THRESHOLD</option>
+					</select>
 
-						<button ng-click="createNotic();">Submit</button>
-					</section>
+					<p>
+						Selected Source Currency: <b>{{ selectedSrcCurrency }}</b>
+					</p>
+					<p>
+						Selected Destination Currency: <b>{{ selectedDstCurrency }}</b>
+					</p>
+					<p>
+						Notification Period: <b>{{ selectedNoticPeriod }}</b>
+					</p>
+
+					<button ng-click="createNotic();">Submit</button>
+				</section>
 			</div>
 
-			<div id="divUnsubscribeCurrency" ng-show="selectedMenuItem.MenuIndex == 2;">
+			<div id="divUnsubscribeCurrency"
+				ng-show="selectedMenuItem.MenuIndex == 2;">
 				<section flex="10"></section>
 				<section>
-						<h2>Unsubscribe a Currency</h2>
-            <table id="tblSelectCur2Unsubscribe">
-              <tr>
-                <th></th>
-                <th>Src. Currency</th>
-                <th>Dest. Currency</th>
-                <th>Status</th>
-                <th>Notic. Period</th>
-                <th>Threshold</th>
-                <th>Threshold Type</th>
-              </tr>
-              <tr ng-repeat="subs in $root.lstUnsubscriptions">
-                <td><input type="checkbox" checked="false" ng-model="subs.checked" id="chkBxUnsCur"/></td>
-                <td>{{subs.srcCurrencyCode}}</td>
-                <td>{{subs.dstCurrencyCode}}</td>
-                <td>{{subs.status}}</td>
-                <td>{{subs.noticPeriod}}</td>
-                <td>{{subs.thresholdValue}}</td>
-                <td>{{subs.thresholdType}}</td>
-              </tr>
-            </table>
-            <button ng-click="deleteNotic()">Delete Selected Records</button>
-            <button ng-click="$root.showUnSubscriptionsForMenu($root.currentUserName);">Refresh</button>
-					</section>
+					<h2>Unsubscribe a Currency</h2>
+					<table id="tblSelectCur2Unsubscribe">
+						<tr>
+							<th></th>
+							<th>Src. Currency</th>
+							<th>Dest. Currency</th>
+							<th>Status</th>
+							<th>Notic. Period</th>
+							<th>Threshold</th>
+							<th>Threshold Type</th>
+							<th title="BITPAY: Rates from bitpay.com, NBP: Rates from National Bank of Poland">Cur. Serv. Mode</th>
+						</tr>
+						<tr ng-repeat="subs in $root.lstUnsubscriptions">
+							<td><input type="checkbox" checked="false"
+								ng-model="subs.checked" id="chkBxUnsCur" /></td>
+							<td>{{subs.srcCurrencyCode}}</td>
+							<td>{{subs.dstCurrencyCode}}</td>
+							<td>{{subs.status}}</td>
+							<td>{{subs.noticPeriod}}</td>
+							<td>{{subs.thresholdValue}}</td>
+							<td>{{subs.thresholdType}}</td>
+							<td>{{subs.currencyServiceMode}}</td>							
+						</tr>
+					</table>
+					<button ng-click="deleteNotic()">Delete Selected Records</button>
+					<button
+						ng-click="$root.showUnSubscriptionsForMenu($root.currentUserName);">Refresh</button>
+				</section>
 			</div>
-			<div id="divSubscribeCurrencyThr" ng-show="selectedMenuItem.MenuIndex == 3;">
+			<div id="divSubscribeCurrencyThr"
+				ng-show="selectedMenuItem.MenuIndex == 3;">
 				<section flex="10"></section>
 				<section>
-						<h2>Subscribe Currency Threshold Notification</h2>
-						<p>Selected Item: {{ selectedMenuItem.Title }}</p>
-					</section>
+					<h2>Subscribe Currency Threshold Notification</h2>
+					<p>Selected Item: {{ selectedMenuItem.Title }}</p>
+				</section>
 			</div>
-			<div id="divUnsubscribeCurrencyThr" ng-show="selectedMenuItem.MenuIndex == 4;">
+			<div id="divUnsubscribeCurrencyThr"
+				ng-show="selectedMenuItem.MenuIndex == 4;">
 				<section flex="10"></section>
 				<section>
-						<h2>Unsubscribe Currency Threshold Notification</h2>
-						<p>Selected Item: {{ selectedMenuItem.Title }}</p>
-					</section>
+					<h2>Unsubscribe Currency Threshold Notification</h2>
+					<p>Selected Item: {{ selectedMenuItem.Title }}</p>
+				</section>
 			</div>
-    </div>
+		</div>
 	</div>
 
-  <!-- Angular Material requires Angular.js Libraries -->
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+	<!-- Angular Material requires Angular.js Libraries -->
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
 	<script src="../js/ui-bootstrap-tpls-1.1.2.min.js"></script>
 
-  <!-- Angular Material Library -->
-  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+	<!-- Angular Material Library -->
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
 	<script src="../js/account_page.js"></script>
-  <!-- Your application bootstrap  -->
-  <script type="text/javascript">
+	<!-- Your application bootstrap  -->
+	<script type="text/javascript">
     /**
      * You must include the dependency on 'ngMaterial'
      */
