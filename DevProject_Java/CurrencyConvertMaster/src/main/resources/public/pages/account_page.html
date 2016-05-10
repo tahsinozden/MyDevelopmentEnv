@@ -84,17 +84,24 @@
 				<!-- Here I use bootstrap ui for auto-complete-->
 				<section>
 					<h2>Subscribe a Currency</h2>
+					<div class="form-group">
+
 					<span title="BITPAY: Rates from bitpay.com, NBP: Rates from National Bank of Poland">
-						<select id="selectCurServMode" ng-model="selectedCurrencyServMode" ng-change="resetFields()">
+					Currency Service <select id="selectCurServMode" ng-model="selectedCurrencyServMode" ng-change="resetFields()" >
 							<option value="BITPAY">BITPAY</option>
 							<option value="NBP">NBP</option>
 						</select> 
 					</span>
-					<select id="selectNotPeriod" ng-model="selectedNoticPeriod">
+					</div>
+					<div class="form-group">
+					Notification Period <select id="selectNotPeriod" ng-model="selectedNoticPeriod" >
 						<option value="Daily">Daily</option>
 						<option value="Weekly">Weekly</option>
 						<option value="Monthly">Monthly</option>
-					</select> <input type="text" ng-model="selectedSrcCurrency"
+					</select> 
+					</div>
+					<div class="form-group">
+					<input type="text" ng-model="selectedSrcCurrency"
 						placeholder="Source Currency Code"
 						uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
 						typeahead-loading="loadingLocations"
@@ -103,7 +110,8 @@
 					<div ng-show="noResults0">
 						<i class="glyphicon glyphicon-remove"></i> No Results Found
 					</div>
-
+					</div>
+					<div class="form-group">
 					<input type="text" ng-model="selectedDstCurrency"
 						placeholder="Dest. Currency Code" typeahead-min-length="1"
 						uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
@@ -112,16 +120,19 @@
 					<div ng-show="noResults1">
 						<i class="glyphicon glyphicon-remove"></i> No Results Found
 					</div>
-
-					<input type="text" ng-model="thresholdValue"
-						placeholder="Threshold Value" class="form-control" value="0.0" />
-
+					</div>
+					<div class="form-group">
 					<select id="selectNotPeriod" ng-model="thresholdType">
 						<option>EQUAL</option>
 						<option>GREATER_THAN</option>
 						<option>LESS_THAN</option>
 						<option>NO_THRESHOLD</option>
 					</select>
+					</div>
+					<div class="form-group">
+					<input type="text" ng-model="thresholdValue"
+						placeholder="Threshold Value" class="form-control" value="0.0" />
+					</div>
 
 					<p>
 						Selected Source Currency: <b>{{ selectedSrcCurrency }}</b>

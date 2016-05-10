@@ -248,9 +248,22 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
       getterSetter: true
     };
     
-    $scope.thresholdValue = 0.0;
+    //$scope.thresholdValue = 0.0;
     $scope.thresholdType = "NO_THRESHOLD"
     $scope.createNotic = function(){
+    	if ($scope.thresholdValue == undefined || $scope.thresholdValue == null){
+    		$scope.thresholdValue = 0.0;
+    	}
+    	// check input values
+    	if ($scope.selectedSrcCurrency == undefined || $scope.selectedSrcCurrency == null ||
+    		$scope.selectedDstCurrency == undefined || $scope.selectedDstCurrency == null || 
+    		$scope.selectedNoticPeriod == undefined || $scope.selectedNoticPeriod == null ||
+    		$scope.thresholdType == undefined || $scope.thresholdType == null ||
+    		$scope.selectedCurrencyServMode == undefined || $scope.selectedCurrencyServMode == null
+    		){
+    		alert("Please check values in the form!!!");
+    		return;
+    	}
         $http.defaults.headers.common.Authorization = $rootScope.AuthHeader;
         $http.get('http://localhost:8080/notic_reg_serv/create', {
           params: {
