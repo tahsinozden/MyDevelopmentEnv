@@ -15,4 +15,5 @@ public interface NotificationRegistryRepository extends JpaRepository<Notificati
 	public List<NotificationRegistry> findByStatus(String status);
 	public List<NotificationRegistry> findByEmailSendStatus(String emailSendStatus);
 	public List<NotificationRegistry> findByUserNameAndStatus(String userName, String status);
+	public List<NotificationRegistry> findByUserNameAndSrcCurrencyCodeAndDstCurrencyCode(String userName, String srcCur, String dstCur);
 }

@@ -80,6 +80,11 @@ public class CurrencyNotificationRegistryController {
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Check your request parameters!");
 		}
 		
+		// check source currency is equal to dst cur.
+		if(srcCur.equals(dstCur)){
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Src. cur. cannot be equal to dst. cur.!");
+		}
+		
 		if (notificationEmail == null || notificationEmail.equals(""))
 			notificationEmail = userName;
 		
@@ -87,6 +92,12 @@ public class CurrencyNotificationRegistryController {
 		List<Users> user = usersRepository.findByUserName(userName);
 		if (user == null || user.isEmpty()){
 			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found!");
+		}
+		
+		// check user has subcription to requested notification
+		List<NotificationRegistry> regs = notificationRegistryRepository.findByUserNameAndSrcCurrencyCodeAndDstCurrencyCode(userName, srcCur, dstCur);
+		if(!regs.isEmpty()){
+			throw new HttpClientErrorException(HttpStatus.CONFLICT, "User already has this subscription!");
 		}
 		
 		String curServMode = currencyServiceMode;

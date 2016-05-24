@@ -278,6 +278,7 @@ app.controller('ctrlSubsNotic', function ($scope, $http, $rootScope) {
         }).then(function(response){
           // success function
           console.log(response);
+          alert('Notification created!');
         }, function(response){
           // error function
           alert(response.data.message);

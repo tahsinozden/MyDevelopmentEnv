@@ -26,7 +26,7 @@
 
 	<div id="divMenu" layout="column" class="boxWithHeight" layout-padding>
 		<section>
-			<h1>Welcome to Account Page</h1>
+			<h1>Welcome {{ $root.currentUserName }}</h1>
 		</section>
 		<section>
 			<h3>Operations</h3>
@@ -63,7 +63,9 @@
 						<!--             <th>Current Rate</th> -->
 						<th>Threshold</th>
 						<th>Threshold Type</th>
-						<th  title="BITPAY: Rates from bitpay.com, NBP: Rates from National Bank of Poland">Cur. Serv. Mode</th>
+						<th
+							title="BITPAY: Rates from bitpay.com, NBP: Rates from National Bank of Poland">Cur.
+							Serv. Mode</th>
 					</tr>
 					<tr ng-repeat="subs in $root.allSubscriptions">
 						<td>{{subs.srcCurrencyCode}}</td>
@@ -76,76 +78,85 @@
 						<td>{{subs.currencyServiceMode}}</td>
 					</tr>
 				</table>
-				<p><b>Cur. Serv. Mode : </b> <b>BITPAY</b>: Rates from bitpay.com, <b>NBP</b>: Rates from National Bank of Poland</p>
+				<p>
+					<b>Cur. Serv. Mode : </b> <b>BITPAY</b>: Rates from bitpay.com, <b>NBP</b>:
+					Rates from National Bank of Poland
+				</p>
 			</div>
 			<div id="divSubscribeCurrency"
 				ng-show="selectedMenuItem.MenuIndex == 1;">
 				<section flex="10"></section>
 				<!-- Here I use bootstrap ui for auto-complete-->
-				<section>
-					<h2>Subscribe a Currency</h2>
-					<div class="form-group">
+				<fieldset>
+				<legend><b>Subscribe a Currency</b></legend>
+					<section>
+<!-- 						<h2>Subscribe a Currency</h2> -->
+						<div class="form-group">
 
-					<span title="BITPAY: Rates from bitpay.com, NBP: Rates from National Bank of Poland">
-					Currency Service <select id="selectCurServMode" ng-model="selectedCurrencyServMode" ng-change="resetFields()" >
-							<option value="BITPAY">BITPAY</option>
-							<option value="NBP">NBP</option>
-						</select> 
-					</span>
-					</div>
-					<div class="form-group">
-					Notification Period <select id="selectNotPeriod" ng-model="selectedNoticPeriod" >
-						<option value="Daily">Daily</option>
-						<option value="Weekly">Weekly</option>
-						<option value="Monthly">Monthly</option>
-					</select> 
-					</div>
-					<div class="form-group">
-					<input type="text" ng-model="selectedSrcCurrency"
-						placeholder="Source Currency Code"
-						uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
-						typeahead-loading="loadingLocations"
-						typeahead-no-results="noResults0" class="form-control" /> <i
-						ng-show="loadingSrc" class="glyphicon glyphicon-refresh"></i>
-					<div ng-show="noResults0">
-						<i class="glyphicon glyphicon-remove"></i> No Results Found
-					</div>
-					</div>
-					<div class="form-group">
-					<input type="text" ng-model="selectedDstCurrency"
-						placeholder="Dest. Currency Code" typeahead-min-length="1"
-						uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
-						typeahead-loading="loadingDst" typeahead-no-results="noResults1"
-						class="form-control" />
-					<div ng-show="noResults1">
-						<i class="glyphicon glyphicon-remove"></i> No Results Found
-					</div>
-					</div>
-					<div class="form-group">
-					<select id="selectNotPeriod" ng-model="thresholdType">
-						<option>EQUAL</option>
-						<option>GREATER_THAN</option>
-						<option>LESS_THAN</option>
-						<option>NO_THRESHOLD</option>
-					</select>
-					</div>
-					<div class="form-group">
-					<input type="text" ng-model="thresholdValue"
-						placeholder="Threshold Value" class="form-control" value="0.0" />
-					</div>
+							<span
+								title="BITPAY: Rates from bitpay.com, NBP: Rates from National Bank of Poland">
+								Currency Service <select id="selectCurServMode"
+								ng-model="selectedCurrencyServMode" ng-change="resetFields()">
+									<option value="BITPAY">BITPAY</option>
+									<option value="NBP">NBP</option>
+							</select>
+							</span>
+						</div>
+						<div class="form-group">
+							Notification Period <select id="selectNotPeriod"
+								ng-model="selectedNoticPeriod">
+								<option value="Daily">Daily</option>
+								<option value="Weekly">Weekly</option>
+								<option value="Monthly">Monthly</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="text" ng-model="selectedSrcCurrency"
+								placeholder="Source Currency Code"
+								uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
+								typeahead-loading="loadingLocations"
+								typeahead-no-results="noResults0" class="form-control" /> <i
+								ng-show="loadingSrc" class="glyphicon glyphicon-refresh"></i>
+							<div ng-show="noResults0">
+								<i class="glyphicon glyphicon-remove"></i> No Results Found
+							</div>
+						</div>
+						<div class="form-group">
+							<input type="text" ng-model="selectedDstCurrency"
+								placeholder="Dest. Currency Code" typeahead-min-length="1"
+								uib-typeahead="currency for currency in allCurrencyCodes  | filter:$viewValue | limitTo:8"
+								typeahead-loading="loadingDst" typeahead-no-results="noResults1"
+								class="form-control" />
+							<div ng-show="noResults1">
+								<i class="glyphicon glyphicon-remove"></i> No Results Found
+							</div>
+						</div>
+						<div class="form-group">
+							<select id="selectNotPeriod" ng-model="thresholdType">
+								<option>EQUAL</option>
+								<option>GREATER_THAN</option>
+								<option>LESS_THAN</option>
+								<option>NO_THRESHOLD</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="text" ng-model="thresholdValue"
+								placeholder="Threshold Value" class="form-control" value="0.0" />
+						</div>
 
-					<p>
-						Selected Source Currency: <b>{{ selectedSrcCurrency }}</b>
-					</p>
-					<p>
-						Selected Destination Currency: <b>{{ selectedDstCurrency }}</b>
-					</p>
-					<p>
-						Notification Period: <b>{{ selectedNoticPeriod }}</b>
-					</p>
+						<p>
+							Selected Source Currency: <b>{{ selectedSrcCurrency }}</b>
+						</p>
+						<p>
+							Selected Destination Currency: <b>{{ selectedDstCurrency }}</b>
+						</p>
+						<p>
+							Notification Period: <b>{{ selectedNoticPeriod }}</b>
+						</p>
 
-					<button ng-click="createNotic();">Submit</button>
-				</section>
+						<button ng-click="createNotic();">Submit</button>
+					</section>
+				</fieldset>
 			</div>
 
 			<div id="divUnsubscribeCurrency"
@@ -162,7 +173,9 @@
 							<th>Notic. Period</th>
 							<th>Threshold</th>
 							<th>Threshold Type</th>
-							<th title="BITPAY: Rates from bitpay.com, NBP: Rates from National Bank of Poland">Cur. Serv. Mode</th>
+							<th
+								title="BITPAY: Rates from bitpay.com, NBP: Rates from National Bank of Poland">Cur.
+								Serv. Mode</th>
 						</tr>
 						<tr ng-repeat="subs in $root.lstUnsubscriptions">
 							<td><input type="checkbox" checked="false"
@@ -173,7 +186,7 @@
 							<td>{{subs.noticPeriod}}</td>
 							<td>{{subs.thresholdValue}}</td>
 							<td>{{subs.thresholdType}}</td>
-							<td>{{subs.currencyServiceMode}}</td>							
+							<td>{{subs.currencyServiceMode}}</td>
 						</tr>
 					</table>
 					<button ng-click="deleteNotic()">Delete Selected Records</button>
@@ -217,19 +230,17 @@
 	<script src="../js/account_page.js"></script>
 	<!-- Your application bootstrap  -->
 	<script type="text/javascript">
-    /**
-     * You must include the dependency on 'ngMaterial'
-     */
-    // angular.module('BlankApp', ['ngMaterial']);
-
-// 		var app = angular.module('myApp', ['ngMaterial']);
-// 		app.controller('MyController', function($scope, $mdSidenav) {
-//   			$scope.openLeftMenu = function() {
-//     		$mdSidenav('left').toggle();
-//   		};
-// });
-
-  </script>
+		/**
+		 * You must include the dependency on 'ngMaterial'
+		 */
+		// angular.module('BlankApp', ['ngMaterial']);
+		// 		var app = angular.module('myApp', ['ngMaterial']);
+		// 		app.controller('MyController', function($scope, $mdSidenav) {
+		//   			$scope.openLeftMenu = function() {
+		//     		$mdSidenav('left').toggle();
+		//   		};
+		// });
+	</script>
 </body>
 </html>
 

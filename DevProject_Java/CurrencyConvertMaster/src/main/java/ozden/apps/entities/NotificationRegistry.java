@@ -8,11 +8,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
+// this can be for composite primary key
+//@IdClass(NotificationRegistryPK.class)
 @Table(name = "notification_registry")
 public class NotificationRegistry implements Serializable {
 
@@ -35,13 +38,16 @@ public class NotificationRegistry implements Serializable {
 	@GeneratedValue
 	private Integer recId;
 	
+//	@Id
 	@Column(name="user_name")
 	private String userName;
 	
+//	@Id
 	//!!!! ATTENTION srcCurrencyCode is automatically parsed as src_currency_code
 	@Column(name="src_currency_code")
 	private String srcCurrencyCode;
 	
+//	@Id
 	@Column(name="dst_currency_code")
 	private String dstCurrencyCode;
 	
