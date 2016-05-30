@@ -163,6 +163,10 @@ app.controller('jwtLoginCtrl', ['mainService','$scope','$http', '$cookies',
 			$scope.error = error
 			$scope.userName = '';
 			$scope.password = '';
+			// if the user is in IDLE state
+			if (error.data.message.indexOf("IDLE") > -1){
+				window.location="/pages/idle-user-page.html";				
+			}
 		});
 	}
 	

@@ -140,7 +140,7 @@ public class Users implements Serializable {
 
 	@Override
 	public String toString() {
-		return "User [userName=" + userName + ", password=" + password + ", activationDate=" + activationDate
+		return "User [userName=" + userName + ", password=" + "********" + ", activationDate=" + activationDate
 				+ ", expirationDate=" + expirationDate + ", statusFlag=" + statusFlag + "]";
 	}
 	

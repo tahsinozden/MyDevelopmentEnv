@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
@@ -21,15 +22,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
+import ozden.apps.entities.AccountActivation;
 import ozden.apps.entities.Users;
+import ozden.apps.repos.AccountActivationRepository;
 import ozden.apps.repos.UsersRepository;
 import ozden.apps.tools.EncryptionHelper;
+import ozden.apps.tools.SmtpMailSender;
 
 
 @RestController
 public class CreateAccountController {
 	@Autowired
 	private UsersRepository usersRepository;
+	
+    @Autowired
+    private SmtpMailSender sendMail;
+    
+	@Autowired
+	private AccountActivationRepository accountActivationRepository;
+	
 	private static final Logger log = LoggerFactory.getLogger(CreateAccountController.class);
 	// create account service
 	@RequestMapping(value="/create-account", method=RequestMethod.POST)
@@ -69,14 +80,43 @@ public class CreateAccountController {
 		Date expirationDate = (new Calendar.Builder()).setDate(2050, 1, 1).build().getTime();
 
 		// create user
-		Users user = new Users(username, encryptedPassword, activationDate, expirationDate, new Integer(1));
+		Users user = new Users(username, encryptedPassword, activationDate, expirationDate, new Integer(0));
 		
-		// save user to the database
-		usersRepository.save(user);
 		
-		// redirect to account page 
-//		return user.getUserName();
-		usr.password = "****";
+		// create activation email for the account
+		String token = EncryptionHelper.generateEncryptedPassword(username);
+		// replace / character, it causes address errors in http address
+		token = token.replace("/", "");
+		String serviceLink = "http://localhost:8080/account-activate/by-token/" + token;
+		String title = "Your Account Activation";
+		String msg = "<p>Please click the link below</p><br><a href=\"" + serviceLink + "\">Activate Your Account</a>";
+		try {
+			log.info("Trying to send email to " + username);
+			sendMail.send(username, title, msg);
+			
+			// save user to the database
+			usersRepository.save(user);
+			log.info("User is saved to the database " + user.toString());
+			
+			// redirect to account page 
+//			return user.getUserName();
+			usr.password = "****";
+			
+			// save matching record to db for activation
+			long secondsInDay = 60 * 60 * 24;
+			// add one day expiration
+			Date actExpDate = new Date(activationDate.getTime() + secondsInDay);
+//			Date activationExpDate = (new Calendar.Builder()).setDate(, 1, 1).build().getTime();
+			AccountActivation act = new AccountActivation(username, token, activationDate, actExpDate);
+			accountActivationRepository.save(act);
+			log.info("Activation record is added to database. " + act.toString());
+			
+		} catch (MessagingException e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Your email address is not valid!");
+		}
+		
 		return usr;
 //		return "redirect:/index.html";
 	}

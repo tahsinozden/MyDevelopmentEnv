@@ -52,8 +52,16 @@ public class UserController {
 		
 		List<Users> lstUser = usersRepository.findByUserNameAndStatusFlag(userName, 1);
 		if (lstUser == null || lstUser.isEmpty()){
-			log.warn("User not found! ");
-			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found!");
+			//idle-user-page.html
+			// check idle user
+			lstUser = usersRepository.findByUserNameAndStatusFlag(userName, 0);
+			if (lstUser == null || lstUser.isEmpty()){
+				log.warn("User not found! ");
+				throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found!");
+			}
+			else{
+				throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "User is IDLE!");
+			}
 		}
 		Users currentUser = lstUser.get(0);
 		if (!EncryptionHelper.checkPasswordPairEqual(currentUser.getPassword(), password)){

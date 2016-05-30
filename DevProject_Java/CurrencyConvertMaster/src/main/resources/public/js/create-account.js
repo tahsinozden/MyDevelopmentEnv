@@ -6,7 +6,8 @@ var app = angular.module('ngCreateAcctApp', ['ui.bootstrap']);
 
 app.controller('ctrlCreateAcctForm', ['mainService', '$scope', '$http',
                                       function(mainService, $scope, $http){
-	$scope.submitFormData = function(){			  
+	$scope.submitFormData = function(){			
+		// TODO: disable submit button during submit
 		console.log("going to send data...");
 		// TODO: find out why syntax error is thrown -> Implemented, the reason was because the backend returns String object
 		// I changed it to a user object
