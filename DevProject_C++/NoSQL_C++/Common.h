@@ -22,5 +22,7 @@ typedef std::vector<IDBEntitry*> DBEntityList;
 typedef std::map<std::string, std::string> StringMap;
 typedef std::pair<std::string, std::string> StringPair;
 
+bool copyFile(std::string srcFile, std::string dstFile);
+
 #endif /* COMMON_H */
 

@@ -21,6 +21,11 @@
 #include <iostream>
 #include <fstream>
 
+enum WRITER_MODE {
+	CREATE,
+	APPEND
+};
+
 class CDatabaseObjectHandler{
   
 private:
@@ -30,10 +35,18 @@ private:
     PairList m_dbObjFieldPairs;
     std::ofstream m_dbWriter;
     std::ifstream m_dbReader;
-    
+	std::vector<int>* m_matchedIndexes;
+	std::string currentEntityObjectFile;
+
     bool fexists(std::string filename);
     bool checkObjectHeaderExist(std::string fileName, std::string expectedHeader);
     std::vector<std::string> getElementsFromString(std::string str);
+	std::vector<int>* getMatchIndexes(IDBEntitry* queryObj);
+	std::ofstream* getEntityObjectWriter(IDBEntitry* obj, WRITER_MODE mode);
+	std::ifstream* getEntityObjectReader(IDBEntitry* obj);
+	void closeObjectWriter();
+	void closeObjectReader();
+
 public:
     enum DB_OBJECT_FIELD_TYPE{
         INT,
@@ -41,9 +54,10 @@ public:
         TEXT        
     };
     
-    void save2DB(IDBEntitry*);
+	CDatabaseObjectHandler();
+    void saveEntityObject(IDBEntitry*);
     DBEntityList queryWithEntityObject(IDBEntitry* queryObj);
-//    DBEntityList getDBObjectsByQueryEntity(IDBEntitry*);
+	void updateWithEntityObject(IDBEntitry* queryObj, IDBEntitry* newObj);
     
 };
 

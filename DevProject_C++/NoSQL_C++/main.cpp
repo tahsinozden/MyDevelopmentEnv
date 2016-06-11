@@ -13,6 +13,7 @@
 
 #include <cstdlib>
 #include <memory>
+#include <fstream>
 
 #include "CEmployee.h"
 #include "CDatabaseObjectHandler.h"
@@ -33,7 +34,7 @@ using namespace std;
 int main(int argc, char** argv) {
     CEmployee* emp = new CEmployee("john", "doe", "software developer", "male", 45);
     CDatabaseObjectHandler* dbHandler = new CDatabaseObjectHandler();
-    dbHandler->save2DB(emp);
+    //dbHandler->saveEntityObject(emp);
     
     CEmployee* queryEmp = new CEmployee("john", "", "", "", 45);
     DBEntityList res = dbHandler->queryWithEntityObject(queryEmp);
@@ -42,7 +43,9 @@ int main(int argc, char** argv) {
     for (int i = 0; i < res.size(); i++) {
         std::cout << ((CEmployee*)(res.at(i)))->toString() << std::endl;
     }
-
+	queryEmp = new CEmployee("jack", "", "", "", 45);
+	CEmployee* updateObj = new CEmployee("tahsin", "ozden", "electronics engineer", "male", 26);
+	dbHandler->updateWithEntityObject(queryEmp, updateObj);
 
     return 0;
 }
