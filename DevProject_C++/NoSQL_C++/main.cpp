@@ -26,7 +26,6 @@ using namespace std;
  * 
  * 
  * TODO: Handle null integer initialization, if the integer number not initialized, convert it to "" string
- * TODO: Implement update record
  * TODO: Implement delete record
  * TODO: Implement multiple records saving at once
  * TODO: Integrate Logger API to the application
@@ -44,7 +43,7 @@ int main(int argc, char** argv) {
         std::cout << ((CEmployee*)(res.at(i)))->toString() << std::endl;
     }
 	queryEmp = new CEmployee("jack", "", "", "", 45);
-	CEmployee* updateObj = new CEmployee("tahsin", "ozden", "electronics engineer", "male", 26);
+	CEmployee* updateObj = new CEmployee("master", "dev", "software engineer", "male", 37);
 	dbHandler->updateWithEntityObject(queryEmp, updateObj);
 
     return 0;
