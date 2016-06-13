@@ -42,24 +42,32 @@ void Logger::initialize(std::string logFileName, LOG_LEVEL logLevel, std::string
 
 void Logger::info(std::string msg){
     if (this->getLogLevel() == INFO || this->getLogLevel() == ALL){
+        // lock the log file
+        std::lock_guard<std::mutex> locker(_mu);
         _logger << getTimeStamp() +  " - INFO - " << msg << std::endl;
     }
 }
 
 void Logger::warn(std::string msg){
     if (this->getLogLevel() == WARN || this->getLogLevel() == ALL){
+        // lock the log file
+        std::lock_guard<std::mutex> locker(_mu);
         _logger << getTimeStamp() +  " - WARN - " << msg << std::endl;
     }
 }
 
-void Logger::error(std::string msg){
+void Logger::error(std::string msg){    
     if (this->getLogLevel() == ERROR || this->getLogLevel() == ALL){
+        // lock the log file
+        std::lock_guard<std::mutex> locker(_mu);
         _logger << getTimeStamp() +  " - ERROR - " << msg << std::endl;
     }
 }
 
 void Logger::debug(std::string msg){
     if (this->getLogLevel() == DEBUG || this->getLogLevel() == ALL){
+        // lock the log file
+        std::lock_guard<std::mutex> locker(_mu);
         _logger << getTimeStamp() +  " - DEBUG - " << msg << std::endl;
     }
 }

@@ -16,6 +16,7 @@
 #include <fstream>
 #include <chrono>
 #include <ctime>
+#include <mutex>
 
 enum LOG_LEVEL {
     INFO,
@@ -28,6 +29,7 @@ enum LOG_LEVEL {
 class Logger {
 private:
     std::ofstream _logger;
+    std::mutex _mu;
     LOG_LEVEL m_LogLevel;
     std::string  m_TimeStamp;
     bool fexists(std::string filename);
