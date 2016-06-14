@@ -17,7 +17,7 @@
 #include "Common.h"
 #include <string>
 
-class CEmployee : public IDBEntitry {
+class CEmployee : public IDBEntity {
     private:
         std::string m_name;
         std::string m_surname;
@@ -47,7 +47,9 @@ class CEmployee : public IDBEntitry {
         
         StringMap getMappedObject() override;
         
-        IDBEntitry* getEntityObjFromMapping(StringMap) override;
+        IDBEntity* getEntityObjFromMapping(StringMap) override;
+
+		IDBEntity * clone() const;
 
 //        CEmployee* getEntityObjFromMapping1(StringMap);
         

@@ -32,10 +32,13 @@ StringMap CEmployee::getMappedObject(){
     return mapping;
 }
 
-IDBEntitry* CEmployee::getEntityObjFromMapping(StringMap objMap){
+IDBEntity* CEmployee::getEntityObjFromMapping(StringMap objMap){
     return new CEmployee(objMap["name"], objMap["surname"], objMap["occupation"], objMap["gender"], std::stoi(objMap["age"]));
 }
 
+IDBEntity* CEmployee::clone() const{
+	return new CEmployee(dynamic_cast<CEmployee const&>(*this));
+}
 //CEmployee* CEmployee::getEntityObjFromMapping1(StringMap objMap){
 //    return new CEmployee(objMap["name"], objMap["surname"], objMap["occupation"], objMap["gender"], std::stoi(objMap["age"]));
 //}

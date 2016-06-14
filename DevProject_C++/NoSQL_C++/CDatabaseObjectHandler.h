@@ -20,6 +20,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <mutex>
 
 enum WRITER_MODE {
 	CREATE,
@@ -37,15 +38,21 @@ private:
     std::ifstream m_dbReader;
 	std::vector<int>* m_matchedIndexes;
 	std::string currentEntityObjectFile;
+	std::mutex m_fileLockMutex;
 
     bool fexists(std::string filename);
     bool checkObjectHeaderExist(std::string fileName, std::string expectedHeader);
     std::vector<std::string> getElementsFromString(std::string str);
-	std::vector<int>* getMatchIndexes(IDBEntitry* queryObj);
-	std::ofstream* getEntityObjectWriter(IDBEntitry* obj, WRITER_MODE mode);
-	std::ifstream* getEntityObjectReader(IDBEntitry* obj);
+	std::vector<int>* getMatchIndexes(IDBEntity* queryObj);
+	std::ofstream* getEntityObjectWriter(IDBEntity* obj, WRITER_MODE mode);
+	std::ifstream* getEntityObjectReader(IDBEntity* obj);
 	void closeObjectWriter();
 	void closeObjectReader();
+	void writeObjectToDB(IDBEntity* refEntityObject, WRITER_MODE openMode, std::string toBeWritten);
+	void readObjectFromDB();
+	DBEntityList getAllEntitiesFromDB(IDBEntity* refObj);
+	std::string createRecordFromEntityObject(IDBEntity* obj);
+	std::string createHeaderFromEntityObject(IDBEntity* obj);
 
 public:
     enum DB_OBJECT_FIELD_TYPE{
@@ -55,10 +62,11 @@ public:
     };
     
 	CDatabaseObjectHandler();
-    void saveEntityObject(IDBEntitry*);
-    DBEntityList queryWithEntityObject(IDBEntitry* queryObj);
-	void updateWithEntityObject(IDBEntitry* queryObj, IDBEntitry* newObj);
-    
+    void saveEntityObject(IDBEntity*);
+    DBEntityList queryWithEntityObject(IDBEntity* queryObj);
+	DBEntityList queryAll(IDBEntity* queryObj);
+	void updateWithEntityObject(IDBEntity* queryObj, IDBEntity* newObj);
+	void deleteEntityObject(IDBEntity* objToBeDeleted);
 };
 
 #endif /* CDATABASEOBJECTHANDLER_H */

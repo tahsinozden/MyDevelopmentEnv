@@ -6,6 +6,6 @@
 
 #include "IDBEntity.h"
 
-std::string IDBEntitry::getName(){
-    return "IDBEntitry";
+std::string IDBEntity::getName(){
+    return "IDBEntity";
 }

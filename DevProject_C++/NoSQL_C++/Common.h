@@ -18,7 +18,7 @@
 #include "IDBEntity.h"
 #include <exception>
 
-typedef std::vector<IDBEntitry*> DBEntityList; 
+typedef std::vector<IDBEntity*> DBEntityList; 
 typedef std::map<std::string, std::string> StringMap;
 typedef std::pair<std::string, std::string> StringPair;
 

@@ -21,12 +21,13 @@
 typedef std::map<std::string, std::string> StringMap;
 typedef std::vector<std::pair<std::string, std::string> > PairList;
 
-class IDBEntitry{
+class IDBEntity{
 public:
     virtual PairList getDBObjectFields() = 0;
     virtual std::string getDBObjectName() = 0;
     virtual StringMap getMappedObject() = 0;
-    virtual IDBEntitry* getEntityObjFromMapping(StringMap) = 0;
+    virtual IDBEntity* getEntityObjFromMapping(StringMap) = 0;
+	virtual IDBEntity* clone() const = 0;
     std::string getName();
 };
 
