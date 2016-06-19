@@ -6,16 +6,24 @@
                    projectFiles="true">
       <itemPath>CDatabaseObjectHandler.h</itemPath>
       <itemPath>CEmployee.h</itemPath>
+      <itemPath>CStocks.h</itemPath>
       <itemPath>Common.h</itemPath>
+      <itemPath>Double.h</itemPath>
       <itemPath>IDBEntity.h</itemPath>
+      <itemPath>Integer.h</itemPath>
+      <itemPath>String.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
       <itemPath>CDatabaseObjectHandler.cpp</itemPath>
       <itemPath>CEmployee.cpp</itemPath>
+      <itemPath>CStocks.cpp</itemPath>
       <itemPath>Common.cpp</itemPath>
-      <itemPath>IDBEntitry.cpp</itemPath>
+      <itemPath>Double.cpp</itemPath>
+      <itemPath>IDBEntity.cpp</itemPath>
+      <itemPath>Integer.cpp</itemPath>
+      <itemPath>String.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -55,13 +63,29 @@
       </item>
       <item path="CEmployee.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="CStocks.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CStocks.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Common.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Common.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="IDBEntitry.cpp" ex="false" tool="1" flavor2="0">
+      <item path="Double.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Double.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IDBEntity.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="IDBEntity.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Integer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Integer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="String.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="String.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -94,13 +118,29 @@
       </item>
       <item path="CEmployee.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="CStocks.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CStocks.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Common.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Common.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="IDBEntitry.cpp" ex="false" tool="1" flavor2="0">
+      <item path="Double.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Double.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IDBEntity.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="IDBEntity.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Integer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Integer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="String.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="String.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>

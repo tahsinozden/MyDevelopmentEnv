@@ -17,6 +17,10 @@
 
 #include "CEmployee.h"
 #include "CDatabaseObjectHandler.h"
+#include "Integer.h"
+#include "String.h"
+#include "Double.h"
+#include "CStocks.h"
 
 using namespace std;
 
@@ -25,23 +29,28 @@ void testQuery();
 void testQueryAll();
 void testUpdate();
 void testDelete();
+void testTypes();
+void testDouble();
+void testStocks();
 
 /*
  * This is a No-SQL C++ library. It has its newly designed database structure.
  * C++11 features are used that's -std=c++11 needs to be passed to the compiler.
  * 
  * 
- * TODO: Handle null integer initialization, if the integer number not initialized, convert it to "" string
  * TODO: Implement multiple records saving at once
  * TODO: Integrate Logger API to the application
  */
 int main(int argc, char** argv) {
 
-	testQueryAll();
+	//testQueryAll();
 	//testUpdate();
 	//testQuery();
 	//testDelete();
 	//testInsert();
+	//testTypes();
+	//testDouble();
+	testStocks();
     return 0;
 }
 
@@ -82,4 +91,67 @@ void testDelete() {
 	CDatabaseObjectHandler* dbHandler = new CDatabaseObjectHandler();
 	CEmployee* queryEmp = new CEmployee("news dev", "", "", "", 17);
 	dbHandler->deleteEntityObject(queryEmp);
+}
+void testTypes() {
+	int(*func)();
+	func = std::numeric_limits<int>::quiet_NaN;
+	std::string a = "";
+	//int b = std::stoi(a);
+	Integer i;
+	std::cout << i.getStringValue() << std::endl;
+	std::cout << i.getIntValue() << std::endl;
+
+	Integer x(34);
+	Integer y(0);
+	Integer z;
+	String str("sfsdfs");
+	try {
+		std::cout << (x + y).getIntValue() << std::endl;
+		//z = x / y;
+		Integer v = Integer::valueOf(str);
+		std::cout << v.getIntValue() << std::endl;
+	}
+	catch (const std::exception& e) {
+
+		//std::cout << z.getIntValue() << std::endl;
+		std::cout << "Exception : " << e.what() << std::endl;
+	}
+
+}
+
+void testDouble() {
+	Double d(3.67);
+	Integer i(3);
+	i = d;
+	std::cout << d.getDoubleValue() / 2 << std::endl;
+	std::cout << i.getIntValue() / 2 << std::endl;
+}
+
+void testStocks() {
+	CDatabaseObjectHandler* dbHandler = new CDatabaseObjectHandler();
+	Integer amt(23);
+	Double per(23.4);
+	CStocks* st = new CStocks(String("phone"), amt, per);
+	dbHandler->saveEntityObject(st);
+
+
+	Integer amt1;
+	Double per1;
+	CStocks* st1 = new CStocks(String("phone"), amt1, per1);
+	DBEntityList res = dbHandler->queryWithEntityObject(st1);
+	std::cout << "Query Result Matches : " << res.size() << std::endl;
+	for (int i = 0; i < res.size(); i++) {
+		std::cout << ((CStocks*)(res.at(i)))->toString() << std::endl;
+	}
+
+	CStocks* queryPc = new CStocks(String("pc"), amt1, per1);
+	res = dbHandler->queryWithEntityObject(queryPc);
+	std::cout << "Query Result Matches : " << res.size() << std::endl;
+	for (int i = 0; i < res.size(); i++) {
+		std::cout << ((CStocks*)(res.at(i)))->toString() << std::endl;
+	}
+	amt1 = Integer(45);
+	per1 = Double(67.9);
+	CStocks* updatePc = new CStocks(String("pc"), amt, per);
+	dbHandler->updateWithEntityObject(queryPc, updatePc);
 }

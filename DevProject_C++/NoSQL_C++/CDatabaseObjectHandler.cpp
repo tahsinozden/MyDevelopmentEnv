@@ -431,6 +431,13 @@ void CDatabaseObjectHandler::writeObjectToDB(IDBEntity * refEntityObject, WRITER
 	PairList pairsFromDB;
 	StringMap mapFromDB;
 
+	// check db file, if not exist create an empty one
+	if (!fexists(currentEntityObjectFile)) {
+		std::ofstream of;
+		of.open(currentEntityObjectFile, std::ios::out);
+		of.close();
+	}
+
 	// copy original file to a temp one
 	copyFile(objName, tmpObjName);
 
@@ -546,7 +553,7 @@ DBEntityList CDatabaseObjectHandler::getAllEntitiesFromDB(IDBEntity * refObj) {
 
 			IDBEntity* entity = refObj->clone();
 			// fill the object with new data
-			entity = entity->getEntityObjFromMapping(mapFromDB);
+			entity = (entity->getEntityObjFromMapping(mapFromDB))->clone();
 			// add it to the stack
 			entityList.push_back(entity);
 		}

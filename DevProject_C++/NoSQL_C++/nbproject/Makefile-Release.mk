@@ -37,8 +37,12 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/CDatabaseObjectHandler.o \
 	${OBJECTDIR}/CEmployee.o \
+	${OBJECTDIR}/CStocks.o \
 	${OBJECTDIR}/Common.o \
-	${OBJECTDIR}/IDBEntitry.o \
+	${OBJECTDIR}/Double.o \
+	${OBJECTDIR}/IDBEntity.o \
+	${OBJECTDIR}/Integer.o \
+	${OBJECTDIR}/String.o \
 	${OBJECTDIR}/main.o
 
 
@@ -76,15 +80,35 @@ ${OBJECTDIR}/CEmployee.o: CEmployee.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CEmployee.o CEmployee.cpp
 
+${OBJECTDIR}/CStocks.o: CStocks.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CStocks.o CStocks.cpp
+
 ${OBJECTDIR}/Common.o: Common.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Common.o Common.cpp
 
-${OBJECTDIR}/IDBEntitry.o: IDBEntitry.cpp 
+${OBJECTDIR}/Double.o: Double.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/IDBEntitry.o IDBEntitry.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Double.o Double.cpp
+
+${OBJECTDIR}/IDBEntity.o: IDBEntity.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/IDBEntity.o IDBEntity.cpp
+
+${OBJECTDIR}/Integer.o: Integer.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Integer.o Integer.cpp
+
+${OBJECTDIR}/String.o: String.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/String.o String.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
