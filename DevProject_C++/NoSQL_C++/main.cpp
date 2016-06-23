@@ -32,13 +32,12 @@ void testDelete();
 void testTypes();
 void testDouble();
 void testStocks();
-
+void testInsertMultipleObjects();
 /*
  * This is a No-SQL C++ library. It has its newly designed database structure.
  * C++11 features are used that's -std=c++11 needs to be passed to the compiler.
  * 
  * 
- * TODO: Implement multiple records saving at once
  * TODO: Integrate Logger API to the application
  */
 int main(int argc, char** argv) {
@@ -50,7 +49,8 @@ int main(int argc, char** argv) {
 	//testInsert();
 	//testTypes();
 	//testDouble();
-	testStocks();
+	//testStocks();
+	testInsertMultipleObjects();
     return 0;
 }
 
@@ -154,4 +154,15 @@ void testStocks() {
 	per1 = Double(67.9);
 	CStocks* updatePc = new CStocks(String("pc"), amt, per);
 	dbHandler->updateWithEntityObject(queryPc, updatePc);
+}
+
+void testInsertMultipleObjects() {
+	DBEntityList lst;
+	lst.push_back(new CStocks(String("pc"), Integer(10), Double(12.5)));
+	lst.push_back(new CStocks(String("tablet"), Integer(2), Double(21.5)));
+	lst.push_back(new CStocks(String("phone"), Integer(100), Double(54.37)));
+	lst.push_back(new CEmployee("john","doe", "developer", "male", 34));
+
+	CDatabaseObjectHandler* dbHandler = new CDatabaseObjectHandler();
+	dbHandler->saveEntityObjects(lst);
 }

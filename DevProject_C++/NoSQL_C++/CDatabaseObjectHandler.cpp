@@ -33,6 +33,35 @@ void CDatabaseObjectHandler::saveEntityObject(IDBEntity* dbEntity) {
 
 }
 
+void CDatabaseObjectHandler::saveEntityObjects(DBEntityList objList) {
+	if (objList.empty()) {
+		std::cout << "The list is empty!" << std::endl;
+		return;
+	}
+
+	// iterate over list
+	for (size_t i = 0; i < objList.size(); i++) {
+		IDBEntity* dbEntity = objList.at(i)->clone();
+
+		PairList lst = dbEntity->getDBObjectFields();
+		std::string header = "";
+		std::string record = "";
+		StringMap recordMapping = dbEntity->getMappedObject();
+
+		// create record
+		for (int i = 0; i < lst.size(); i++) {
+			record += recordMapping[lst.at(i).first] + "|";
+		}
+
+		// add new line to the end of the record
+		record += "\n";
+
+		// write new record to the file
+		writeObjectToDB(dbEntity, APPEND, record);
+	}
+
+}
+
 bool CDatabaseObjectHandler::fexists(std::string filename) {
     std::ifstream ifile;
     ifile.open(filename.c_str(), std::ios::in);

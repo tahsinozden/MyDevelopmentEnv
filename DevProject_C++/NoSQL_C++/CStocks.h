@@ -6,6 +6,8 @@
 
 class CStocks : public IDBEntity {
 private:
+	// customized types are used instead of string, int and double
+	// because null integer conversion to null string "" needs to be handled for object query
 	String m_stockName;
 	Integer m_amount;
 	Double m_percentage;
@@ -34,5 +36,19 @@ public:
 	String getStockName() {
 		return m_stockName;
 	}
-
+	void setStockName(String s) {
+		m_stockName = s;
+	}
+	Integer getAmount() {
+		return m_amount;
+	}
+	void setAmount(Integer i) {
+		m_amount = i;
+	}
+	Double getPercentage() {
+		return m_percentage;
+	}
+	void setPercentage(Double d) {
+		m_percentage = d;
+	}
 };
