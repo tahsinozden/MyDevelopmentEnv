@@ -6,6 +6,9 @@ from pprint import pprint
 
 """
 	Main script for sorting information from downloaded data from website.
+	After generating JSON files, under the directory which index.html exists,
+	run the following command to start a localserver "python -m SimpleHTTPServer".
+	local server will be available at http://http://localhost:8000/
 """
 
 def sort_list(lst):
@@ -64,7 +67,7 @@ def get_sorted_list(lst):
     return tmpLst
 
 def createreport():
-    with open('../testdata.json') as data_file:
+    with open('testdata.json') as data_file:
         data = json.load(data_file)
 
 
@@ -73,15 +76,19 @@ def createreport():
     # pprint(lst)
 
 
-    with open('testreport.txt', 'w') as out:
-        for item in lst:
-            out.write(str(item) + "\n")
+    with open('testreport.json', 'w') as out:
+        # for item in lst:
+        #     out.write(str(item) + "\n")
+        out.write(json.dumps(lst, sort_keys=True,
+                      indent=4, separators=(',', ': ')))
 
     unique_lst = create_unique_records(lst)
     # write summary with unique records
-    with open('test-unique-report.txt', 'w') as out:
-        for item in unique_lst:
-            out.write(str(item) + "\n")
+    with open('test-unique-report.json', 'w') as out:
+        # for item in unique_lst:
+        #     out.write(str(item) + "\n")
+        out.write(json.dumps(unique_lst, sort_keys=True,
+                      indent=4, separators=(',', ': ')))
 
 def choose_uniquerecord(seq):
     seen = set()

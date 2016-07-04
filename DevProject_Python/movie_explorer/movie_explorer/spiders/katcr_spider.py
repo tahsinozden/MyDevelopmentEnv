@@ -1,16 +1,16 @@
 import scrapy
 
 from movie_explorer.items import TorrentItem
+from urlparse import urljoin
 
 """
 
  A movie torrent finder by getting data from https://kat.cr
  
- scrapy crawl katcr -o testdata.json > tmp.txt can be used inside project folder to run the application.
- 
- project folder
- movie_explorer
- scrapy.cfg
+ "scrapy crawl katcr -o testdata.json > out.txt" can be used inside project folder to run the application.
+ Run the command where items.py, settings.py etc exist.
+
+ Then, run main.py to generate JSON files.
  
 """
 class KatcrSpider(scrapy.Spider):
@@ -19,6 +19,8 @@ class KatcrSpider(scrapy.Spider):
     start_urls = [
         "https://kat.cr/movies/"
     ]
+
+    BASE_URL = 'https://kat.cr/movies/'
 
     def parse(self, response):
          pages = response.xpath('///div[@class="pages botmarg5px floatright"]/a/@href')
@@ -30,7 +32,7 @@ class KatcrSpider(scrapy.Spider):
          last_page = int(last_page)
 
          base_url = 'https://kat.cr/movies/'
-         for idx in range(0, last_page):
+         for idx in range(0, 2):
              # url = base_url + str(idx)
              url = response.urljoin(base_url + str(idx))
 
@@ -82,7 +84,7 @@ class KatcrSpider(scrapy.Spider):
         link = response.xpath('///div[@class="torrentMediaInfo"]/a/@href').extract_first()
 
         # parent link for that movie, includes other similar movies
-        item['parent_link'] = link
+        item['parent_link'] = urljoin(self.BASE_URL, link)
 
         # imdb_rating = self.get_imdb_rating(response)
         imdb_rating = self.get_imdb_ratio(response)

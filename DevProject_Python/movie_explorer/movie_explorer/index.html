@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="http://code.jquery.com/jquery.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+<body ng-controller="mainCtrl">
+
+<div>
+  <table class="table table-hover">
+    <tr>
+      <th>Torrent Name</th>
+      <th>Link</th>
+      <th>Parent Link</th>
+      <th>IMDB Calculated Ratio</th>
+      <th>Size</th>
+    </tr>
+    <span ng-show="!dataLoaded" ng-model="dataLoadInfo">Data loading...</span>
+    <tr ng-repeat="item in movieData">
+      <td>{{ item.torrent_name }}</td>
+      <td><a href="{{item.pages_link}}">{{ item.pages_link}}</a></td>
+      <td><a href="{{ item.parent_link }}">{{ item.parent_link }}</a></td>
+      <td>{{ item.imdb_rating }}</td>
+      <td>{{ item.size }}</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+
+<script>
+
+  var app = angular.module('mainApp', []);
+  app.controller('mainCtrl', function($scope, $http){
+    $scope.movieData = [];
+    $scope.dataLoaded = false;
+    // http://www.w3schools.com/angular/customers.php
+    $http.get('test-unique-report.json').then(
+    // $http.get('http://www.w3schools.com/angular/customers.php').then(
+      function(response){
+        console.log(response.data);
+        $scope.movieData = response.data;
+        $scope.dataLoaded = true;
+      },
+      function(error){
+        console.log("ERROR : " + error);
+        $scope.dataLoadInfo = "Data load error!";
+        // $scope.dataLoaded = true;
+      }
+    );
+  });
+</script>
+</html>
