@@ -32,7 +32,7 @@ class KatcrSpider(scrapy.Spider):
          last_page = int(last_page)
 
          base_url = 'https://kat.cr/movies/'
-         for idx in range(0, 2):
+         for idx in range(0, last_page):
              # url = base_url + str(idx)
              url = response.urljoin(base_url + str(idx))
 
