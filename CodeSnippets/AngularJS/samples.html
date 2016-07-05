@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="http://code.jquery.com/jquery.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<body >
+
+<div ng-controller="mainCtrl">
+  <!--  USAGE OF USER CREATED DIRECTIVE -->
+  <div my-title="newone"></div>
+  <my-title></my-title>
+  <!--  USAGE OF USER CREATED DIRECTIVE -->
+
+  <!-- USAGE OF TABLE WITH ANGULARJS -->
+  <div class="container" ng-controller="tableController">
+    <table id="tblTorrents" class="table table-striped table-bordered" cellspacing="0" width="100%">
+      <thead>
+      <tr>
+        <th>Torrent Name</th>
+        <th>Link</th>
+        <th>Parent Link</th>
+        <th>IMDB Calculated Ratio</th>
+        <th>Size</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="item in movieData">
+        <td>{{ item.torrent_name }}</td>
+        <td><a href="{{item.pages_link}}">{{ item.pages_link}}</a></td>
+        <td><a href="{{ item.parent_link }}">{{ item.parent_link }}</a></td>
+        <td>{{ item.imdb_rating }}</td>
+        <td>{{ item.size }}</td>
+      </tr>
+    </tbody>
+    </table>
+  </div>
+  <!-- USAGE OF TABLE WITH ANGULARJS -->
+
+</div>
+
+</body>
+
+<script>
+
+  var app = angular.module('mainApp', [])
+  .controller('mainCtrl',["$scope", "mainService", function($scope, mainService){
+    $scope.titleText = "New title here!";
+
+    // --- USAGE OF SERVICE
+    $scope.userName = "x";
+    $scope.password = "y";
+    // for main service
+    mainService.login($scope.userName, $scope.password)
+    .then(
+      function(token) {
+        $scope.token = token;
+        // $http.defaults.headers.common.Authorization = 'Bearer ' + token;
+        // sessionStorage.setItem('token', token);
+        // sessionStorage.setItem('currentUser', $scope.userName);
+      },
+      function(error){
+        $scope.error = error
+        $scope.userName = '';
+        $scope.password = '';
+    });
+    // --- USAGE OF SERVICE
+
+
+
+  }])
+  .controller('tableController', ["$scope", function($scope){
+      $scope.movieData = [
+        {
+          "torrent_name": "name1",
+          "pages_link": "link1",
+          "parent_link": "parent_link1",
+          "imdb_rating": "rating1",
+          "size": "size1"
+        },
+        {
+          "torrent_name": "name2",
+          "pages_link": "link2",
+          "parent_link": "parent_link2",
+          "imdb_rating": "rating2",
+          "size": "size2"
+        }
+      ]
+  }])
+  .directive('myTitle', function(){
+    return {
+      // enables usage of scope variables
+      scope: true,
+      // to disable scope variables
+      // scope: {},
+      // restricts usage inside an element, like <div my-title="newone"></div>
+      // restrict: 'E',
+      template: '<h1>{{ titleText }}</h1>',
+      // element stores current DOM element
+      link: function(scope, element, attrs){
+        element.bind('click', function(event){
+          // event stores event object
+          console.log(event);
+        })
+      }
+    }
+  })
+  .service('mainService', function($http) {
+  	return {
+  		login : function(username, pass) {
+  			return $http.post('/user/login', {name: username, password: pass}).then(function(response) {
+  				return response.data.token;
+  			});
+  		},
+
+  		hasRole : function(role) {
+  			return $http.get('/api/role/' + role).then(function(response){
+  				console.log(response);
+  				return response.data;
+  			});
+  		}
+  	};
+  })
+
+
+</script>
+</html>
