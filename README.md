@@ -12,3 +12,6 @@ This folder contains JAVA based-on applications. JPA, JSP, JAX-WS, JAX-RS, Sprin
 
 ## DevProject_Python
 Some useful scripts and small applications developed in Python. 
+
+## CodeSnippets
+Small code snippets which can be used as a template for bigger projects.
