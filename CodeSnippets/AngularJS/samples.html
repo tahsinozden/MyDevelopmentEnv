@@ -60,6 +60,102 @@
 
 </div>
 
+ <!-- BASIC FORM VALIDATION -->
+<div ng-controller="frmCtrl" class="container" >
+
+  <style>
+    input.ng-dirty.ng-invalid {
+      border: solid red;
+    }
+
+  </style>
+
+  <br>
+  <label>Form Example</label>
+  <!--
+    In order to be able use ng-dirty, ng-valid features, elements need to be binded to a angular model.
+    <input type="email" name="email" ng-model="user.email" class="ng-dirty ng-touched ng-invalid ng-invalid-email">
+
+    in order to be able to use "frm.password.$dirty && frm.password.$error.minlength", form element should't have ng-model, just requires a form name to access alll children under.
+  -->
+<!--   <form name="frm" ng-submit="frmSubmit()">
+    <label for="email">E-mail</label>
+    <input
+       type="email" 
+       name="email" 
+       ng-model="email"
+       required
+    />
+    
+    <label for="password">Password</label>
+    <input 
+      type="password" 
+      name="password"
+      ng-model="password"
+      ng-minlength="5"
+      ng-maxlength="10"
+      required
+    />
+
+    <button ng-disabled="frm.$invalid">Submit</button>
+    <span ng-show="frm.email.$dirty && frm.email.$error.email">Invalid e-mail!</span>
+    <span ng-show="frm.password.$dirty && frm.password.$error.minlength">Password too short!</span>
+    <span ng-show="frm.password.$dirty && frm.password.$error.maxlength">Password too long!</span>
+  </form> -->
+
+  <!--
+    In order to be able use ng-dirty, ng-valid features, elements need to be binded to a angular model.
+    <input type="email" name="email" ng-model="user.email" class="ng-dirty ng-touched ng-invalid ng-invalid-email">
+
+    in order to be able to use "frm.password.$dirty && frm.password.$error.minlength", form element should't have ng-model, just requires a form name to access alll children under.
+  -->
+  <form class="form-horizontal" name="frm" ng-submit="frmSubmit()">
+  <div class="control-group">
+    <label class="control-label" for="inputEmail">Email</label>
+    <div class="controls">
+      <input 
+        type="email"
+        id="inputEmail" 
+        name="email"
+        placeholder="Email"
+        ng-model="email"
+        required
+      >
+      <span ng-show="frm.email.$dirty && frm.email.$error.email">Invalid e-mail!</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label" for="inputPassword">Password</label>
+    <div class="controls">
+      <input 
+        type="password" 
+        id="inputPassword" 
+        name="password"
+        placeholder="Password"
+        ng-model="password"
+        ng-minlength="5"
+        ng-maxlength="10"
+        required
+      >
+    <span ng-show="frm.password.$dirty && frm.password.$error.minlength">Password too short!</span>
+    <span ng-show="frm.password.$dirty && frm.password.$error.maxlength">Password too long!</span>
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox"> Remember me
+      </label>
+      
+    <button ng-disabled="frm.$invalid">Login</button>
+    </div>
+  </div>
+</form>
+
+</div>
+<!-- BASIC FORM VALIDATION -->
+
 </body>
 
 <script>
@@ -108,6 +204,7 @@
         }
       ]
   }])
+  // WATCH example
   .controller('ctlLsnr', ["$scope", function($scope){
       $scope.myVal = "";
       $scope.alertUser = function(n, o){
@@ -122,6 +219,15 @@
       }, true /* true is used to deeper value check */);
 
   }])
+  // BASIC FORM VALIDATION 
+  .controller('frmCtrl', ["$scope", function($scope){
+    // var e = angular.element(document.querySelector('#frm'));
+    $scope.frmSubmit = function(){
+      alert('Form submitted!');
+    };
+
+  }])
+  // DIRECTIVE
   .directive('myTitle', function(){
     return {
       // enables usage of scope variables
