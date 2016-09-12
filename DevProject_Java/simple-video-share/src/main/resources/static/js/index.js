@@ -16,6 +16,44 @@ var app = angular.module('mainApp', [])
 	
 
 }])
+.controller('mainVideoCtrl',["$scope", "$http", "mainService", function($scope,$http, mainService){
+	//$scope.randVideo = "/allvideos/video1.mp4";
+	$scope.randVideo = undefined;
+	
+	$scope.loadRandVideo = function(){
+		var elm = angular.element(document);
+		elm = angular.element(angular.element(document).find("mainVideo"));
+//		console.log(angular.element(document).find("mainVideo"));
+		console.log(elm);
+		$http.get('/randomvideo')
+		.then(function(response){
+			$scope.randVideo = response.data.url;
+			console.log('video loaded' + response.data.url);
+		})
+	}
+	
+	var elm = angular.element(document);
+	elm = angular.element(angular.element(document).find("mainVideo"));
+//	console.log(angular.element(document).find("mainVideo"));
+	console.log(elm);
+	
+	$http.get('/randomvideo')
+	.then(function(response){
+		$scope.randVideo = response.data.url;
+		console.log('video loaded' + response.data.url);
+	})
+	
+
+}])
+.directive('dynamicUrl', function () {
+    return {
+        restrict: 'A',
+        link: function postLink(scope, element, attr) {
+        	console.log("new link is " + attr.dynamicUrlSrc);
+            element.attr('src', attr.dynamicUrlSrc);
+        }
+    };
+})
 .service('mainService', function($http) {
   	return {
   		uploadFile : function(file, uploadUrl){

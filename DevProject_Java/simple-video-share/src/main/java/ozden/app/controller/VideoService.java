@@ -14,7 +14,7 @@ public class VideoService {
 	String savePath;
 	
 	@RequestMapping(value="/randomvideo")
-	public String getRandomVideo(){
+	public VideoResponse getRandomVideo(){
 		File folder = new File(savePath);
 		Random rn = new Random();
 		File[] allFiles = folder.listFiles();
@@ -24,8 +24,20 @@ public class VideoService {
 				supportedFiles.add(file);
 			}
 		}
+		String name = supportedFiles.get(rn.nextInt(supportedFiles.size())).getName();
+		return  new VideoResponse(name, "/allvideos/" + name );
+//		return "/allvideos/" + supportedFiles.get(rn.nextInt(supportedFiles.size())).getName();
+	}
+	
+	class VideoResponse {
+		public String name;
+		public String url;
+		public VideoResponse(String name, String url) {
+			super();
+			this.name = name;
+			this.url = url;
+		}
 		
-		return "/videos/" + supportedFiles.get(rn.nextInt(supportedFiles.size())).getName();
 	}
 }
 

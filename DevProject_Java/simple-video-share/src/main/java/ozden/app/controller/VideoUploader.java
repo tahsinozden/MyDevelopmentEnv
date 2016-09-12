@@ -28,7 +28,8 @@ public class VideoUploader {
 	public String uploader(@RequestPart MultipartFile file /*, @RequestParam String textline*/) throws IllegalStateException, IOException{
 //	public String uploader(@RequestBody RequestData reqBody) throws IllegalStateException, IOException{
 //		MultipartFile file = reqBody.file;
-		File videoFile = new File(savePath + "time_" + System.currentTimeMillis() + "_" + file.getOriginalFilename());
+//		savePath = "static\\videos\\";
+		File videoFile = new File(savePath + "file_" + System.currentTimeMillis() + "_" + file.getOriginalFilename());
 		file.transferTo(videoFile);
 //		return savePath;
 		return "redirect:index.html";
