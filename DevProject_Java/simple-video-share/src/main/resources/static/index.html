@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
+<style type="text/css" media="screen">
 
+.link-disabled {
+   pointer-events: none;
+   cursor: default;
+}
+
+.link-enabled {
+   cursor: default;
+}
+
+
+</style>
 <html ng-app="mainApp">
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	<script src="http://code.jquery.com/jquery.js"></script>
@@ -18,13 +30,15 @@
 
 	<body>
 
-		<div style="text-align:center">
-
+		<div style="text-align:center;" >
+			<br /><br />
 			<div id="divRandVideo" ng-controller="mainVideoCtrl">
-				<input type="button" ng-click="loadRandVideo()" value="Load Random Video" />
-				<video id="randVideoElm" controls width="560">
+				<video id="randVideoElm" controls width="560" height="315">
 					<source id="randVideoSrc" type="video/mp4" ></source>
 				</video>
+				<br><input type="button" ng-click="loadRandVideo()" value="Load Random Video" />
+				<!-- <a href="{{randVideo}}" download="" ng-disabled="randVideo == undefined">Download</a> -->
+				<a href="{{randVideo}}" download="">Download</a>
 			</div>
 			
 			<!-- <div id="divVideo">
@@ -37,7 +51,7 @@
 
 		</div>
 
-		<div id="uploadFileDiv" ng-controller="uploadFileCtrl">
+		<div id="uploadFileDiv" ng-controller="uploadFileCtrl" class="container">
 			<!--
 			<input type="file" name="file1" ng-model="fileName" onchange="angular.element(this).scope().showFile(this)" accept="*/*" />
 			<button ng-click="sendFile()">
@@ -46,22 +60,13 @@
 			-->
 
 			<form action="/uploader"
+			class="container"
 			enctype="multipart/form-data" method="post">
-				<!--
-				<p>
-				Type a file name (if you like):
-				<br>
-				<input type="text" name="textline" size="30">
-				</p>
-				-->
-				<p>
-					Please specify a file, or a set of files:
+					Please choose a file to upload!
 					<br>
-					<input type="file" name="file" size="40">
-				</p>
-				<div>
+					<input type="file" name="file" size="40" accept="video/mp4">
 					<input type="submit" value="Send">
-				</div>
+
 			</form>
 
 		</div>

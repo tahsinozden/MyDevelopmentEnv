@@ -20,8 +20,9 @@ public class VideoService {
 		File[] allFiles = folder.listFiles();
 		ArrayList<File> supportedFiles = new ArrayList<>();
 		for(File file : allFiles){
-			if (file.isFile() && file.getName().endsWith("mp4")){
+			if (file.isFile() && file.getName().toLowerCase().endsWith("mp4")){
 				supportedFiles.add(file);
+				System.out.println(file.getName());
 			}
 		}
 		String name = supportedFiles.get(rn.nextInt(supportedFiles.size())).getName();

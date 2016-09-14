@@ -37,17 +37,21 @@ var app = angular.module('mainApp', [])
 			videoElm.load();
 			videoElm.play();
 		})
+	};
+	
+	$scope.downloadRandVideo = function(){
+		
 	}
 	
-	var elm = angular.element(document);
-	elm = angular.element(angular.element(document).find("mainVideo"));
-//	console.log(angular.element(document).find("mainVideo"));
-	console.log(elm);
+	var videoElm = document.getElementById('randVideoElm');
+	var videoSrcElm = document.getElementById('randVideoSrc');
 	
 	$http.get('/randomvideo')
 	.then(function(response){
 		$scope.randVideo = response.data.url;
 		console.log('video loaded' + response.data.url);
+		videoSrcElm.src = response.data.url;
+		videoElm.load();
 	})
 	
 
