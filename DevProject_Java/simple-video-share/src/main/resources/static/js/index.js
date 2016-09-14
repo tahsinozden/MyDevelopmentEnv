@@ -21,14 +21,21 @@ var app = angular.module('mainApp', [])
 	$scope.randVideo = undefined;
 	
 	$scope.loadRandVideo = function(){
-		var elm = angular.element(document);
-		elm = angular.element(angular.element(document).find("mainVideo"));
-//		console.log(angular.element(document).find("mainVideo"));
-		console.log(elm);
+//		var videoElm = angular.element(document.getElementById('mainVideo'));
+//		var videoSrcElm = angular.element(document.getElementById("mainVideoSrc"));
+//		console.log(videoElm);
+//		console.log(videoSrcElm);
+		
+		var videoElm = document.getElementById('randVideoElm');
+		var videoSrcElm = document.getElementById('randVideoSrc');
+		
 		$http.get('/randomvideo')
 		.then(function(response){
 			$scope.randVideo = response.data.url;
 			console.log('video loaded' + response.data.url);
+			videoSrcElm.src = response.data.url;
+			videoElm.load();
+			videoElm.play();
 		})
 	}
 	
