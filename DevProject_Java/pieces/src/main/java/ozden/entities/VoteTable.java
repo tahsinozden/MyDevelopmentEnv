@@ -1,8 +1,9 @@
 package ozden.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,17 +36,19 @@ public class VoteTable implements Serializable{
 	private Date expiryDate;
 	
 	@Column
-	@GeneratedValue
+//	@GeneratedValue
 	private String authKey;
 	
 	public VoteTable() {
 	}
 
-	public VoteTable(String voteTableName, LocalDateTime creationDate, LocalDateTime expiryDate) {
+//	public VoteTable(String voteTableName, LocalDateTime creationDate, LocalDateTime expiryDate) {
+	public VoteTable(String voteTableName, Date creationDate, Date expiryDate) {
 		super();
 		this.voteTableName = voteTableName;
-		this.creationDate = Date.valueOf(creationDate.toLocalDate());
-		this.expiryDate = Date.valueOf(expiryDate.toLocalDate());
+		this.creationDate = creationDate;
+		this.expiryDate = expiryDate;
+		this.authKey = String.valueOf(Instant.now().getEpochSecond());
 	}
 
 	public Integer getTableID() {
@@ -78,16 +81,16 @@ public class VoteTable implements Serializable{
 		return creationDate;
 	}
 
-	public void setCreationDate(LocalDateTime creationDate) {
-		this.creationDate =  Date.valueOf(creationDate.toLocalDate()) ;
+	public void setCreationDate(Date creationDate) {
+		this.creationDate =  creationDate ;
 	}
 
 	public Date getExpiryDate() {
 		return expiryDate;
 	}
 
-	public void setExpiryDate(LocalDateTime expiryDate) {
-		this.expiryDate = Date.valueOf(expiryDate.toLocalDate()) ;
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
 	}
 
 

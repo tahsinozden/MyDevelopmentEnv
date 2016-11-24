@@ -1,6 +1,8 @@
 package ozden.controllers;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +22,20 @@ public class VoteService {
 	@Autowired
 	private TableItemRepository tableItemRepository;
 	
-	public VoteTable createVoteTable(String tableName, LocalDateTime expireDate) throws Exception{
+	public VoteTable createVoteTable(String tableName, Date expire) throws Exception{
+//		expire.get
+//		LocalDateTime expireDate = LocalDateTime.ofEpochSecond(expire.getTime(), 0, 0);
+		Date now = Calendar.getInstance().getTime();
 		if (tableName == null || "".equals(tableName)){
 			throw new Exception("invalid table name!");
 		}
 		
-		if (LocalDateTime.now().compareTo(expireDate) >= 0){
+		if (now.compareTo(expire) >= 0){
 			throw new Exception("expire date cannot be smaller than current time");
 		}
 		
-		VoteTable table = new VoteTable(tableName, LocalDateTime.now(), expireDate);
+		Calendar cal = Calendar.getInstance();
+		VoteTable table = new VoteTable(tableName, cal.getTime() , expire);
 		voteTableRepository.save(table);
 		return table;
 	}
@@ -48,6 +54,14 @@ public class VoteService {
 		}
 		voteTableRepository.delete(table);
 		return true;
+	}
+	
+	public List<VoteTable> getVoteTable(String tableName){
+		return voteTableRepository.findByVoteTableName(tableName);
+	}
+	
+	public List<VoteTable> getVoteTable(Integer tableID){
+		return voteTableRepository.findByTableID(tableID);
 	}
 	
 	public boolean addVoteItemToVoteTable(TableItem item) throws Exception{
