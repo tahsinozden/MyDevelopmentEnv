@@ -2,15 +2,13 @@ package ozden.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 public class VoteTable implements Serializable{
@@ -21,7 +19,7 @@ public class VoteTable implements Serializable{
 	
 	@Id
 	@Column
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer tableID;
 	
 	@Column
@@ -39,16 +37,20 @@ public class VoteTable implements Serializable{
 //	@GeneratedValue
 	private String authKey;
 	
+	@Column
+	private String tableURL;
+	
 	public VoteTable() {
 	}
 
 //	public VoteTable(String voteTableName, LocalDateTime creationDate, LocalDateTime expiryDate) {
-	public VoteTable(String voteTableName, Date creationDate, Date expiryDate) {
+	public VoteTable(String voteTableName, Date creationDate, Date expiryDate, String tableURL) {
 		super();
 		this.voteTableName = voteTableName;
 		this.creationDate = creationDate;
 		this.expiryDate = expiryDate;
 		this.authKey = String.valueOf(Instant.now().getEpochSecond());
+//		this.tableURL = "/all-votes/" + this.tableID;
 	}
 
 	public Integer getTableID() {
@@ -93,6 +95,14 @@ public class VoteTable implements Serializable{
 		this.expiryDate = expiryDate;
 	}
 
+
+	public String getTableURL() {
+		return tableURL;
+	}
+
+	public void setTableURL(String tableURL) {
+		this.tableURL = tableURL;
+	}
 
 	@Override
 	public int hashCode() {
@@ -144,12 +154,14 @@ public class VoteTable implements Serializable{
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
 		return "VoteTable [tableID=" + tableID + ", voteTableName=" + voteTableName + ", creationDate=" + creationDate
-				+ ", expiryDate=" + expiryDate + ", authKey=" + authKey + "]";
+				+ ", expiryDate=" + expiryDate + ", authKey=" + authKey + ", tableURL=" + tableURL + "]";
 	}
+
+
+
 
 
 

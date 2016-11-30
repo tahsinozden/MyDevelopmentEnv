@@ -3,6 +3,7 @@ package ozden.controllers;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,12 @@ public class VoteService {
 		}
 		
 		Calendar cal = Calendar.getInstance();
-		VoteTable table = new VoteTable(tableName, cal.getTime() , expire);
-		voteTableRepository.save(table);
+		VoteTable table = new VoteTable(tableName, cal.getTime(), expire, "");
+		// save table to get a uniq id
+		table = voteTableRepository.save(table);
+		table.setTableURL("/all-votes/" + table.getTableID());
+		// save again after changing table url
+		table = voteTableRepository.save(table);
 		return table;
 	}
 	
@@ -47,12 +52,20 @@ public class VoteService {
 		
 		VoteTable table = voteTableRepository.findOne(tableID);
 		if (table == null){
-			throw new Exception("Table doesnt exist in DB!");
+			throw new Exception("Table doesn't exist in DB!");
 		}
 		if (!table.getAuthKey().equals(authKey)){
 			throw new Exception("invalid authkey!");
 		}
 		voteTableRepository.delete(table);
+		
+		// delete all items corresponding vote table
+		List<TableItem> allItems = tableItemRepository.findByVoteTableID(tableID);
+		if (allItems != null && !allItems.isEmpty()){
+			for (TableItem tableItem : allItems) {
+				tableItemRepository.delete(tableItem);
+			}
+		}
 		return true;
 	}
 	
@@ -80,6 +93,26 @@ public class VoteService {
 		tableItemRepository.save(item);
 		return true;
 	}
+	
+	public boolean addVoteItemsToVoteTable(List<TableItem> items) throws Exception{
+		for (TableItem item : items) {
+			if (item == null){
+				throw new NullPointerException("null item!");
+			}
+			if (item.getVoteTableID() == null){
+				throw new NullPointerException("item doesnt contain table id. Invalid item!!!");
+			}
+			
+			VoteTable table = voteTableRepository.findOne(item.getVoteTableID());
+			if (table == null){
+				throw new Exception("Table doesn't exist in DB!" + item.getVoteTableID());
+			}
+			
+			tableItemRepository.save(item);
+		}
+		return true;
+	}
+	
 	/**
 	 * It adds a score for voted item in vote table
 	 * @param tableID
@@ -106,8 +139,11 @@ public class VoteService {
 			throw new NullPointerException("item id not exist!");
 		}
 		
+		if (item.getVoteTableID() != table.getTableID()){
+			throw new Exception("table id does not macth with item table id!!!");
+		}
 		// increase the score of the item
-		item.setItemScore(item.getItemScore());
+		item.setItemScore(item.getItemScore()+1);
 		tableItemRepository.save(item);
 		return true;
 	}
@@ -119,6 +155,20 @@ public class VoteService {
 		}
 
 		return tableItemRepository.findByVoteTableID(tableID);
+	}
+	
+	public List<TableItem> getVoteTableItemsById(Integer tableID, Integer itemID) throws Exception{
+		// check id here
+		if (tableID < 0){
+			throw new Exception("invalid table ID!");
+		}
+		if (itemID == -1){
+			return tableItemRepository.findByVoteTableID(tableID);
+		}
+		else {
+			return tableItemRepository.findByVoteTableIDAndItemID(tableID, itemID);
+		}
+			
 	}
 	
 

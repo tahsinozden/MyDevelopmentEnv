@@ -66,7 +66,7 @@ public class PiecesApplicationTests {
 	@Test
 	public void shouldAddaNewVoteWithValidTableID() throws Exception{
 //		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote", LocalDateTime.now(), LocalDateTime.now()));
-		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote", now, now));
+		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote", now, now, ""));
 		when(tableItemRepository.findOne(itemID)).thenReturn(new TableItem());
 		assertTrue(voteService.doVote(tableID, itemID));
 	}
@@ -91,7 +91,7 @@ public class PiecesApplicationTests {
 	@Test(expected=NullPointerException.class)
 	public void shouldThrowNullPointerExeptionWhenItemIDNotFoundInDB() throws Exception{
 //		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote", LocalDateTime.now(), LocalDateTime.now()));
-		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote", now, now));
+		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote", now, now, ""));
 		when(tableItemRepository.findOne(itemID)).thenReturn(null);
 		assertTrue(voteService.doVote(tableID, itemID));
 	}
@@ -106,7 +106,7 @@ public class PiecesApplicationTests {
 				);
 		
 //		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote Table", LocalDateTime.now(), LocalDateTime.now()));
-		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote Table", now, now));
+		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote Table", now, now, ""));
 		when(tableItemRepository.findByVoteTableID(3))
 			.thenReturn(items);
 		
@@ -117,7 +117,7 @@ public class PiecesApplicationTests {
 	@Test
 	public void shouldReturnEmptyListWhenThereAreNoRecordsForSpecifiedTableID(){
 //		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote", LocalDateTime.now(), LocalDateTime.now()));
-		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote", now, now));
+		when(voteTableRepository.findOne(tableID)).thenReturn(new VoteTable("Test Vote", now, now, ""));
 		when(tableItemRepository.findByVoteTableID(tableID)).thenReturn(null);
 		
 	}

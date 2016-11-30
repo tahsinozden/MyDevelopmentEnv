@@ -9,4 +9,5 @@ import ozden.entities.TableItem;
 
 public interface TableItemRepository extends JpaRepository<TableItem, Integer>{
 	public List<TableItem> findByVoteTableID(Integer tableID);
+	public List<TableItem> findByVoteTableIDAndItemID(Integer tableID, Integer itemID);
 }
