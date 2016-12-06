@@ -62,7 +62,7 @@ public class VoteController {
 	public ResponseEntity<List<TableItem>> addVotesToVoteTable(@PathVariable("tableID") Integer tableID,
 														 @RequestBody List<TableItem> tableItems ) throws Exception{
 		if (tableItems == null || tableItems.isEmpty()){
-			throw new Exception("no table items!");
+			throw new NullPointerException("no table items!");
 		}
 		
 		List<VoteTable> tables = voteService.getVoteTable(tableID);
@@ -100,8 +100,4 @@ public class VoteController {
 		return new ResponseEntity<List<TableItem>>(voteService.getVoteTableItemsById(tableID, tableItemID), HttpStatus.OK);
 	}
 	
-	// TODO: Implement
-	public Map<String, String> getAllVotes(Integer voteTableID){
-		return new HashMap<String, String>();
-	}
 }
