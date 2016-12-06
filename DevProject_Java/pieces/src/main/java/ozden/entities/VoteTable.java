@@ -43,6 +43,13 @@ public class VoteTable implements Serializable{
 	public VoteTable() {
 	}
 
+	public VoteTable(VoteTable vt) {
+		this.voteTableName = vt.getVoteTableName();
+		this.creationDate = vt.getCreationDate();
+		this.expiryDate = vt.getExpiryDate();
+		this.authKey = vt.getAuthKey();
+	}
+	
 //	public VoteTable(String voteTableName, LocalDateTime creationDate, LocalDateTime expiryDate) {
 	public VoteTable(String voteTableName, Date creationDate, Date expiryDate, String tableURL) {
 		super();
