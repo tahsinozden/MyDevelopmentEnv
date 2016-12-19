@@ -8,10 +8,9 @@
  * Controller of the mainApp
  */
 angular.module('mainApp')
-  .controller('createVoteTableCtrl', ["$scope", "tableService", function ($scope, tableService) {
-    // .controller('createVoteTableCtrl', ["$scope", 'tableService', function ($scope) {
+  .controller('createVoteTableCtrl', ["$scope", "tableService", 'VoteTable', 'TableItem', function ($scope, tableService, VoteTable, TableItem) {
     $scope.tableItems = [];
-    
+
     $scope.addItemToTheTable = function(){
       console.log($scope.itemText);
       if ($scope.itemText != null && $scope.itemText != ''){
@@ -37,30 +36,83 @@ angular.module('mainApp')
       console.log($scope.voteTableEndDate);
       console.log($scope.chosenTableName);
 
-      var tblObj = {
-        'voteTableName': $scope.chosenTableName,
-        // 'creationDate': '2016-01-01',
-        // 'expiryDate': '2017-01-01'
-        'creationDate': $scope.voteTableStartDate,
-        'expiryDate': $scope.voteTableEndDate
-      };
+      // var tblObj = {
+      //   'voteTableName': $scope.chosenTableName,
+      //   // 'creationDate': '2016-01-01',
+      //   // 'expiryDate': '2017-01-01'
+      //   'creationDate': $scope.voteTableStartDate,
+      //   'expiryDate': $scope.voteTableEndDate
+      // };
 
-      tableService.createTable(tblObj);
+
+      var tblObj = new VoteTable('', $scope.chosenTableName, $scope.voteTableStartDate, $scope.voteTableEndDate, '', '');
+      var tableItemsInTable = [];
+
+      var promise = tableService.createTable(tblObj);
+      // send table items after creation of table request
+      promise.then(function(){
+        console.log('response received from promise!');
+        if (localStorage.getItem('currentTableID') == undefined){
+          console.log('currentTableID is null!');
+          return;
+        }
+        
+        $scope.currentTableID = localStorage.getItem('currentTableID');
+        // build table items for the request
+        for (var i in $scope.tableItems){
+          tableItemsInTable.push(new TableItem('', $scope.currentTableID, $scope.tableItems[i], '0'));
+        }
+
+        // add vote items to the table
+        tableService.addItemsToTable(tableItemsInTable);
+
+        });
     }
   }])
 
-  .service('tableService',[ '$http', function( $http){
+  .service('tableService',[ '$http', '$q', function($http, $q){
       return {
         createTable: function(tableObj){
-          $http.post('http://localhost:8080/vote-tables/'+tableObj.voteTableName, tableObj)
+          var defer = $q.defer();
+
+          $http.post('http://localhost:8080/vote-tables/' + tableObj.voteTableName, tableObj)
           .then(
-            function(succesData){
-              console.log(succesData);
+            function(succesRes){
+              console.log(succesRes);
+              // resolving the promise does the job
+               defer.resolve('data received successfully!');
+              var tbl = succesRes.data;
+              localStorage.setItem('currentTableID', succesRes.data.tableID);
+              alert('TableID: ' + tbl.tableID + ", authKey: " + tbl.authKey);
             },
             function(failedData){
+              // resolving the promise does the job
+              defer.resolve('data received with errors!');
               console.log(failedData);
+              alert(failedData.data);
             }
           )
+
+          return defer.promise;
+        },
+
+        addItemsToTable: function(tableItems){
+          var tableID = undefined;
+          if ( !(tableItems instanceof Array) || tableItems.length <= 0){
+            console.log('tableItems is not an array or it is empty!');
+            return;
+          }
+          
+          tableID = tableItems[0].voteTableID;
+          $http.put('http://localhost:8080/vote-tables/' + tableID, tableItems)
+            .then(
+              function(success){
+                alert(success.data);
+              },
+              function(error){
+                alert(error.data);
+              }
+            )
         }
       }
 

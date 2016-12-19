@@ -1,10 +1,10 @@
 
-<ul class="list-group">
+<!--<ul class="list-group">
   <li class="list-group-item">
     <span class="badge">14</span>
     Cras justo odio
   </li>
-</ul>
+</ul>-->
 
 <form>
   Start Date:
@@ -18,13 +18,13 @@
   <input type="text" class="form-control" aria-label="..." placeholder="Table name here." ng-model="tableName">
     <div class="input-group-btn">
     <!-- Buttons -->
-    <button type="button" class="btn btn-default" ng-click="chosenTableName = tableName; tableName = '';">+</button>
+    <button type="button" class="btn btn-default" ng-click="chosenTableName = tableName; tableName = '';">Set Table Name</button>
   </div>
 </div>
 
 <!-- Table items here -->
 <div class="input-group">
-  <input type="text" class="form-control" aria-label="..." ng-model="itemText">
+  <input type="text" class="form-control" aria-label="..." ng-model="itemText" placeholder="Add a new vote item by pressing '+' button.">
   <div class="input-group-btn">
     <!-- Buttons -->
     <button type="button" class="btn btn-default" ng-click="addItemToTheTable();">+</button>
@@ -35,9 +35,9 @@
 <div class="panel panel-default">
   <!-- Default panel contents -->
   <div class="panel-heading"><h2>{{ chosenTableName }}</h2></div>
-  <div class="panel-body">
+  <!--<div class="panel-body">
     
-  </div>
+  </div>-->
 
   <!-- List group -->
   <ul class="list-group">
