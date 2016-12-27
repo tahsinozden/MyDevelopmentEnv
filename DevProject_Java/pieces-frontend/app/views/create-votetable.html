@@ -48,3 +48,12 @@
 
 <button type="button" class="btn btn-default" ng-click="submitCreateTable();">Create Table!</button>
 
+<div class="panel panel-default">
+  <div class="panel-body" ng-bind="currentTableObject.voteTableName">
+   <h2>{{ currentTableObject.voteTableName }} </h2>
+  </div>
+  <div class="panel-footer">ID : {{ currentTableObject.tableID }}</div>
+  <div class="panel-footer">AuthKey : {{ currentTableObject.authKey }}</div>
+  <div class="panel-footer">URL : {{ currentTableObject.tableURL }}</div>
+</div>
+

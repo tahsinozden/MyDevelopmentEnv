@@ -58,6 +58,9 @@ angular.module('mainApp')
         }
         
         $scope.currentTableID = localStorage.getItem('currentTableID');
+        $scope.currentTableObject = JSON.parse(localStorage.getItem('currentTableObject'));
+        console.log("current table object");
+        console.log($scope.currentTableObject);
         // build table items for the request
         for (var i in $scope.tableItems){
           tableItemsInTable.push(new TableItem('', $scope.currentTableID, $scope.tableItems[i], '0'));
@@ -83,13 +86,15 @@ angular.module('mainApp')
                defer.resolve('data received successfully!');
               var tbl = succesRes.data;
               localStorage.setItem('currentTableID', succesRes.data.tableID);
+              localStorage.setItem('currentTableObject', JSON.stringify(succesRes.data));  
+              console.log( succesRes.data);            
               alert('TableID: ' + tbl.tableID + ", authKey: " + tbl.authKey);
             },
             function(failedData){
               // resolving the promise does the job
               defer.resolve('data received with errors!');
               console.log(failedData);
-              alert(failedData.data);
+              alert("creation of table failed!" + failedData.data);
             }
           )
 
@@ -107,10 +112,10 @@ angular.module('mainApp')
           $http.put('http://localhost:8080/vote-tables/' + tableID, tableItems)
             .then(
               function(success){
-                alert(success.data);
+                console.log("items added successfully" + success.data);
               },
               function(error){
-                alert(error.data);
+                console.log("items couldnt be added!" + error.data);
               }
             )
         }
