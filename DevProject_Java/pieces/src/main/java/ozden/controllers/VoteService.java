@@ -1,16 +1,16 @@
 package ozden.controllers;
 
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ozden.entities.IPAddressToVoteTable;
 import ozden.entities.TableItem;
 import ozden.entities.VoteTable;
+import ozden.repos.IPAddressToVoteTableRepository;
 import ozden.repos.TableItemRepository;
 import ozden.repos.VoteTableRepository;
 
@@ -22,6 +22,9 @@ public class VoteService {
 	
 	@Autowired
 	private TableItemRepository tableItemRepository;
+	
+	@Autowired
+	IPAddressToVoteTableRepository ipAddressToVoteTableRepository;
 	
 	public VoteTable createVoteTable(String tableName, Date expire) throws Exception{
 //		expire.get
@@ -169,6 +172,22 @@ public class VoteService {
 			return tableItemRepository.findByVoteTableIDAndItemID(tableID, itemID);
 		}
 			
+	}
+	
+	public Boolean isIPaddrUsedForVotingBefore(String ipAddr, Integer voteTableID){
+		if (ipAddr == null || voteTableID == null){
+			throw new NullPointerException("one of the item is null!");
+		}
+		
+		if (!ipAddressToVoteTableRepository.findByIpAddressAndVoteTableID(ipAddr, voteTableID).isEmpty()){
+			return true;
+		}
+		return false;
+	}
+	
+	public void saveIP2Table(IPAddressToVoteTable ip2table){
+		IPAddressToVoteTable savedData = ipAddressToVoteTableRepository.save(ip2table);
+		System.out.println("Saved data: " + savedData);
 	}
 	
 
