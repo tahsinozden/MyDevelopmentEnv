@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" ng-app="votePresenterApp">
+<link rel="stylesheet" href="../common-css/bootstrap.min.css" />
+
+<head>
+<title>Getting Started: Serving Web Content</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+	<!-- <form  th:action="@{'/vote-tables/' + ${voteTableForm.getTable().getTableID()} + '/43'}"  method="post"> -->
+	<!-- <form  th:action="@{/vote-tables/__${voteTableForm.getTable().getTableID()}__/43}"  method="post"> -->
+	<div ng-controller="voteCtrl">
+		<h2 th:inline="text">
+			<small id="tableName"
+				th:text="${voteTableForm.getTable().getVoteTableName()}"></small> <small
+				id="tableID" th:text="${voteTableForm.getTable().getTableID()}"
+				style="display: none"></small>
+		</h2>
+		<div class="row" th:each="item : ${voteTableForm.getTableItems()}">
+			<div class="col-lg-6">
+				<div class="input-group">
+					<span class="input-group-addon"> <input type="checkbox"
+						aria-label="...">
+					</span> <label class="form-control" th:text="${item.getItemID()}" style="display: none"></label>
+<!-- 					<label class="form-control" th:text="${item.getItemName()}"></label>  -->
+					<li class="list-group-item" th:inline="text">
+						<span class="badge" th:text="${item.getItemScore()}">0</span> 
+						<small th:text="${item.getItemName()}" ></small>
+					</li>
+				</div>
+				<!-- /input-group -->
+			</div>
+			<!-- /.col-lg-6 -->
+		</div>
+		<!-- /.row -->
+
+		<input type="submit" value="Submit" ng-click="submit()" />
+	</div>
+	<!-- </form> -->
+
+
+
+</body>
+
+<script src="../common-js/angular.min.js"></script>
+<script src="../common-js/angular-cookies.min.js"></script>
+<script src="../common-js/jquery.min.js"></script>
+<script src="../common-js/bootstrap.min.js"></script>
+<script src="../common-js/votetablepresenter.js"></script>
+
+</html>
