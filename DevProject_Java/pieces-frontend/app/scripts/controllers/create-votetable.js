@@ -52,6 +52,7 @@ angular.module('mainApp')
       // send table items after creation of table request
       promise.then(function(){
         console.log('response received from promise!');
+        // conosle.log(data);
         if (localStorage.getItem('currentTableID') == undefined){
           console.log('currentTableID is null!');
           return;
@@ -71,6 +72,18 @@ angular.module('mainApp')
 
         });
     }
+
+    $scope.resetValues = function(){
+      localStorage.setItem('currentTableID', undefined);
+      localStorage.setItem('currentTableObject', undefined); 
+      $scope.currentTableID = undefined; 
+      $scope.currentTableObject = undefined;
+      $scope.tableItems = [];
+      $scope.chosenTableName = '';
+      $scope.tableName = '';
+      $scope.voteTableStartDate = undefined;
+      $scope.voteTableEndDate = undefined;
+    };
   }])
 
   .service('tableService',[ '$http', '$q', function($http, $q){
