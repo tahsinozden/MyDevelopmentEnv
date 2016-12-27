@@ -45,6 +45,11 @@ angular
         controller: 'ContactCtrl',
         controllerAs: 'contact'
       })
+      .when('/delete-votetable', {
+        templateUrl: 'views/delete-votetable.html',
+        controller: 'DeleteVotetableCtrl',
+        controllerAs: 'deleteVotetable'
+      })
       .otherwise({
         redirectTo: '/'
       });
