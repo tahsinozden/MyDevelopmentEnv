@@ -1,0 +1,30 @@
+<h3>Create a Job Schedule</h3>
+
+<form>
+  Start Date:
+  <input type="datetime-local" name="sDate" ng-model='selectedStartDate' required>
+    End Date:
+  <input type="datetime-local" name="eDate" ng-model='selectedEndDate' required>
+</form>
+
+<div class="input-group">
+  <span class="input-group-addon"></span>
+  <input type="text" class="form-control" placeholder="Name here" ng-model="selectedName">
+  <span class="input-group-addon"></span>
+</div>
+
+
+<div class="input-group">
+  <span class="input-group-addon"></span>
+  <input type="text" class="form-control" placeholder="Cron String here" ng-model="cronString">
+  <span class="input-group-addon"></span>
+</div>
+
+<!--<select class="form-control" ng-options="job as job.name for job in userJobs track by item.id" ng-model="selectedJobId"><option value="">- Please Choose -</option></select>-->
+<select class="form-control" ng-options="job as job.name for job in userJobs " ng-model="selectedJob">
+    <option value="">- Choose a job -</option>
+</select>
+
+<button type="button" class="btn btn-default" ng-click="createJobScheduleSubmit();">Create Job Schedule!</button>
+
+
