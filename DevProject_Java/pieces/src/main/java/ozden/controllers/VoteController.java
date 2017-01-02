@@ -1,6 +1,7 @@
 package ozden.controllers;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import ozden.entities.TableItem;
 import ozden.entities.VoteTable;
 
-@CrossOrigin(origins = "http://localhost:9000")
+//@CrossOrigin(origins = "http://localhost:9000")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("vote-tables")
 public class VoteController {
@@ -71,7 +73,10 @@ public class VoteController {
 		// check if there is any table item whose tableID doesn't match with the request
 		if (tableItems
 				.stream()
-				.filter(item -> item.getVoteTableID() != tableID)
+				.filter(item -> item != null)
+// == sign only works for numbers between -128 and 127				
+//				.filter(item -> item.getVoteTableID() != tableID)
+				.filter(item -> !item.getVoteTableID().equals(tableID))
 				.count() > 0){
 				throw new Exception("table id is different than one of the items table id");
 		}
