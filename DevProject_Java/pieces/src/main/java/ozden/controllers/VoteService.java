@@ -142,8 +142,8 @@ public class VoteService {
 			throw new NullPointerException("item id not exist!");
 		}
 		
-		if (item.getVoteTableID() != table.getTableID()){
-			throw new Exception("table id does not macth with item table id!!!");
+		if (!item.getVoteTableID().equals(table.getTableID())){
+			throw new Exception("table id does not match with item table id!!!");
 		}
 		// increase the score of the item
 		item.setItemScore(item.getItemScore()+1);
