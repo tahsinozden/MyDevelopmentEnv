@@ -293,7 +293,43 @@
   		}
   	};
   })
+  .service('ScheduleService', function($http) {
+    // service which returns a promise
+  	return {
+        changeJobScheduleById: function (jobSchedId, status) {
+                var defer = $q.defer();
 
+                 $http(
+                    {
+                        url: '/api/schedule/' + jobSchedId,
+                        // dataType: 'json',
+                        method: 'PUT',
+                        // data: tableObj,
+                        params: {'status': status},
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        }
+                    })
+                    .then(
+                    function (succesRes) {
+                        console.log(succesRes);
+                        // resolving the promise does the job
+                        defer.resolve(succesRes.data);
+                        // localStorage.setItem('currentjobObject', JSON.stringify(succesRes.data));
+                        console.log(succesRes.data);
+                    },
+                    function (failedData) {
+                        // resolving the promise does the job
+                        defer.resolve(failedData.data);
+                        console.log(failedData);
+                    }
+                    )
+
+                return defer.promise;
+            }
+  		}
+  	};
+  })
 
 </script>
 </html>
