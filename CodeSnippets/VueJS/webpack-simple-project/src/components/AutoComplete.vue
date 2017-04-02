@@ -31,7 +31,7 @@
             }
         },
         methods: {
-            filteredList: function () {
+            filteredListGen: function () {
                 if (this.dataLst == null) {
                     console.log("list is null");
                     return;
@@ -66,9 +66,14 @@
             }
         },
         updated: function () {
-            // console.log("updated");
-            // update the filtered list when the query text is updated
-            this.filteredLst = this.filteredList();
+            // when virtaul dom is updated
+        },
+        watch: {
+            // when 'query' model is updated
+            query: function(val) {
+                // console.log("query updated");
+                this.filteredLst = this.filteredListGen();
+            }
         }
     }
 </script>
